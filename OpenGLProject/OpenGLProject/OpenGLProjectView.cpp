@@ -35,9 +35,12 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	// 유저가 추가한 메시지 입니다
 	ON_MESSAGE(UWM_CUSTOM1, &COpenGLProjectView::OnUwmCustom1)
 	ON_MESSAGE(UWM_CHECKED, &COpenGLProjectView::OnUwmChecked)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
-	ON_WM_MOUSEMOVE()
+	//ON_WM_LBUTTONDOWN()
+	//ON_WM_LBUTTONUP()
+	//ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_TEST_DIRECTIONAL, &COpenGLProjectView::OnTestDirectional)
+	ON_COMMAND(ID_LIGHT_POSITIONAL, &COpenGLProjectView::OnLightPositional)
+	ON_COMMAND(ID_LIGHT_SPOTLIGHT, &COpenGLProjectView::OnLightSpotlight)
 END_MESSAGE_MAP()
 
 BOOL COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
@@ -81,6 +84,9 @@ BOOL COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
 
 COpenGLProjectView::COpenGLProjectView() noexcept
 {
+	preX = 0.0;
+	preY = 0.0;
+	clicked = false;
 	// TODO: 여기에 생성 코드를 추가합니다.
 }
 
@@ -107,6 +113,7 @@ void COpenGLProjectView::OnDraw(CDC* /*pDC*/)
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 	DrawGLScene();
+	Invalidate(FALSE);
 }
 
 
@@ -196,6 +203,11 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		mOPT_LTG[i] = TRUE;
 	}
 
+	mEN_LTG = new BOOL[nLTG];
+	for (int i = 0; i < nLTG; i++) {
+		mEN_LTG[i] = TRUE;
+	}
+
 	initGL();
 
 	// glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);     // 더블버퍼 사용
@@ -212,6 +224,8 @@ void COpenGLProjectView::OnDestroy()
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	glDisable(GL_LIGHTING);
 	glDisable(GL_LIGHT0);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHT2);
 	wglMakeCurrent(m_hDC, NULL);
 	wglDeleteContext(m_hglRC);
 }
@@ -223,8 +237,31 @@ void COpenGLProjectView::initGL()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+	GLfloat light1_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+	GLfloat light1_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+	GLfloat light1_specular[] = { 0.0,0.0,1.0,1.0 };
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+
+	GLfloat light2_position[] = { -4.0, -4.0, 1.0, 1.0 };
+	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
+	GLfloat light2_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
+	glLightfv(GL_LIGHT2, GL_AMBIENT, light2_ambient);
+	GLfloat light2_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
+	GLfloat light2_specular[] = { 0.0,0.0,1.0,1.0 };
+	glLightfv(GL_LIGHT2, GL_SPECULAR, light2_specular);
+	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 45.0);
+	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
+	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 }
 
 
@@ -261,7 +298,7 @@ void COpenGLProjectView::DrawGLScene(void)
 	glLoadIdentity();
 
 	// camera view configuration
-	gluLookAt(2.f+cameraX, 2.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
+	gluLookAt(2.f + cameraX, 2.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
 	if (!mOPT_LTG[0])
 		for (int i = 0; i < 4; i++)
@@ -304,8 +341,14 @@ void COpenGLProjectView::DrawGLScene(void)
 		mat_shiness[0] = 0.0;
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shiness);
 
-
-
+	for (int i = 0; i < nLTG; i++) {
+		if (mEN_LTG[i]) {
+			glEnable(GL_LIGHT0 + i);
+		}
+		else {
+			glDisable(GL_LIGHT0 + i);
+		}
+	}
 
 	// draw
 	glBegin(GL_TRIANGLES);
@@ -360,14 +403,15 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 {
 	int index = lParam - ID_PROPERTIES_CHECKBOX1;
 	mOPT_LTG[index] = wParam;
-	DrawGLScene();
 	return 0;
 }
 
 void COpenGLProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
+	preX = point.x - 4.0;
+	preY = point.y - 4.0;
+	clicked = true;
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -375,7 +419,11 @@ void COpenGLProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
+	clicked = false;
+	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
+	if (!mOPT_LTG[0])
+		for (int i = 0; i < 4; i++)
+			light0_position[i] = 0.0;
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -383,6 +431,36 @@ void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (clicked) {
+		GLfloat light0_position[] = { (preX - point.x)/100, (preY - point.y)/100, 1.0, 1.0 };
+		if (!mOPT_LTG[0])
+			for (int i = 0; i < 4; i++)
+				light0_position[i] = 0.0;
+	}
+	preX = (preX - point.x) / 100;
+	preY = (preY - point.y) / 100;
 
+	// swap buffer
 	CView::OnMouseMove(nFlags, point);
+}
+
+
+void COpenGLProjectView::OnTestDirectional()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	mEN_LTG[0] = !mEN_LTG[0];
+}
+
+
+void COpenGLProjectView::OnLightPositional()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	mEN_LTG[1] = !mEN_LTG[1];
+}
+
+
+void COpenGLProjectView::OnLightSpotlight()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	mEN_LTG[2] = !mEN_LTG[2];
 }

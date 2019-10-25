@@ -14,8 +14,6 @@
 #pragma comment(lib, "GLU32.LIB")
 #pragma comment(lib, "GLUT32.LIB")
 
-void test(int value);
-
 class COpenGLProjectView : public CView
 {
 protected: // serialization에서만 만들어집니다.
@@ -57,8 +55,13 @@ public:
 
 private:
 	BOOL *mOPT_LTG;
-	const int nOPT_LTG = 8; // 조명 옵션의 갯수
+	BOOL* mEN_LTG; // Enable Lighting
+	const int nLTG = 3; // Lighting의 개수
+	const int nOPT_LTG = 8; // 조명 옵션의 개수
 	GLfloat *light0_position;
+	GLfloat preX;
+	GLfloat preY;
+	BOOL clicked;
 
 // 생성된 메시지 맵 함수
 protected:
@@ -73,6 +76,13 @@ public:
 protected:
 	afx_msg LRESULT OnUwmCustom1(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUwmChecked(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnTestDirectional();
+	afx_msg void OnLightPositional();
+	afx_msg void OnLightSpotlight();
 };
 
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전

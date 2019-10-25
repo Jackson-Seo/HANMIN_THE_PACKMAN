@@ -11,3 +11,6 @@
 #include "framework.h"
 
 #endif //PCH_H
+
+#define UWM_CUSTOM1 WM_USER + 1
+#define UWM_CHECKED WM_USER + 2
