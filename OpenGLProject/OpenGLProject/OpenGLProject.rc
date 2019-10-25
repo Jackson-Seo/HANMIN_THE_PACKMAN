@@ -77,18 +77,6 @@ IDR_MAINFRAME           ICON                    "res\\OpenGLProject.ico"
 
 IDR_OpenGLProjectTYPE   ICON                    "res\\OpenGLProjectDoc.ico"
 
-IDI_FILE_VIEW           ICON                    "res\\file_view.ico"
-
-IDI_FILE_VIEW_HC        ICON                    "res\\file_view_hc.ico"
-
-IDI_CLASS_VIEW          ICON                    "res\\class_view.ico"
-
-IDI_CLASS_VIEW_HC       ICON                    "res\\class_view_hc.ico"
-
-IDI_OUTPUT_WND          ICON                    "res\\output_wnd.ico"
-
-IDI_OUTPUT_WND_HC       ICON                    "res\\output_wnd_hc.ico"
-
 IDI_PROPERTIES_WND      ICON                    "res\\properties_wnd.ico"
 
 IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
@@ -102,26 +90,6 @@ IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-
-IDR_SORT                BITMAP                  "res\\sort.bmp"
-
-IDB_SORT_24             BITMAP                  "res\\sort_hc.bmp"
-
-IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
-
-IDB_FILE_VIEW_24        BITMAP                  "res\\fileview_hc.bmp"
-
-IDB_CLASS_VIEW          BITMAP                  "res\\classview.bmp"
-
-IDB_CLASS_VIEW_24       BITMAP                  "res\\classview_hc.bmp"
-
-IDR_EXPLORER            BITMAP                  "res\\explorer.bmp"
-
-IDB_EXPLORER_24         BITMAP                  "res\\explorer_hc.bmp"
-
-IDR_MENU_IMAGES         BITMAP                  "res\\menuimages.bmp"
-
-IDB_MENU_IMAGES_24      BITMAP                  "res\\menuimages_hc.bmp"
 
 IDR_PROPERTIES          BITMAP                  "res\\properties.bmp"
 
