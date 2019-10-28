@@ -1,5 +1,4 @@
-﻿
-// OpenGLProjectView.cpp: COpenGLProjectView 클래스의 구현
+﻿// OpenGLProjectView.cpp: COpenGLProjectView 클래스의 구현
 //
 
 #include "pch.h"
@@ -39,9 +38,11 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	ON_COMMAND(ID_LIGHT_POSITIONAL, &COpenGLProjectView::OnLightPositional)
 	ON_COMMAND(ID_LIGHT_SPOTLIGHT, &COpenGLProjectView::OnLightSpotlight)
 	ON_WM_RBUTTONDOWN()
+	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
-BOOL COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
+bool COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
 	int pixelformat;
 
 	PIXELFORMATDESCRIPTOR pfd = {
@@ -100,7 +101,6 @@ BOOL COpenGLProjectView::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 // COpenGLProjectView 그리기
-
 void COpenGLProjectView::OnDraw(CDC* /*pDC*/)
 {
 	COpenGLProjectDoc* pDoc = GetDocument();
@@ -113,10 +113,7 @@ void COpenGLProjectView::OnDraw(CDC* /*pDC*/)
 	Invalidate(FALSE);
 }
 
-
 // COpenGLProjectView 인쇄
-
-
 void COpenGLProjectView::OnFilePrintPreview()
 {
 #ifndef SHARED_HANDLERS
@@ -147,9 +144,7 @@ void COpenGLProjectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #endif
 }
 
-
 // COpenGLProjectView 진단
-
 #ifdef _DEBUG
 void COpenGLProjectView::AssertValid() const
 {
@@ -168,10 +163,6 @@ COpenGLProjectDoc* COpenGLProjectView::GetDocument() const // 디버그되지 �
 }
 #endif //_DEBUG
 
-
-// COpenGLProjectView 메시지 처리기
-
-
 int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CView::OnCreate(lpCreateStruct) == -1)
@@ -189,12 +180,12 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// initialize renderring mode
 
-	mOPT_LTG = new BOOL[nOPT_LTG];
+	mOPT_LTG = new bool[nOPT_LTG];
 	for (int i = 0; i < nOPT_LTG; i++) {
 		mOPT_LTG[i] = TRUE;
 	}
 
-	mEN_LTG = new BOOL[nLTG];
+	mEN_LTG = new bool[nLTG];
 	for (int i = 0; i < nLTG; i++) {
 		mEN_LTG[i] = TRUE;
 	}
@@ -285,7 +276,6 @@ void COpenGLProjectView::DrawGLScene(void)
 {
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	Camera::Convert();
 
 	Axis::Draw();
@@ -341,7 +331,7 @@ void COpenGLProjectView::DrawGLScene(void)
 			glDisable(GL_LIGHT0 + i);
 		}
 	}
-
+	Controller::CameraTrans();
 	// draw
 	glBegin(GL_TRIANGLES);
 	// glColor3f(1, 0, 0);
@@ -407,7 +397,6 @@ void COpenGLProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 	CView::OnLButtonDown(nFlags, point);
 }
 
-
 void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -455,13 +444,11 @@ void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	CView::OnMouseMove(nFlags, point);
 }
 
-
 void COpenGLProjectView::OnTestDirectional()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	mEN_LTG[0] = !mEN_LTG[0];
 }
-
 
 void COpenGLProjectView::OnLightPositional()
 {
@@ -469,9 +456,49 @@ void COpenGLProjectView::OnLightPositional()
 	mEN_LTG[1] = !mEN_LTG[1];
 }
 
-
 void COpenGLProjectView::OnLightSpotlight()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	mEN_LTG[2] = !mEN_LTG[2];
+}
+
+// 키보드 입력을 처리합니다
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	switch (nChar) {
+	case 'W':
+		Controller::setW(TRUE);
+		break;
+	case 'A':
+		Controller::setA(TRUE);
+		break;
+	case 'S':
+		Controller::setS(TRUE);
+		break;
+	case 'D':
+		Controller::setD(TRUE);
+	}
+
+	Controller::CameraTrans();
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+// 키보드 입력을 처리합니다
+void COpenGLProjectView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	switch (nChar) {
+	case 'W':
+		Controller::setW(FALSE);
+		break;
+	case 'A':
+		Controller::setA(FALSE);
+		break;
+	case 'S':
+		Controller::setS(FALSE);
+		break;
+	case 'D':
+		Controller::setD(FALSE);
+	}
+
+	Controller::CameraTrans();
+	CView::OnKeyUp(nChar, nRepCnt, nFlags);
 }

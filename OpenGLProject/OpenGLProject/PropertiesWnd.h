@@ -5,7 +5,7 @@
 class CPropertiesToolBar : public CMFCToolBar
 {
 public:
-	virtual void OnUpdateCmdUI(CFrameWnd* /*pTarget*/, BOOL bDisableIfNoHndler)
+	virtual void OnUpdateCmdUI(CFrameWnd* /*pTarget*/, bool bDisableIfNoHndler)
 	{
 		CMFCToolBar::OnUpdateCmdUI((CFrameWnd*)GetOwner(), bDisableIfNoHndler);
 	}
@@ -23,7 +23,7 @@ public:
 
 	// 특성입니다.
 public:
-	void SetVSDotNetLook(BOOL bSet)
+	void SetVSDotNetLook(bool bSet)
 	{
 		m_wndPropList.SetVSDotNetLook(bSet);
 		m_wndPropList.SetGroupNameFullWidth(bSet);

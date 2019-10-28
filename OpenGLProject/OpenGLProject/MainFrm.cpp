@@ -181,9 +181,9 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
-BOOL CMainFrame::CreateDockingWindows()
+bool CMainFrame::CreateDockingWindows()
 {
-	BOOL bNameValid;
+	bool bNameValid;
 
 	// 속성 창을 만듭니다.
 	CString strPropertiesWnd;
@@ -199,7 +199,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	return TRUE;
 }
 
-void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
+void CMainFrame::SetDockingWindowIcons(bool bHiColorIcons)
 {
 	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
@@ -241,7 +241,7 @@ LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 	CMFCToolBar* pUserToolbar = (CMFCToolBar*)lres;
 	ASSERT_VALID(pUserToolbar);
 
-	BOOL bNameValid;
+	bool bNameValid;
 	CString strCustomize;
 	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
 	ASSERT(bNameValid);
@@ -337,7 +337,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
 
 	// 모든 사용자 도구 모음에 사용자 지정 단추를 활성화합니다.
-	BOOL bNameValid;
+	bool bNameValid;
 	CString strCustomize;
 	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
 	ASSERT(bNameValid);

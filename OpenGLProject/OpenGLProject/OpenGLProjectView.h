@@ -36,7 +36,7 @@ public:
 
 public:
 	GLfloat cameraX = 0.0;
-	BOOL SetDevicePixelFormat(HDC hdc);
+	bool SetDevicePixelFormat(HDC hdc);
 	void initGL(void);
 	void ReSizeGLScene(GLsizei width, GLsizei height);
 	void DrawGLScene(void);
@@ -59,14 +59,14 @@ public:
 #endif
 
 private:
-	BOOL *mOPT_LTG;
-	BOOL* mEN_LTG; // Enable Lighting
+	bool *mOPT_LTG;
+	bool* mEN_LTG; // Enable Lighting
 	const int nLTG = 3; // Lighting의 개수
 	const int nOPT_LTG = 8; // 조명 옵션의 개수
 	GLfloat *light0_position;
 	GLfloat preX;
 	GLfloat preY;
-	BOOL clicked;
+	bool clicked;
 
 // 생성된 메시지 맵 함수
 protected:
@@ -89,6 +89,8 @@ public:
 	afx_msg void OnLightPositional();
 	afx_msg void OnLightSpotlight();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전

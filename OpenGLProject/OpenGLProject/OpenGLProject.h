@@ -27,7 +27,7 @@ public:
 
 // 구현입니다.
 	UINT  m_nAppLook;
-	BOOL  m_bHiColorIcons;
+	bool  m_bHiColorIcons;
 
 	virtual void PreLoadState();
 	virtual void LoadCustomState();

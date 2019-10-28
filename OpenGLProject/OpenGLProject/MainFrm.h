@@ -47,8 +47,8 @@ protected:
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	DECLARE_MESSAGE_MAP()
 
-	BOOL CreateDockingWindows();
-	void SetDockingWindowIcons(BOOL bHiColorIcons);
+	bool CreateDockingWindows();
+	void SetDockingWindowIcons(bool bHiColorIcons);
 };
 
 

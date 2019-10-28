@@ -1,8 +1,4 @@
-﻿
-// OpenGLProject.cpp: 애플리케이션에 대한 클래스 동작을 정의합니다.
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
@@ -16,9 +12,6 @@
 #define new DEBUG_NEW
 #endif
 
-
-// COpenGLProjectApp
-
 BEGIN_MESSAGE_MAP(COpenGLProjectApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &COpenGLProjectApp::OnAppAbout)
 	// 표준 파일을 기초로 하는 문서 명령입니다.
@@ -27,9 +20,6 @@ BEGIN_MESSAGE_MAP(COpenGLProjectApp, CWinAppEx)
 	// 표준 인쇄 설정 명령입니다.
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
 END_MESSAGE_MAP()
-
-
-// COpenGLProjectApp 생성
 
 COpenGLProjectApp::COpenGLProjectApp() noexcept
 {
@@ -53,12 +43,9 @@ COpenGLProjectApp::COpenGLProjectApp() noexcept
 }
 
 // 유일한 COpenGLProjectApp 개체입니다.
-
 COpenGLProjectApp theApp;
 
-
 // COpenGLProjectApp 초기화
-
 BOOL COpenGLProjectApp::InitInstance()
 {
 	// 애플리케이션 매니페스트가 ComCtl32.dll 버전 6 이상을 사용하여 비주얼 스타일을
@@ -125,8 +112,6 @@ BOOL COpenGLProjectApp::InitInstance()
 	// 표준 셸 명령, DDE, 파일 열기에 대한 명령줄을 구문 분석합니다.
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-
-
 
 	// 명령줄에 지정된 명령을 디스패치합니다.
 	// 응용 프로그램이 /RegServer, /Register, /Unregserver 또는 /Unregister로 시작된 경우 FALSE를 반환합니다.
@@ -196,7 +181,7 @@ void COpenGLProjectApp::OnAppAbout()
 
 void COpenGLProjectApp::PreLoadState()
 {
-	BOOL bNameValid;
+	bool bNameValid;
 	CString strName;
 	bNameValid = strName.LoadString(IDS_EDIT_MENU);
 	ASSERT(bNameValid);
