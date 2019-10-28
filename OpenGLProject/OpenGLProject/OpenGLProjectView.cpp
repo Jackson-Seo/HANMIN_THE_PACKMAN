@@ -17,9 +17,6 @@
 #define new DEBUG_NEW
 #endif
 
-
-// COpenGLProjectView
-
 IMPLEMENT_DYNCREATE(COpenGLProjectView, CView)
 
 BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
@@ -37,10 +34,11 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	ON_MESSAGE(UWM_CHECKED, &COpenGLProjectView::OnUwmChecked)
 	//ON_WM_LBUTTONDOWN()
 	//ON_WM_LBUTTONUP()
-	//ON_WM_MOUSEMOVE()
+	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TEST_DIRECTIONAL, &COpenGLProjectView::OnTestDirectional)
 	ON_COMMAND(ID_LIGHT_POSITIONAL, &COpenGLProjectView::OnLightPositional)
 	ON_COMMAND(ID_LIGHT_SPOTLIGHT, &COpenGLProjectView::OnLightSpotlight)
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 BOOL COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
@@ -81,7 +79,6 @@ BOOL COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
 }
 
 // COpenGLProjectView 생성/소멸
-
 COpenGLProjectView::COpenGLProjectView() noexcept
 {
 	preX = 0.0;
@@ -141,12 +138,6 @@ void COpenGLProjectView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 void COpenGLProjectView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
 	// TODO: 인쇄 후 정리 작업을 추가합니다.
-}
-
-void COpenGLProjectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
 }
 
 void COpenGLProjectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
@@ -262,9 +253,11 @@ void COpenGLProjectView::initGL()
 	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 45.0);
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
+
+	Camera::Initialize();
 }
 
-
+// OnCreate 이후에 적어도 한번 호출된다
 void COpenGLProjectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
@@ -273,32 +266,29 @@ void COpenGLProjectView::OnSize(UINT nType, int cx, int cy)
 	ReSizeGLScene(cx, cy);
 }
 
+// OnSize에서 호출된다
 void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 {
 	// don't want a divide by zero
 	if (height == 0)
 		height = 1;
 
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	// calculate aspect ratio of the window
-	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	Camera::ReSize(width, height);
 
 	// set modeview matrix
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glPopMatrix();
+	glPushMatrix();
 }
 
 void COpenGLProjectView::DrawGLScene(void)
 {
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+
+	Camera::Convert();
 
 	// camera view configuration
-	gluLookAt(2.f + cameraX, 2.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
 	if (!mOPT_LTG[0])
 		for (int i = 0; i < 4; i++)
@@ -427,18 +417,36 @@ void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 	CView::OnLButtonUp(nFlags, point);
 }
 
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	Controller::setRClick(TRUE);
+	Controller::setClickPoint(point);
+
+	CView::OnRButtonDown(nFlags, point);
+}
+void COpenGLProjectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
+{
+	Controller::setRClick(FALSE);
+
+	// 우클릭 완료시 벗어나려면 주석을 지워야한다
+	// ClientToScreen(&point);
+	// OnContextMenu(this, point);
+}
 
 void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (clicked) {
-		GLfloat light0_position[] = { (preX - point.x)/100, (preY - point.y)/100, 1.0, 1.0 };
-		if (!mOPT_LTG[0])
-			for (int i = 0; i < 4; i++)
-				light0_position[i] = 0.0;
+	//if (clicked) {
+	//	GLfloat light0_position[] = { (preX - point.x)/100, (preY - point.y)/100, 1.0, 1.0 };
+	//	if (!mOPT_LTG[0])
+	//		for (int i = 0; i < 4; i++)
+	//			light0_position[i] = 0.0;
+	//}
+	//preX = (preX - point.x) / 100;
+	//preY = (preY - point.y) / 100;
+	if (Controller::getRClick()) {
+		Camera::setCaRo(point - Controller::getClickPoint());
 	}
-	preX = (preX - point.x) / 100;
-	preY = (preY - point.y) / 100;
 
 	// swap buffer
 	CView::OnMouseMove(nFlags, point);

@@ -9,6 +9,10 @@
 #include <gl\glaux.H>
 #include "OpenGLProjectDoc.h"
 
+// 사용자 정의 클래스
+#include "Controller.h"
+#include "Camera.h"
+
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "GLAUX.LIB")
 #pragma comment(lib, "GLU32.LIB")
@@ -83,6 +87,7 @@ public:
 	afx_msg void OnTestDirectional();
 	afx_msg void OnLightPositional();
 	afx_msg void OnLightSpotlight();
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전

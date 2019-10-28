@@ -187,6 +187,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="OpenGLProject.h" />
     <ClInclude Include="OpenGLProjectDoc.h" />
@@ -199,6 +201,8 @@
     <ClInclude Include="ViewTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="OpenGLProject.cpp" />
     <ClCompile Include="OpenGLProjectDoc.cpp" />
     <ClCompile Include="OpenGLProjectView.cpp" />
