@@ -288,6 +288,8 @@ void COpenGLProjectView::DrawGLScene(void)
 
 	Camera::Convert();
 
+	Axis::Draw();
+
 	// camera view configuration
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
 	if (!mOPT_LTG[0])
@@ -420,7 +422,7 @@ void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	Controller::setRClick(TRUE);
-	Controller::setClickPoint(point);
+	Controller::setpreClickPoint(point);
 
 	CView::OnRButtonDown(nFlags, point);
 }
@@ -445,7 +447,8 @@ void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	//preX = (preX - point.x) / 100;
 	//preY = (preY - point.y) / 100;
 	if (Controller::getRClick()) {
-		Camera::setCaRo(point - Controller::getClickPoint());
+		Camera::setCaRo(Camera::getCaRo() + point - Controller::getpreClickPoint());
+		Controller::setpreClickPoint(point);
 	}
 
 	// swap buffer

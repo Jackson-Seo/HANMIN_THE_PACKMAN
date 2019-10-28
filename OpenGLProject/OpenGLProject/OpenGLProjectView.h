@@ -12,6 +12,7 @@
 // 사용자 정의 클래스
 #include "Controller.h"
 #include "Camera.h"
+#include "Axis.h"
 
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "GLAUX.LIB")

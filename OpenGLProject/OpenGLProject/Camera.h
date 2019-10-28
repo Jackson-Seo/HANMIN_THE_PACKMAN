@@ -9,11 +9,11 @@
 #pragma comment(lib, "GLU32.LIB")
 #pragma comment(lib, "GLUT32.LIB")
 
-// 전역변수
-const static float fCameraMovemet = 0.2778; // Camera의 회전을 부드럽게 보정
-
 class Camera
 {
+private:
+	// 정적상수
+	const static float c_fCameraMovemet; // Camera의 회전을 부드럽게 보정
 private:
 	static CPoint s_CaRo; // 카메라의 회전 각도
 	static CPoint s_CaTrans; // 카메라의 이동 각도

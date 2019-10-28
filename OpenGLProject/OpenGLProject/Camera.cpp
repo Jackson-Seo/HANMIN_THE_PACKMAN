@@ -2,12 +2,13 @@
 #include "Camera.h"
 
 // 정적변수 초기화
+const float Camera::c_fCameraMovemet = 0.2778f;
 CPoint Camera::s_CaRo = { 0, 0 };
 CPoint Camera::s_CaTrans = { 0, 0 };
 
 void Camera::Initialize() {
 	// 초기 카메라 위치를 지정합니다
-	gluLookAt(0.0f, 0.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(1.0f, 1.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 void Camera::ReSize(GLsizei width, GLsizei height) {
@@ -34,9 +35,9 @@ void Camera::Convert() {
 	// Camera를 회전시킨다
 	// 처음 위치에서 마우스 움직임으로 누적 이동한 값을 기준으로 회전시킨다
 	// Y축을 기준으로 회전시킨다
-	glRotatef(s_CaRo.x * fCameraMovemet, 0, 1, 0);
+	glRotatef(s_CaRo.x * c_fCameraMovemet, 0, 1, 0);
 	// Y축이 회전된 만큼 X축을 회전시키고 회전된 축(XZ평면)을 기준으로 회전시킨다
-	glRotatef(s_CaRo.y * fCameraMovemet, cosf(s_CaRo.x * fCameraMovemet * 3.141592 / 180), 0, sinf(s_CaRo.x * fCameraMovemet * 3.141592 / 180));
+	glRotatef(s_CaRo.y * c_fCameraMovemet, cosf((float)s_CaRo.x * c_fCameraMovemet * 3.141592 / 180), 0, sinf(s_CaRo.x * c_fCameraMovemet * 3.141592 / 180));
 	// 혼동이 일어나지 않도록 Matrix Mode를 ModelView로 설정합니다
 	glMatrixMode(GL_MODELVIEW);
 }

@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ViewTree.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGLProject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -19,19 +13,26 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일\창</Filter>
+    </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp">
+      <Filter>소스 파일\창</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewTree.cpp">
+      <Filter>소스 파일\창</Filter>
+    </ClCompile>
+    <ClCompile Include="Axis.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrm.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="OpenGLProject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -44,20 +45,33 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>헤더 파일\창</Filter>
+    </ClInclude>
     <ClInclude Include="PropertiesWnd.h">
+      <Filter>헤더 파일\창</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewTree.h">
+      <Filter>헤더 파일\창</Filter>
+    </ClInclude>
+    <ClInclude Include="Axis.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="Camera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\기본구성</Filter>
     </ClInclude>
-    <ClInclude Include="ViewTree.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일\기본구성</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Controller.h" />
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일\기본구성</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -97,6 +111,15 @@
     </Filter>
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{a333b29f-0d3e-41a8-88cd-93a9d9ad5477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\창">
+      <UniqueIdentifier>{fedd7cd3-7170-4829-bf9f-fba551f55c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\창">
+      <UniqueIdentifier>{76e8ad6b-6491-4c38-a71a-594d2a0fcb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\기본구성">
+      <UniqueIdentifier>{42478ec0-12c7-437d-b79e-00d21470c7a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
