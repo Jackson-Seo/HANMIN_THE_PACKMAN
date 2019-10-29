@@ -18,7 +18,6 @@ private:
 	const static float c_Degree; // Degree로 변환하는 상수 
 private:
 	static CPoint s_CaRo; // 카메라의 회전 각도
-	static CPoint s_CaTrans; // 카메라의 이동 각도
 	static float s_X; // 카메라의 위치 X
 	static float s_Y; // 카메라의 위치 Y
 	static float s_Z; // 카메라의 위치 Z

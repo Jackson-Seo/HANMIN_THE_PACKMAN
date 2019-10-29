@@ -7,7 +7,6 @@ const float Camera::c_fCameraRotate = 0.2778f;
 const float Camera::c_fCameraTrans = 0.05;
 const float Camera::c_Degree = 3.141592 / 180;
 CPoint Camera::s_CaRo = { 0, 0 };
-CPoint Camera::s_CaTrans = { 0, 0 };
 float Camera::s_X = 0;
 float Camera::s_Y = 0;
 float Camera::s_Z = 0;
