@@ -4,7 +4,6 @@
 
 // 정적변수 초기화
 const float Camera::c_fCameraRotate = 0.2778f;
-const float Camera::c_fCameraTrans = 0.05;
 const float Camera::c_Degree = 3.141592 / 180;
 CPoint Camera::s_CaRo = { 0, 0 };
 float Camera::s_X = 0;
@@ -56,15 +55,15 @@ void Camera::Convert() {
 
 // x값이 1이면 앞으로 이동하고 -1이면 뒤로 이동합니다
 // z값이 1이면 우측으로 이동하고 -1이면 좌측으로 이동합니다
-void Camera::Move(int x, int y, int z) {
+void Camera::Move(float x, float y, float z) {
 	// 카메라의 현재 각도를 기준으로 sin, cos 값을 계산합니다
 	float sinX = sinf(s_CaRo.x * c_fCameraRotate * c_Degree);
 	float cosX = cosf(s_CaRo.x * c_fCameraRotate * c_Degree);
 	float sinY = sinf(s_CaRo.y * c_fCameraRotate * c_Degree);
 	float cosY = cosf(s_CaRo.y * c_fCameraRotate * c_Degree);
-	s_X += (x * cosX - z * sinX) * cosY * c_fCameraTrans;
-	s_Y += x * c_fCameraTrans * sinY;
-	s_Z += (x * sinX + z * cosX) * cosY * c_fCameraTrans;
+	s_X += (x * cosX - z * sinX) * cosY;
+	s_Y += x * sinY;
+	s_Z += (x * sinX + z * cosX) * cosY;
 }
 
 void Camera::setCaRo(CPoint point) {

@@ -2,6 +2,8 @@
 #include "Controller.h"
 #include "Camera.h"
 
+// 정적변수 초기화
+const float Controller::c_fCameraTrans = 0.05;
 bool Controller::s_bRClick = FALSE;
 bool Controller::s_bLClick = FALSE;
 CPoint Controller::s_ClickPoint = { 0, 0 };
@@ -14,16 +16,16 @@ bool Controller::s_bD = FALSE;
 // W는 앞 A는 좌 S는 뒤 D는 우
 void Controller::CameraTrans() {
 	if (s_bW) {
-		Camera::Move(1, 0, 0);
+		Camera::Move(c_fCameraTrans, 0, 0);
 	}
 	if (s_bA) {
-		Camera::Move(0, 0, -1);
+		Camera::Move(0, 0, -c_fCameraTrans);
 	}
 	if (s_bS) {
-		Camera::Move(-1, 0, 0);
+		Camera::Move(-c_fCameraTrans, 0, 0);
 	}
 	if (s_bD) {
-		Camera::Move(0, 0, 1);
+		Camera::Move(0, 0, c_fCameraTrans);
 	}
 }
 

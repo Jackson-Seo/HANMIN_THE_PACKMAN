@@ -4,6 +4,9 @@
 class Controller : public CWnd
 {
 private:
+	// 정적상수
+	const static float c_fCameraTrans; // WASD 입력시 Camera의 평행이동을 보정
+private:
 	static bool s_bRClick; // 마우스 우클릭 감지
 	static bool s_bLClick; // 마우스 좌클릭 감지
 	static CPoint s_ClickPoint; // 마우스 클릭 위치
