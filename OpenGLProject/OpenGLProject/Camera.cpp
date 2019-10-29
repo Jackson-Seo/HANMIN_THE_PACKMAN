@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Camera.h"
-#include "Controller.h"
 
 // 정적변수 초기화
 const float Camera::c_fCameraRotate = 0.2778f;
