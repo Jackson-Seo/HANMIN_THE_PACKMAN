@@ -60,7 +60,6 @@ BOOL COpenGLProjectApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
-
 	// OLE 라이브러리를 초기화합니다.
 	if (!AfxOleInit())
 	{
@@ -69,7 +68,6 @@ BOOL COpenGLProjectApp::InitInstance()
 	}
 
 	AfxEnableControlContainer();
-
 	EnableTaskbarInteraction(FALSE);
 
 	// RichEdit 컨트롤을 사용하려면 AfxInitRichEdit2()가 있어야 합니다.
@@ -85,11 +83,8 @@ BOOL COpenGLProjectApp::InitInstance()
 	SetRegistryKey(_T("로컬 애플리케이션 마법사에서 생성된 애플리케이션"));
 	LoadStdProfileSettings(4);  // MRU를 포함하여 표준 INI 파일 옵션을 로드합니다.
 
-
 	InitContextMenuManager();
-
 	InitKeyboardManager();
-
 	InitTooltipManager();
 	CMFCToolTipInfo ttParams;
 	ttParams.m_bVislManagerTheme = TRUE;
@@ -131,12 +126,9 @@ int COpenGLProjectApp::ExitInstance()
 
 	return CWinAppEx::ExitInstance();
 }
-
 // COpenGLProjectApp 메시지 처리기
 
-
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
-
 class CAboutDlg : public CDialogEx
 {
 public:
@@ -167,7 +159,6 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-	// ON_MESSAGE(UWM_CUSTOM1, &CAboutDlg::OnUwmCustom1)
 END_MESSAGE_MAP()
 
 // 대화 상자를 실행하기 위한 응용 프로그램 명령입니다.
@@ -178,7 +169,6 @@ void COpenGLProjectApp::OnAppAbout()
 }
 
 // COpenGLProjectApp 사용자 지정 로드/저장 방법
-
 void COpenGLProjectApp::PreLoadState()
 {
 	bool bNameValid;
@@ -200,12 +190,3 @@ void COpenGLProjectApp::SaveCustomState()
 }
 
 // COpenGLProjectApp 메시지 처리기
-
-
-
-
-
-//afx_msg LRESULT CAboutDlg::OnUwmCustom1(WPARAM wParam, LPARAM lParam)
-//{
-//	return 0;
-//}

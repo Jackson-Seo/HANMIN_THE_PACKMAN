@@ -9,6 +9,15 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
+#include <gl\gl.H>
+#include <gl\glu.H>
+#include <gl/glut.H>
+#include <gl\glaux.H>
+
+#pragma comment(lib, "OPENGL32.LIB")
+#pragma comment(lib, "GLAUX.LIB")
+#pragma comment(lib, "GLU32.LIB")
+#pragma comment(lib, "GLUT32.LIB")
 
 #endif //PCH_H
 

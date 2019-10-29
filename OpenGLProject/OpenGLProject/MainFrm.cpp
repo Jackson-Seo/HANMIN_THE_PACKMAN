@@ -1,8 +1,4 @@
-﻿
-// MainFrm.cpp: CMainFrame 클래스의 구현
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "OpenGLProject.h"
 
@@ -13,7 +9,6 @@
 #endif
 
 // CMainFrame
-
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWndEx)
 
 const int  iMaxUserToolbars = 10;
@@ -38,7 +33,6 @@ static UINT indicators[] =
 };
 
 // CMainFrame 생성/소멸
-
 CMainFrame::CMainFrame() noexcept
 {
 	// TODO: 여기에 멤버 초기화 코드를 추가합니다.
@@ -101,7 +95,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
 
-
 	// Visual Studio 2005 스타일 도킹 창 동작을 활성화합니다.
 	CDockingManager::SetDockingMode(DT_SMART);
 	// Visual Studio 2005 스타일 도킹 창 자동 숨김 동작을 활성화합니다.
@@ -161,10 +154,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
-	//lstBasicCommands.AddTail(ID_SORTING_SORTALPHABETIC);
-	//lstBasicCommands.AddTail(ID_SORTING_SORTBYTYPE);
-	//lstBasicCommands.AddTail(ID_SORTING_SORTBYACCESS);
-	//lstBasicCommands.AddTail(ID_SORTING_GROUPBYTYPE);
 
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
@@ -220,9 +209,7 @@ void CMainFrame::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-
 // CMainFrame 메시지 처리기
-
 void CMainFrame::OnViewCustomize()
 {
 	CMFCToolBarsCustomizeDialog* pDlgCust = new CMFCToolBarsCustomizeDialog(this, TRUE /* 메뉴를 검색합니다. */);

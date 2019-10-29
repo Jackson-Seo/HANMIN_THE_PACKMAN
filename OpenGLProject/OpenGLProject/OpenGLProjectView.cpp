@@ -1,7 +1,4 @@
-﻿// OpenGLProjectView.cpp: COpenGLProjectView 클래스의 구현
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 // SHARED_HANDLERS는 미리 보기, 축소판 그림 및 검색 필터 처리기를 구현하는 ATL 프로젝트에서 정의할 수 있으며
 // 해당 프로젝트와 문서 코드를 공유하도록 해 줍니다.
@@ -331,23 +328,6 @@ void COpenGLProjectView::DrawGLScene(void)
 			glDisable(GL_LIGHT0 + i);
 		}
 	}
-	Controller::CameraTrans();
-	// draw
-	glBegin(GL_TRIANGLES);
-	// glColor3f(1, 0, 0);
-	glVertex3f(-1, -.5f, 1);
-	// glColor3f(0, 1, 0);
-	glVertex3f(0, .5f, 0);
-	// glColor3f(0, 0, 1);
-	glVertex3f(1, -.5f, 0);
-
-	glVertex3f(0, .5f, 0);
-	glVertex3f(1, -.5f, 0);
-	glVertex3f(-1, -.5f, -1);
-	glEnd();
-
-	// glDisable(GL_LIGHTING);
-	// glDisable(GL_LIGHT0);
 
 	// swap buffer
 	SwapBuffers(m_hDC);
@@ -379,7 +359,6 @@ afx_msg LRESULT COpenGLProjectView::OnUwmCustom1(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
-
 
 afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 {

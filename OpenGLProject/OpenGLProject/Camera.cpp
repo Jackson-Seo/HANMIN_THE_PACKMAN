@@ -12,7 +12,8 @@ float Camera::s_Z = 0;
 void Camera::Initialize() {
 	// 초기 카메라 위치를 지정합니다
 	// -X 방향으로 카메라가 바라봐야 나중에 카메라 이동시에 오류가 안생깁니다
-	gluLookAt(3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	s_X = -3;
 }
 
 void Camera::ReSize(GLsizei width, GLsizei height) {

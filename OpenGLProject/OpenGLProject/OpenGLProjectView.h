@@ -13,6 +13,7 @@
 #include "Controller.h"
 #include "Camera.h"
 #include "Axis.h"
+#include "Object.h"
 
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "GLAUX.LIB")
@@ -33,7 +34,6 @@ public:
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
-
 public:
 	GLfloat cameraX = 0.0;
 	bool SetDevicePixelFormat(HDC hdc);
@@ -67,7 +67,6 @@ private:
 	GLfloat preX;
 	GLfloat preY;
 	bool clicked;
-
 // 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
