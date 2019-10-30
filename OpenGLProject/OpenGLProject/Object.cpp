@@ -21,13 +21,20 @@ void Object::AddIndex(GLubyte idx[], int size) {
 	}
 }
 
-void Object::Draw(void) {glMatrixMode(GL_MODELVIEW);
+void Object::Draw(void) {
+	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glTranslatef(this->x, this->y, this->z);
 	glRotatef(this->xRo, 1, 0, 0);
 	glRotatef(this->yRo, 0, 1, 0);
 	glRotatef(this->zRo, 0, 0, 1);
-	glScalef(0.02f, 0.02f, 0.02f);
+	glScalef(this->xSc, this->ySc, this->zSc);
 	glCallList(this->id);
 	glPopMatrix();
+}
+
+void Object::setScale(const float& xSc, const float& ySc, const float& zSc) {
+	this->xSc = xSc;
+	this->ySc = ySc;
+	this->zSc = zSc;
 }

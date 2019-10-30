@@ -243,6 +243,8 @@ void COpenGLProjectView::initGL()
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 
 	ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
+	Object *iron = ObjectController::FindObject(std::string("IronMan.obj"));
+	iron->setScale(0.01f, 0.01f, 0.01f);
 
 	Camera::Initialize();
 }

@@ -34,6 +34,10 @@ void ObjectController::LoadObject(const char* const fdir) {
 	}
 }
 
+Object* ObjectController::FindObject(const std::string key) {
+	return s_object.find(key)->second;
+}
+
 void ObjectController::DrawObjects(void) {
 	for (auto it = s_object.begin(); it != s_object.end(); it++) {
 		it->second->Draw();
