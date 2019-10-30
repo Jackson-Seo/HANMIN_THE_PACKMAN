@@ -27,6 +27,7 @@ void Object::Draw(void) {glMatrixMode(GL_MODELVIEW);
 	glRotatef(this->xRo, 1, 0, 0);
 	glRotatef(this->yRo, 0, 1, 0);
 	glRotatef(this->zRo, 0, 0, 1);
+	glScalef(0.02f, 0.02f, 0.02f);
 	glCallList(this->id);
 	glPopMatrix();
 }

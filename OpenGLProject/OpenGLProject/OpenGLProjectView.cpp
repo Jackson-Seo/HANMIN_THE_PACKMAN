@@ -242,6 +242,8 @@ void COpenGLProjectView::initGL()
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 
+	ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
+
 	Camera::Initialize();
 }
 
@@ -276,6 +278,7 @@ void COpenGLProjectView::DrawGLScene(void)
 	Camera::Convert();
 
 	Axis::Draw();
+	ObjectController::DrawObjects();
 
 	// camera view configuration
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };

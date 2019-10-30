@@ -14,7 +14,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 
 	s_iNumGenList++;
 	GLuint id = glGenLists(s_iNumGenList);
-	s_object.insert(std::make_pair(strrchr(fdir, '\\') + 1, new Object(id)));
+	s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, new Object(id)));
 	fopen_s(&fp, fdir, "r");
 	if (fp) {
 		glPointSize(2.0);

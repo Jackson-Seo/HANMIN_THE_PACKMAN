@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "Axis.h"
 #include "Object.h"
+#include "ObjectController.h"
 
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "GLAUX.LIB")
