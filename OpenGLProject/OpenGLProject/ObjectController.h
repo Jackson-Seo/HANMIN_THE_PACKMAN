@@ -6,7 +6,7 @@
 class ObjectController
 {
 private:
-	static std::map<std::string, Object> s_object; // 오브젝트 관리
+	static std::map<std::string, Object*> s_object; // 오브젝트 관리
 private:
 	static int s_iNumGenList; // GenList의 개수
 public:

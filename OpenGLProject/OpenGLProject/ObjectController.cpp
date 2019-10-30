@@ -2,6 +2,7 @@
 #include "ObjectController.h"
 
 // 정적변수 초기화
+std::map<std::string, Object*> ObjectController::s_object = {};
 int ObjectController::s_iNumGenList = 0;
 
 void ObjectController::LoadObject(const char* const fdir) {
@@ -13,8 +14,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 
 	s_iNumGenList++;
 	GLuint id = glGenLists(s_iNumGenList);
-	obj = new Object(id);
-	s_object.insert(std::make_pair(strrchr(fdir, '\\') + 1, *obj));
+	s_object.insert(std::make_pair(strrchr(fdir, '\\') + 1, new Object(id)));
 	fopen_s(&fp, fdir, "r");
 	if (fp) {
 		glPointSize(2.0);
@@ -36,6 +36,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 
 void ObjectController::DrawObjects(void) {
 	for (auto it = s_object.begin(); it != s_object.end(); it++) {
-		it->second.Draw();
+		it->second->Draw();
 	}
 }
