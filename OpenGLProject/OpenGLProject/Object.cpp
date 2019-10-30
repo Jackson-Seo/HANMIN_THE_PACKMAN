@@ -2,7 +2,11 @@
 #include "Object.h"
 
 Object::Object(void) {
+	this->id = NULL;
+}
 
+Object::Object(const GLuint id) {
+	this->id = id;
 }
 
 void Object::AddVertex(GLfloat vtx[], int size) {
@@ -17,15 +21,12 @@ void Object::AddIndex(GLubyte idx[], int size) {
 	}
 }
 
-void Object::Draw(void) {
-	glVertexPointer(3, GL_FLOAT, sizeof(this->vertex) / sizeof(this->vertex) / 3, &this->vertex);
-
-	glMatrixMode(GL_MODELVIEW);
+void Object::Draw(void) {glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
+	glTranslatef(this->x, this->y, this->z);
 	glRotatef(this->xRo, 1, 0, 0);
 	glRotatef(this->yRo, 0, 1, 0);
 	glRotatef(this->zRo, 0, 0, 1);
-	glTranslatef(this->x, this->y, this->z);
-	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, &this->index);
+	glCallList(this->id);
 	glPopMatrix();
 }
