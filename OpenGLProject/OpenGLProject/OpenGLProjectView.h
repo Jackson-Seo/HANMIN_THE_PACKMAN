@@ -1,12 +1,9 @@
 ﻿
 // OpenGLProjectView.h: COpenGLProjectView 클래스의 인터페이스
 //
+#ifndef OPENGLPROJECTVIEW_H
+#define OPENGLPROJECTVIEW_H
 
-#pragma once
-#include <gl\gl.H>
-#include <gl\glu.H>
-#include <gl/glut.H>
-#include <gl\glaux.H>
 #include "OpenGLProjectDoc.h"
 
 // 사용자 정의 클래스
@@ -15,11 +12,6 @@
 #include "Axis.h"
 #include "Object.h"
 #include "ObjectController.h"
-
-#pragma comment(lib, "OPENGL32.LIB")
-#pragma comment(lib, "GLAUX.LIB")
-#pragma comment(lib, "GLU32.LIB")
-#pragma comment(lib, "GLUT32.LIB")
 
 class COpenGLProjectView : public CView
 {
@@ -93,8 +85,9 @@ public:
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
+#endif
+
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전
 inline COpenGLProjectDoc* COpenGLProjectView::GetDocument() const
    { return reinterpret_cast<COpenGLProjectDoc*>(m_pDocument); }
 #endif
-
