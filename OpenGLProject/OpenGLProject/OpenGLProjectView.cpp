@@ -299,7 +299,6 @@ void COpenGLProjectView::DrawGLScene(void)
 	glCreateBuffers(1, &gVertexBufferObject);
 	glNamedBufferData(gVertexBufferObject, gVertices.size() * sizeof(glm::vec3), &gVertices[0], GL_STATIC_DRAW);
 
-	glUseProgram(Core::programId);
 	// 버퍼를 바인딩
 	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
 	//정점 속성을 활성화 및 정점 속성 형태 정의
