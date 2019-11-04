@@ -211,15 +211,19 @@ void COpenGLProjectView::OnDestroy()
 
 void COpenGLProjectView::initGL()
 {
+	// GLEW를 사용하기 전에 먼저 초기화합니다
+	GLenum err = glewInit();
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHT2);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	Core::InitShaders();
 
 	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -247,6 +251,7 @@ void COpenGLProjectView::initGL()
 	iron->setScale(0.01f, 0.01f, 0.01f);
 
 	Camera::Initialize();
+
 }
 
 // OnCreate 이후에 적어도 한번 호출된다
@@ -278,9 +283,35 @@ void COpenGLProjectView::DrawGLScene(void)
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Camera::Convert();
-
 	Axis::Draw();
 	ObjectController::DrawObjects();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // color: white
+
+	// 정점 버퍼 오브젝트
+	GLuint gVertexBufferObject;
+	std::vector<glm::vec3> gVertices;
+
+	gVertices = {
+		glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.5f, 0.5f, 0.f)
+	};
+
+	// 정점 버퍼 생성 및 버퍼 데이터 정의
+	glCreateBuffers(1, &gVertexBufferObject);
+	glNamedBufferData(gVertexBufferObject, gVertices.size() * sizeof(glm::vec3), &gVertices[0], GL_STATIC_DRAW);
+
+	glUseProgram(Core::programId);
+	// 버퍼를 바인딩
+	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
+	//정점 속성을 활성화 및 정점 속성 형태 정의
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, NULL);
+	// 그려라! 삼각형 프리미티브(primitive) 형태로 해석하며 0번 정점부터 그린다.
+	glDrawArrays(GL_TRIANGLES, 0, gVertices.size());
+	// 바인딩된 버퍼 해제
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// 활성화된 정점 속성 비활성화
+	glDisableVertexAttribArray(0);
+	// 셰이더 프로그램 사용 중지
 
 	// camera view configuration
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };

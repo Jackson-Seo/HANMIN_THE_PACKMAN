@@ -12,6 +12,9 @@
 #include "Axis.h"
 #include "Object.h"
 #include "ObjectController.h"
+#include "ShaderLoader.h"
+
+using namespace Core;
 
 class COpenGLProjectView : public CView
 {
@@ -27,6 +30,7 @@ public:
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
+	GLuint program;
 public:
 	GLfloat cameraX = 0.0;
 	bool SetDevicePixelFormat(HDC hdc);

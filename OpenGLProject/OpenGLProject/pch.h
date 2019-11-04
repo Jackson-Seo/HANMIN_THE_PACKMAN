@@ -14,6 +14,7 @@
 // #include <gl\glaux.H>
 #include "include/GL/glew.h"
 #include "include/GL/glut.h"
+#include "include/glm/glm.hpp"
 
 #pragma comment(lib, "OPENGL32.LIB")
 // #pragma comment(lib, "GLU32.LIB")
