@@ -38,3 +38,10 @@ void Object::setScale(const float& xSc, const float& ySc, const float& zSc) {
 	this->ySc = ySc;
 	this->zSc = zSc;
 }
+
+void Object::setNumTriangles(const int& n) { m_iNumTriangles = n; }
+void Object::setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV) { 
+	vaoId = vao;
+	vboVId = vboV;
+	vboUvId = vboUV;
+}

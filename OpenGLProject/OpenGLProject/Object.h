@@ -11,6 +11,31 @@ private:
 	float x = 0, y = 0, z = 0; // 월드에서의 위치
 	float xRo = 0, yRo = 0, zRo = 0; // 회전 각도
 	float xSc = 1, ySc = 1, zSc = 1; // Scale값
+	GLuint vaoId;
+	GLuint vboVId;
+	GLuint vboUvId;
+	GLuint vboNorId;
+	int m_iNumTriangles = 0;
+public:
+	std::vector<glm::vec3> bufferPosition;
+	std::vector<glm::vec2> bufferUV;
+	std::vector<glm::vec3> bufferNormal;
+	// 텍스쳐 구조체
+	typedef struct {
+		int w;
+		int h;
+		int comp;
+		unsigned char* image = nullptr;
+	} Texture;
+	std::map<std::string, Texture> textures; // 여러 텍스쳐 저장한 구조체
+	// SubMesh 구조체
+	typedef struct {
+		std::string texname;
+		GLuint textureId;
+		GLuint idxBegin;
+		GLuint cntVertex;
+	} SubMesh;
+	std::vector<SubMesh> subMeshs;
 public:
 	Object(void);
 	Object(const GLuint id);
@@ -19,5 +44,6 @@ public:
 	void AddIndex(GLubyte idx[], int size);
 	void Draw(void); // Object를 그립니다 변환까지 처리합니다
 	void setScale(const float& xSc, const float& ySc, const float& Sc); // Object의 Scale을 조정합니다
+	void setNumTriangles(const int& n);
+	void setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV);
 };
-

@@ -16,6 +16,12 @@
 #include "include/GL/glut.h"
 #include "include/glm/glm.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "include/stb/stb_image.h"
+
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "include/tinyobjloader/tiny_obj_loader.h"
+
 #pragma comment(lib, "OPENGL32.LIB")
 // #pragma comment(lib, "GLU32.LIB")
 // #pragma comment(lib, "GLUT32.LIB")
