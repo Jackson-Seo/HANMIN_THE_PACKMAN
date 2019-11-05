@@ -1,7 +1,9 @@
-// myFS.glsl
+#version 450 core
+
+in vec3 passColorAttribute;
+out vec4 fragmentColor;
+
 void main()
 {
-    gl_FragColor = vec4( 1.0, 1.0, 0.0, 1.0 );
+    fragmentColor = vec4(passColorAttribute, 1.0);
 }
- 
-// gl_FragColor: resulting fragment color (output)

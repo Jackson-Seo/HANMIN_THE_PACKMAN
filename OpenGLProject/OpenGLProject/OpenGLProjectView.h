@@ -12,9 +12,7 @@
 #include "Axis.h"
 #include "Object.h"
 #include "ObjectController.h"
-#include "ShaderLoader.h"
-
-using namespace Core;
+#include "Shader.h"
 
 class COpenGLProjectView : public CView
 {

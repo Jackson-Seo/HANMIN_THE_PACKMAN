@@ -33,8 +33,8 @@
     </ClCompile>
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectController.cpp" />
-    <ClCompile Include="ShaderLoader.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,8 +79,8 @@
     </ClInclude>
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectController.h" />
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Shader.h">
+      <Filter>Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -131,7 +131,7 @@
     <Filter Include="헤더 파일\기본구성">
       <UniqueIdentifier>{42478ec0-12c7-437d-b79e-00d21470c7a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
+    <Filter Include="Shader">
       <UniqueIdentifier>{25706e7c-2658-47c3-af33-3d6496d176e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -145,10 +145,10 @@
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="FragmentShader.glsl">
-      <Filter>Core</Filter>
+      <Filter>Shader</Filter>
     </None>
     <None Include="VertexShader.glsl">
-      <Filter>Core</Filter>
+      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

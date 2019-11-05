@@ -28,8 +28,6 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	// 유저가 추가한 메시지 입니다
 	ON_MESSAGE(UWM_CUSTOM1, &COpenGLProjectView::OnUwmCustom1)
 	ON_MESSAGE(UWM_CHECKED, &COpenGLProjectView::OnUwmChecked)
-	//ON_WM_LBUTTONDOWN()
-	//ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TEST_DIRECTIONAL, &COpenGLProjectView::OnTestDirectional)
 	ON_COMMAND(ID_LIGHT_POSITIONAL, &COpenGLProjectView::OnLightPositional)
@@ -223,7 +221,7 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	Core::InitShaders();
+	Shader ourShader("VertexShader.glsl", "FragmentShader.glsl");
 
 	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -246,10 +244,58 @@ void COpenGLProjectView::initGL()
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 
-	ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
-	Object *iron = ObjectController::FindObject(std::string("IronMan.obj"));
-	iron->setScale(0.01f, 0.01f, 0.01f);
+	//ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
+	//Object *iron = ObjectController::FindObject(std::string("IronMan.obj"));
+	//iron->setScale(0.01f, 0.01f, 0.01f);
 
+	float position[] = {
+	0.0f,  0.5f, 0.0f, //vertex 1  위 중앙
+	0.5f, -0.5f, 0.0f, //vertex 2  오른쪽 아래
+	-0.5f, -0.5f, 0.0f //vertex 3  왼쪽 아래
+	};
+
+	float color[] = {
+		1.0f, 0.0f, 0.0f, //vertex 1 : RED (1,0,0)
+		0.0f, 1.0f, 0.0f, //vertex 2 : GREEN (0,1,0) 
+		0.0f, 0.0f, 1.0f  //vertex 3 : BLUE (0,0,1)
+	};
+
+	GLuint trianglePositionVertexBufferObject;
+	GLuint triangleColorVertexBufferObject;
+	GLuint triangleVertexArrayObject;
+
+	// VBO 생성 position 저장
+	glGenBuffers(1, &trianglePositionVertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(position), position, GL_STATIC_DRAW);
+
+	// VBO 생성 color 저장
+	glGenBuffers(1, &triangleColorVertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
+
+	// VAO 생성 Vertex 연결
+	glGenVertexArrays(1, &triangleVertexArrayObject);
+	glBindVertexArray(triangleVertexArrayObject);
+
+	// Program 객체로부터 이름이 positionAttribute인 속성 변수가 바인딩된 인덱스를 리턴받아서 positionAttribute 변수에 저장합니다
+	GLint positionAttribute = glGetAttribLocation(ourShader.getID(), "positionAttribute");
+	// VBO 를 바인딩합니다
+	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObject);
+	// positionAttribute 변수에 저장된 인덱스가 가리키는 position 속성이 VBO에서 어떻게 데이터를  가져올 수 있는지 지정해줍니다
+	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// Vertex Shader의 position 속성과 VBO의 position 데이터간의 연결이 동작하기 위해서는 glEnableVertexAttribArray 함수를 사용하여 positionAttribute을 활성화해야 합니다
+	glEnableVertexAttribArray(positionAttribute);
+
+	GLint colorAttribute = glGetAttribLocation(ourShader.getID(), "colorAttribute");
+	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObject);
+	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(colorAttribute);
+
+	glBindVertexArray(0);
+	glUseProgram(ourShader.getID());
+	glBindVertexArray(triangleVertexArrayObject);
+		
 	Camera::Initialize();
 
 }
@@ -285,32 +331,8 @@ void COpenGLProjectView::DrawGLScene(void)
 	Camera::Convert();
 	Axis::Draw();
 	ObjectController::DrawObjects();
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // color: white
 
-	// 정점 버퍼 오브젝트
-	GLuint gVertexBufferObject;
-	std::vector<glm::vec3> gVertices;
-
-	gVertices = {
-		glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.5f, 0.5f, 0.f)
-	};
-
-	// 정점 버퍼 생성 및 버퍼 데이터 정의
-	glCreateBuffers(1, &gVertexBufferObject);
-	glNamedBufferData(gVertexBufferObject, gVertices.size() * sizeof(glm::vec3), &gVertices[0], GL_STATIC_DRAW);
-
-	// 버퍼를 바인딩
-	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
-	//정점 속성을 활성화 및 정점 속성 형태 정의
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, NULL);
-	// 그려라! 삼각형 프리미티브(primitive) 형태로 해석하며 0번 정점부터 그린다.
-	glDrawArrays(GL_TRIANGLES, 0, gVertices.size());
-	// 바인딩된 버퍼 해제
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	// 활성화된 정점 속성 비활성화
-	glDisableVertexAttribArray(0);
-	// 셰이더 프로그램 사용 중지
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	// camera view configuration
 	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
