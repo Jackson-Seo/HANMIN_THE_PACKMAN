@@ -22,15 +22,18 @@ void Object::AddIndex(GLubyte idx[], int size) {
 }
 
 void Object::Draw(void) {
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(this->x, this->y, this->z);
-	glRotatef(this->xRo, 1, 0, 0);
-	glRotatef(this->yRo, 0, 1, 0);
-	glRotatef(this->zRo, 0, 0, 1);
-	glScalef(this->xSc, this->ySc, this->zSc);
-	glCallList(this->id);
-	glPopMatrix();
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(vaoId);
+
+	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
+	{
+		glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
+		glUniform1i(glGetUniformLocation(ProgramId, "myTextureSampler"), 0);
+
+		glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 void Object::setScale(const float& xSc, const float& ySc, const float& zSc) {
@@ -40,7 +43,7 @@ void Object::setScale(const float& xSc, const float& ySc, const float& zSc) {
 }
 
 void Object::setNumTriangles(const int& n) { m_iNumTriangles = n; }
-void Object::setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV) { 
+void Object::setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV) {
 	vaoId = vao;
 	vboVId = vboV;
 	vboUvId = vboUV;

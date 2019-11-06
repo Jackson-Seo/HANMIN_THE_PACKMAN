@@ -38,33 +38,54 @@ void ObjectController::LoadObject(const char* const fdir) {
 
 			t.image = stbi_load(texture_filename.c_str(), &t.w, &t.h, &t.comp, STBI_default);
 
+			// Texture VBO를 만듭니다
+			glActiveTexture(GL_TEXTURE0);
+			glGenTextures(1, &t.textureId);
+			glBindTexture(GL_TEXTURE_2D, t.textureId);
+			if (t.comp == 3) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t.w, t.h, 0, GL_RGB, GL_UNSIGNED_BYTE, t.image);
+			}
+			else if (t.comp == 4) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, t.image);
+			}
+			else {
+				assert(0);  // TODO
+			}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
 			obj.textures.insert(std::make_pair(mp->diffuse_texname, t));
+			// stbi_image_free(t.image);
 		}
 	}
 
 	// load obj position, uv, normal from shapes
-	Object::SubMesh sm;
-	sm.idxBegin = 0;
-	sm.cntVertex = 0;
-	sm.textureId = 0;
-	sm.texname = "";
+	Object::Shape sp;
+	sp.idxBegin = 0;
+	sp.cntVertex = 0;
+	sp.textureId = 0;
+	sp.texname = "";
 
-	for (size_t s = 0; s < shapes.size(); s++)
+	for (auto s = 0; s < shapes.size(); s++)
 	{
 		int current_material_id = 0;
 		if (materials.size() > 0)
 		{
 			current_material_id = shapes[s].mesh.material_ids[0];
-			sm.texname = materials[current_material_id].diffuse_texname;
+			sp.texname = materials[current_material_id].diffuse_texname;
 		}
 
-		for (size_t f = 0; f < shapes[s].mesh.indices.size() / 3; f++)
+		for (auto f = 0; f < shapes[s].mesh.indices.size() / 3; f++)
 		{
 			tinyobj::index_t idx0 = shapes[s].mesh.indices[3 * f + 0];
 			tinyobj::index_t idx1 = shapes[s].mesh.indices[3 * f + 1];
 			tinyobj::index_t idx2 = shapes[s].mesh.indices[3 * f + 2];
 
 			// v = vertex = bufferPosition
+			// Vertex 받아온다
 			glm::vec3 v[3];
 			for (int k = 0; k < 3; k++)
 			{
@@ -78,6 +99,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 			}
 
 			// vt = tc = uv = bufferUV
+			// 텍스쳐 좌표 받아온다
 			glm::vec2 tc[3];
 			if (attrib.texcoords.size() > 0) {
 				if ((idx0.texcoord_index < 0) || (idx1.texcoord_index < 0) ||
@@ -92,13 +114,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 				}
 				else
 				{
-					assert(attrib.texcoords.size() >
-						size_t(2 * idx0.texcoord_index + 1));
-					assert(attrib.texcoords.size() >
-						size_t(2 * idx1.texcoord_index + 1));
-					assert(attrib.texcoords.size() >
-						size_t(2 * idx2.texcoord_index + 1));
-
 					// Flip Y coord.
 					tc[0][0] = attrib.texcoords[2 * idx0.texcoord_index];
 					tc[0][1] = 1.0f - attrib.texcoords[2 * idx0.texcoord_index + 1];
@@ -118,6 +133,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 			}
 
 			// vn = vertex normal = bufferNomal
+			// 노말 Vertex 받아온다
 			glm::vec3 n[3];
 			bool invalid_normal_index = false;
 			int nf0 = idx0.normal_index;
@@ -134,9 +150,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 				{
 					for (int k = 0; k < 3; k++)
 					{
-						assert(size_t(3 * nf0 + k) < attrib.normals.size());
-						assert(size_t(3 * nf1 + k) < attrib.normals.size());
-						assert(size_t(3 * nf2 + k) < attrib.normals.size());
 						n[0][k] = attrib.normals[3 * nf0 + k];
 						n[1][k] = attrib.normals[3 * nf1 + k];
 						n[2][k] = attrib.normals[3 * nf2 + k];
@@ -145,10 +158,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 			}
 			else
 			{
-				invalid_normal_index = true;
-			}
-			if (invalid_normal_index) {
-				// compute geometric normal
 				CalcNormal(n[0], v[0], v[1], v[2]);
 				n[1][0] = n[0][0];
 				n[1][1] = n[0][1];
@@ -158,7 +167,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 				n[2][2] = n[0][2];
 			}
 
-			// save to DrawObject
+			// save to Object
 			for (int k = 0; k < 3; k++)
 			{
 				// push buffer
@@ -168,49 +177,26 @@ void ObjectController::LoadObject(const char* const fdir) {
 				numTriangles++;
 			}
 
-			// Make SubSet
+			// shape마다 생성한다
 			int material_id = shapes[s].mesh.material_ids[f];
 			if (current_material_id == material_id)
 			{
-				sm.cntVertex += 3;
+				sp.cntVertex += 3;
 			}
 			else
 			{
-				obj.subMeshs.push_back(sm);
-
+				obj.shapes.push_back(sp);
 				if (materials.size() > 0)
 				{
-					sm.texname = materials[material_id].diffuse_texname;
+					sp.texname = materials[material_id].diffuse_texname;
 				}
-				sm.idxBegin += sm.cntVertex;
-				sm.cntVertex = 3;
-
+				sp.idxBegin += sp.cntVertex;
+				sp.cntVertex = 3;
 				current_material_id = material_id;
 			}
 		}
 
-		// Texture VBO
-		glActiveTexture(GL_TEXTURE0);
-		glGenTextures(1, &sm.textureId);
-		glBindTexture(GL_TEXTURE_2D, sm.textureId);
-		if (obj.textures[sm.texname].comp == 3) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, obj.textures[sm.texname].w, obj.textures[sm.texname].h, 0, GL_RGB,
-				GL_UNSIGNED_BYTE, obj.textures[sm.texname].image);
-		}
-		else if (obj.textures[sm.texname].comp == 4) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, obj.textures[sm.texname].w, obj.textures[sm.texname].h, 0, GL_RGBA,
-				GL_UNSIGNED_BYTE, obj.textures[sm.texname].image);
-		}
-		else {
-			assert(0);  // TODO
-		}
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		obj.subMeshs.push_back(sm);
+		obj.shapes.push_back(sp);
 	}
 	// VAO
 	glGenVertexArrays(1, &vao);
@@ -236,59 +222,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 	obj.setNumTriangles(numTriangles);
 	obj.setID(vao, vboV, vboUV);
 	s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, obj));
-
-	/*--------------------------------------------------------------------------------------------------------------
-	---------------------------------------------Create VBO---------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-
-	for (int i = 0; i < obj.subMeshs.size(); i++)
-	{
-		Object::SubMesh* sm = &obj.subMeshs[i];
-
-		if (sm->textureId == 0 && sm->texname != "")
-		{
-			glActiveTexture(GL_TEXTURE0);
-			glGenTextures(1, &sm->textureId);
-			glBindTexture(GL_TEXTURE_2D, sm->textureId);
-			if (obj.textures[sm->texname].comp == 3) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, obj.textures[sm->texname].w, obj.textures[sm->texname].h, 0, GL_RGB,
-					GL_UNSIGNED_BYTE, obj.textures[sm->texname].image);
-			}
-			else if (obj.textures[sm->texname].comp == 4) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, obj.textures[sm->texname].w, obj.textures[sm->texname].h, 0, GL_RGBA,
-					GL_UNSIGNED_BYTE, obj.textures[sm->texname].image);
-			}
-			else {
-				assert(0);  // TODO
-			}
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-	}
-
-	// VAO
-	glGenVertexArrays(1, obj->vaoId);
-	glBindVertexArray(o->vaoId);
-
-	// Position
-	glGenBuffers(1, &o->vboVId);
-	glBindBuffer(GL_ARRAY_BUFFER, o->vboVId);
-	glBufferData(GL_ARRAY_BUFFER, o->bufferPosition.size() * sizeof(glm::vec3), &o->bufferPosition[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-
-	// UV
-	glGenBuffers(1, &o->vboUvId);
-	glBindBuffer(GL_ARRAY_BUFFER, o->vboUvId);
-	glBufferData(GL_ARRAY_BUFFER, o->bufferUV.size() * sizeof(glm::vec2), &o->bufferUV[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(1);
-
-	// Normal 벡터 추가
-	*/
 }
 
 Object ObjectController::FindObject(const std::string key) {

@@ -1,5 +1,4 @@
-﻿
-// OpenGLProjectView.h: COpenGLProjectView 클래스의 인터페이스
+﻿// OpenGLProjectView.h: COpenGLProjectView 클래스의 인터페이스
 //
 #ifndef OPENGLPROJECTVIEW_H
 #define OPENGLPROJECTVIEW_H
@@ -20,11 +19,11 @@ protected: // serialization에서만 만들어집니다.
 	COpenGLProjectView() noexcept;
 	DECLARE_DYNCREATE(COpenGLProjectView)
 
-// 특성입니다.
+	// 특성입니다.
 public:
 	COpenGLProjectDoc* GetDocument() const;
 
-// 작업입니다.
+	// 작업입니다.
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
@@ -36,7 +35,7 @@ public:
 	void ReSizeGLScene(GLsizei width, GLsizei height);
 	void DrawGLScene(void);
 
-// 재정의입니다.
+	// 재정의입니다.
 public:
 	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
@@ -45,7 +44,7 @@ protected:
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
-// 구현입니다.
+	// 구현입니다.
 public:
 	virtual ~COpenGLProjectView();
 #ifdef _DEBUG
@@ -54,15 +53,15 @@ public:
 #endif
 
 private:
-	bool *mOPT_LTG;
+	bool* mOPT_LTG;
 	bool* mEN_LTG; // Enable Lighting
 	const int nLTG = 3; // Lighting의 개수
 	const int nOPT_LTG = 8; // 조명 옵션의 개수
-	GLfloat *light0_position;
+	GLfloat* light0_position;
 	GLfloat preX;
 	GLfloat preY;
 	bool clicked;
-// 생성된 메시지 맵 함수
+	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
@@ -91,5 +90,7 @@ public:
 
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전
 inline COpenGLProjectDoc* COpenGLProjectView::GetDocument() const
-   { return reinterpret_cast<COpenGLProjectDoc*>(m_pDocument); }
+{
+	return reinterpret_cast<COpenGLProjectDoc*>(m_pDocument);
+}
 #endif

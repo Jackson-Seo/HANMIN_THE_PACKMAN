@@ -193,7 +193,6 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-
 void COpenGLProjectView::OnDestroy()
 {
 	CView::OnDestroy();
@@ -246,7 +245,6 @@ void COpenGLProjectView::initGL()
 
 	//ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
 	//Object *iron = ObjectController::FindObject(std::string("IronMan.obj"));
-	//iron->setScale(0.01f, 0.01f, 0.01f);
 
 	float position[] = {
 	0.0f,  0.5f, 0.0f, //vertex 1  위 중앙
@@ -256,7 +254,7 @@ void COpenGLProjectView::initGL()
 
 	float color[] = {
 		1.0f, 0.0f, 0.0f, //vertex 1 : RED (1,0,0)
-		0.0f, 1.0f, 0.0f, //vertex 2 : GREEN (0,1,0) 
+		0.0f, 1.0f, 0.0f, //vertex 2 : GREEN (0,1,0)
 		0.0f, 0.0f, 1.0f  //vertex 3 : BLUE (0,0,1)
 	};
 
@@ -295,9 +293,8 @@ void COpenGLProjectView::initGL()
 	glBindVertexArray(0);
 	glUseProgram(ourShader.getID());
 	glBindVertexArray(triangleVertexArrayObject);
-		
-	Camera::Initialize();
 
+	Camera::Initialize();
 }
 
 // OnCreate 이후에 적어도 한번 호출된다

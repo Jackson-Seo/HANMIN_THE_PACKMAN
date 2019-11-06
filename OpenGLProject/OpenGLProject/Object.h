@@ -17,11 +17,12 @@ private:
 	GLuint vboNorId;
 	int m_iNumTriangles = 0;
 public:
-	std::vector<glm::vec3> bufferPosition;
-	std::vector<glm::vec2> bufferUV;
-	std::vector<glm::vec3> bufferNormal;
+	std::vector<glm::vec3> bufferPosition; // Vertex의 위치
+	std::vector<glm::vec2> bufferUV; // Vertex의 Texture 좌표
+	std::vector<glm::vec3> bufferNormal; // Normal 좌표
 	// 텍스쳐 구조체
 	typedef struct {
+		GLuint textureId;
 		int w;
 		int h;
 		int comp;
@@ -31,11 +32,10 @@ public:
 	// SubMesh 구조체
 	typedef struct {
 		std::string texname;
-		GLuint textureId;
 		GLuint idxBegin;
 		GLuint cntVertex;
-	} SubMesh;
-	std::vector<SubMesh> subMeshs;
+	} Shape;
+	std::vector<Shape> shapes;
 public:
 	Object(void);
 	Object(const GLuint id);
