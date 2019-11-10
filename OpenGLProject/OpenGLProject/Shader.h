@@ -15,8 +15,6 @@ public:
 	// shader를 활성화하고 사용합니다.
 	void use();
 	// Uniform 유틸리티 함수들
-	void setBool(const std::string& name, bool value) const;
-	void setInt(const std::string& name, int value) const;
-	void setFloat(const std::string& name, float value) const;
+	void setMatrix(glm::mat4& matrix, const std::string& str) const;
 	GLuint getID(void);
 };

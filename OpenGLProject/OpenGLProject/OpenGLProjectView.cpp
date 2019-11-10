@@ -189,6 +189,7 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	initGL();
+	deltaTime = clock();
 
 	return 0;
 }
@@ -222,37 +223,14 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	Shader ourShader("VertexShader.glsl", "FragmentShader.glsl");
-	progId = ourShader.getID();
-	ourShader.use();
+	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
+	glslShader.use();
 
-	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
-	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
-	GLfloat light1_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
-	GLfloat light1_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	GLfloat light1_specular[] = { 0.0,0.0,1.0,1.0 };
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
-
-	GLfloat light2_position[] = { -4.0, -4.0, 1.0, 1.0 };
-	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
-	GLfloat light2_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
-	glLightfv(GL_LIGHT2, GL_AMBIENT, light2_ambient);
-	GLfloat light2_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
-	GLfloat light2_specular[] = { 0.0,0.0,1.0,1.0 };
-	glLightfv(GL_LIGHT2, GL_SPECULAR, light2_specular);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 45.0);
-	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
-	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
-
-	// ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/IronMan.obj");
-	ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
 	TRACE0("로딩 종료\n");
 
-	// Camera::Initialize();
 }
 
 // OnCreate 이후에 적어도 한번 호출된다
@@ -271,7 +249,9 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 	if (height == 0)
 		height = 1;
 
-	Camera::ReSize(width, height);
+	glViewport(0, 0, width, height);
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	glslShader.setMatrix(projection, "projection");
 
 	// set modeview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -281,11 +261,16 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 
 void COpenGLProjectView::DrawGLScene(void)
 {
+	deltaTime = clock() - deltaTime;
+
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Camera::Convert();
+
+	glm::mat4 view = Camera::getViewMatrix();
+	glslShader.setMatrix(view, "view");
+
 	Axis::Draw();
-	ObjectController::DrawObjects(progId);
+	ObjectController::DrawObjects(glslShader.getID());
 
 	// swap buffer
 	SwapBuffers(m_hDC);
@@ -363,21 +348,6 @@ void COpenGLProjectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 
 void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	//if (clicked) {
-	//	GLfloat light0_position[] = { (preX - point.x)/100, (preY - point.y)/100, 1.0, 1.0 };
-	//	if (!mOPT_LTG[0])
-	//		for (int i = 0; i < 4; i++)
-	//			light0_position[i] = 0.0;
-	//}
-	//preX = (preX - point.x) / 100;
-	//preY = (preY - point.y) / 100;
-	if (Controller::getRClick()) {
-		Camera::setCaRo(Camera::getCaRo() + point - Controller::getpreClickPoint());
-		Controller::setpreClickPoint(point);
-	}
-
-	// swap buffer
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -404,38 +374,29 @@ void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar) {
 	case 'W':
-		Controller::setW(TRUE);
+		Camera::Move(Direction::FORWARD, (double)deltaTime / CLOCKS_PER_SEC);
 		break;
 	case 'A':
-		Controller::setA(TRUE);
+		Camera::Move(Direction::LEFT, (double)deltaTime / CLOCKS_PER_SEC);
 		break;
 	case 'S':
-		Controller::setS(TRUE);
+		Camera::Move(Direction::BACKWARD, (double)deltaTime / CLOCKS_PER_SEC);
 		break;
 	case 'D':
-		Controller::setD(TRUE);
+		Camera::Move(Direction::RIGHT, (double)deltaTime / CLOCKS_PER_SEC);
+		break;
+	case 'Q':
+		Camera::Move(Direction::UP, (double)deltaTime / CLOCKS_PER_SEC);
+		break;
+	case 'E':
+		Camera::Move(Direction::DOWN, (double)deltaTime / CLOCKS_PER_SEC);
+		break;
 	}
 
-	Controller::CameraTrans();
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 // 키보드 입력을 처리합니다
 void COpenGLProjectView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	switch (nChar) {
-	case 'W':
-		Controller::setW(FALSE);
-		break;
-	case 'A':
-		Controller::setA(FALSE);
-		break;
-	case 'S':
-		Controller::setS(FALSE);
-		break;
-	case 'D':
-		Controller::setD(FALSE);
-	}
-
-	Controller::CameraTrans();
 	CView::OnKeyUp(nChar, nRepCnt, nFlags);
 }

@@ -3,11 +3,11 @@
 
 void Object::Draw(GLuint progId) {
 	glm::mat4 mvp = glm::mat4(1.0f); // Identitiy 행렬 설정
-	mvp = glm::translate(mvp, glm::vec3(1.0f, 1.0f, 1.0f)); // Translate
-	mvp = glm::rotate(mvp, glm::radians(0.0f), glm::vec3(0.0, 0.0, 0.0)); // Rotate
-	mvp = glm::scale(mvp, glm::vec3(1.0f, 1.0f, 1.0f)); // Scale
+	mvp = glm::translate(mvp, glm::vec3(0.0f, 0.0f, 0.0f)); // Translate
+	mvp = glm::rotate(mvp, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
+	mvp = glm::scale(mvp, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
 
-	glUniformMatrix4fv(glGetUniformLocation(progId, "MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(glGetUniformLocation(progId, "model"), 1, GL_FALSE, glm::value_ptr(mvp));
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);

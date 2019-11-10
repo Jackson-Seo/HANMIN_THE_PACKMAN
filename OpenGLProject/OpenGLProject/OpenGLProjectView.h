@@ -1,10 +1,7 @@
-﻿// OpenGLProjectView.h: COpenGLProjectView 클래스의 인터페이스
-//
-#ifndef OPENGLPROJECTVIEW_H
+﻿#ifndef OPENGLPROJECTVIEW_H
 #define OPENGLPROJECTVIEW_H
 
 #include "OpenGLProjectDoc.h"
-
 // 사용자 정의 클래스
 #include "Controller.h"
 #include "Camera.h"
@@ -18,23 +15,16 @@ class COpenGLProjectView : public CView
 protected: // serialization에서만 만들어집니다.
 	COpenGLProjectView() noexcept;
 	DECLARE_DYNCREATE(COpenGLProjectView)
-
-	// 특성입니다.
 public:
 	COpenGLProjectDoc* GetDocument() const;
-
-	// 작업입니다.
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
 public:
-	GLfloat cameraX = 0.0;
 	bool SetDevicePixelFormat(HDC hdc);
 	void initGL(void);
 	void ReSizeGLScene(GLsizei width, GLsizei height);
 	void DrawGLScene(void);
-
-	// 재정의입니다.
 public:
 	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
@@ -52,6 +42,8 @@ public:
 #endif
 
 private:
+	clock_t deltaTime;
+	Shader glslShader;
 	bool* mOPT_LTG;
 	bool* mEN_LTG; // Enable Lighting
 	const int nLTG = 3; // Lighting의 개수
@@ -60,9 +52,6 @@ private:
 	GLfloat preX;
 	GLfloat preY;
 	bool clicked;
-private:
-	// 쉐이더 관련 변수
-	GLuint progId; // 쉐이더 프로그램 ID
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
