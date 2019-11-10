@@ -18,7 +18,7 @@ void Object::Draw(GLuint progId) {
 			continue;
 		}
 		glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
-		glUniform1i(glGetUniformLocation(progId, "myTextureSampler"), 0);
+		glUniform1i(glGetUniformLocation(progId, "textureSampler"), 0);
 
 		glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 

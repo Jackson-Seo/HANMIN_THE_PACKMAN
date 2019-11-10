@@ -8,6 +8,9 @@
 
 #include "OpenGLProjectDoc.h"
 #include "OpenGLProjectView.h"
+#pragma once
+#include "include/tinyobjloader/tiny_obj_loader.h"
+#include "include/stb/stb_image.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -187,9 +190,6 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	initGL();
 
-	// glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);     // 더블버퍼 사용
-	// glutCreateWindow("OpenGL");
-
 	return 0;
 }
 
@@ -208,6 +208,8 @@ void COpenGLProjectView::OnDestroy()
 
 void COpenGLProjectView::initGL()
 {
+	TRACE0("initGL 시작\n");
+
 	// GLEW를 사용하기 전에 먼저 초기화합니다
 	GLenum err = glewInit();
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -222,6 +224,7 @@ void COpenGLProjectView::initGL()
 
 	Shader ourShader("VertexShader.glsl", "FragmentShader.glsl");
 	progId = ourShader.getID();
+	ourShader.use();
 
 	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -244,59 +247,12 @@ void COpenGLProjectView::initGL()
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 
-	ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/IronMan.obj");
-	//Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
+	// ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/IronMan.obj");
+	ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
+	TRACE0("로딩 종료\n");
 
-	/*
-	float position[] = {
-	0.0f,  0.5f, 0.0f, //vertex 1  위 중앙
-	0.5f, -0.5f, 0.0f, //vertex 2  오른쪽 아래
-	-0.5f, -0.5f, 0.0f //vertex 3  왼쪽 아래
-	};
-
-	float color[] = {
-		1.0f, 0.0f, 0.0f, //vertex 1 : RED (1,0,0)
-		0.0f, 1.0f, 0.0f, //vertex 2 : GREEN (0,1,0)
-		0.0f, 0.0f, 1.0f  //vertex 3 : BLUE (0,0,1)
-	};
-
-	GLuint trianglePositionVertexBufferObject;
-	GLuint triangleColorVertexBufferObject;
-	GLuint triangleVertexArrayObject;
-
-	// VBO 생성 position 저장
-	glGenBuffers(1, &trianglePositionVertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(position), position, GL_STATIC_DRAW);
-
-	// VBO 생성 color 저장
-	glGenBuffers(1, &triangleColorVertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
-
-	// VAO 생성 Vertex 연결
-	glGenVertexArrays(1, &triangleVertexArrayObject);
-	glBindVertexArray(triangleVertexArrayObject);
-
-	// Program 객체로부터 이름이 positionAttribute인 속성 변수가 바인딩된 인덱스를 리턴받아서 positionAttribute 변수에 저장합니다
-	GLint positionAttribute = glGetAttribLocation(ourShader.getID(), "positionAttribute");
-	// VBO 를 바인딩합니다
-	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObject);
-	// positionAttribute 변수에 저장된 인덱스가 가리키는 position 속성이 VBO에서 어떻게 데이터를  가져올 수 있는지 지정해줍니다
-	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	// Vertex Shader의 position 속성과 VBO의 position 데이터간의 연결이 동작하기 위해서는 glEnableVertexAttribArray 함수를 사용하여 positionAttribute을 활성화해야 합니다
-	glEnableVertexAttribArray(positionAttribute);
-
-	GLint colorAttribute = glGetAttribLocation(ourShader.getID(), "colorAttribute");
-	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObject);
-	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(colorAttribute);
-
-	glBindVertexArray(0);
-	glUseProgram(ourShader.getID());
-	glBindVertexArray(triangleVertexArrayObject);
-	*/
-	Camera::Initialize();
+	// Camera::Initialize();
 }
 
 // OnCreate 이후에 적어도 한번 호출된다
@@ -327,63 +283,9 @@ void COpenGLProjectView::DrawGLScene(void)
 {
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Camera::Convert();
+	// Camera::Convert();
 	Axis::Draw();
 	ObjectController::DrawObjects(progId);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	// camera view configuration
-	GLfloat light0_position[] = { -4.0, -4.0, 1.0, 1.0 };
-	if (!mOPT_LTG[0])
-		for (int i = 0; i < 4; i++)
-			light0_position[i] = 0.0;
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-	GLfloat light0_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
-	if (!mOPT_LTG[1])
-		for (int i = 0; i < 4; i++)
-			light0_ambient[i] = 0.0;
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-	GLfloat light0_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	if (!mOPT_LTG[2])
-		for (int i = 0; i < 4; i++)
-			light0_diffuse[i] = 0.0;
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	GLfloat light0_specular[] = { 0.0,0.0,1.0,1.0 };
-	//GLfloat light0_specular;
-	if (!mOPT_LTG[3])
-		for (int i = 0; i < 4; i++)
-			light0_specular[i] = 0.0;
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-
-	GLfloat mat_ambient[] = { 0.2, 0.7, 0.2, 1.0 };
-	if (!mOPT_LTG[4])
-		for (int i = 0; i < 4; i++)
-			mat_ambient[i] = 0.0;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	GLfloat mat_diffuse[] = { 0.5, 0.7, 0.9, 1.0 };
-	if (!mOPT_LTG[5])
-		for (int i = 0; i < 4; i++)
-			mat_diffuse[i] = 0.0;
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	if (!mOPT_LTG[6])
-		for (int i = 0; i < 4; i++)
-			mat_specular[i] = 0.0;
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	GLfloat mat_shiness[] = { 20.0 };
-	if (!mOPT_LTG[7])
-		mat_shiness[0] = 0.0;
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shiness);
-
-	for (int i = 0; i < nLTG; i++) {
-		if (mEN_LTG[i]) {
-			glEnable(GL_LIGHT0 + i);
-		}
-		else {
-			glDisable(GL_LIGHT0 + i);
-		}
-	}
 
 	// swap buffer
 	SwapBuffers(m_hDC);

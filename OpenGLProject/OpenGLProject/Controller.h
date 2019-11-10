@@ -35,4 +35,3 @@ public:
 	static void setD(bool b);
 	static bool getD();
 };
-

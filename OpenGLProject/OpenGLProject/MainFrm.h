@@ -1,5 +1,4 @@
-﻿
-// MainFrm.h: CMainFrame 클래스의 인터페이스
+﻿// MainFrm.h: CMainFrame 클래스의 인터페이스
 //
 
 #pragma once
@@ -7,23 +6,22 @@
 
 class CMainFrame : public CFrameWndEx
 {
-	
 protected: // serialization에서만 만들어집니다.
 	CMainFrame() noexcept;
 	DECLARE_DYNCREATE(CMainFrame)
 
-// 특성입니다.
+	// 특성입니다.
 public:
 
-// 작업입니다.
+	// 작업입니다.
 public:
 
-// 재정의입니다.
+	// 재정의입니다.
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = nullptr, CCreateContext* pContext = nullptr);
 
-// 구현입니다.
+	// 구현입니다.
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -38,7 +36,7 @@ protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CMFCToolBarImages m_UserImages;
 	CPropertiesWnd    m_wndProperties;
 
-// 생성된 메시지 맵 함수
+	// 생성된 메시지 맵 함수
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnViewCustomize();
@@ -50,5 +48,3 @@ protected:
 	bool CreateDockingWindows();
 	void SetDockingWindowIcons(bool bHiColorIcons);
 };
-
-

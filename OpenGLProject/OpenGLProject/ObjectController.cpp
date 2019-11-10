@@ -211,7 +211,6 @@ void ObjectController::LoadObject(Shader& shader, const char* const fdir) {
 		}
 		obj.shapes.push_back(sp);
 	}
-
 	// VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -241,7 +240,6 @@ void ObjectController::LoadObject(Shader& shader, const char* const fdir) {
 	obj.setNumTriangles(numTriangles);
 	obj.setID(vao, vboV, vboUV);
 	s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, obj));
-
 }
 
 Object ObjectController::FindObject(const std::string key) {

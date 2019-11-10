@@ -5,7 +5,7 @@ class Camera
 private:
 	// 정적상수
 	const static float c_fCameraRotate; // Camera의 회전을 부드럽게 보정
-	const static float c_Degree; // Degree로 변환하는 상수 
+	const static float c_Degree; // Degree로 변환하는 상수
 private:
 	static CPoint s_CaRo; // 카메라의 회전 각도
 	static float s_X; // 카메라의 위치 X
@@ -20,4 +20,3 @@ public:
 	static void setCaRo(CPoint point);
 	static CPoint getCaRo();
 };
-

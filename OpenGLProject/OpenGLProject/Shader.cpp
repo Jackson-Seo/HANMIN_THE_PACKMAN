@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Shader.h"
 
+Shader::Shader() {}
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	// 1. 파일 경로를 통해 vertex/fragment shader 소스 코드를 검색합니다.

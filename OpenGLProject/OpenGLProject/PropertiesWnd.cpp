@@ -1,5 +1,4 @@
-﻿
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 
 #include "PropertiesWnd.h"
@@ -10,7 +9,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
@@ -53,7 +52,7 @@ END_MESSAGE_MAP()
 
 void CPropertiesWnd::AdjustLayout()
 {
-	if (GetSafeHwnd () == nullptr || (AfxGetMainWnd() != nullptr && AfxGetMainWnd()->IsIconic()))
+	if (GetSafeHwnd() == nullptr || (AfxGetMainWnd() != nullptr && AfxGetMainWnd()->IsIconic()))
 	{
 		return;
 	}
@@ -304,7 +303,7 @@ void CPropertiesWnd::OnDestroy()
 }
 
 void CPropertiesWnd::OnBtnClick() {
-	if(!cOpenGLProjectView)
+	if (!cOpenGLProjectView)
 		cOpenGLProjectView = (COpenGLProjectView*)((CMainFrame*)AfxGetMainWnd())->GetActiveView();
 	// ::SendMessage(p->m_hWnd, UWM_CUSTOM1, 0, 0);
 	cOpenGLProjectView->SendMessage(UWM_CUSTOM1);

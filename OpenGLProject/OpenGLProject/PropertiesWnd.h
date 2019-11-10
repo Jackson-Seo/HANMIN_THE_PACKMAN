@@ -1,5 +1,4 @@
-﻿
-#pragma once
+﻿#pragma once
 #include "OpenGLProjectView.h"
 
 class CPropertiesToolBar : public CMFCToolBar
@@ -73,4 +72,3 @@ protected:
 public:
 	afx_msg void OnDestroy();
 };
-

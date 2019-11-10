@@ -10,7 +10,8 @@ private:
 	GLuint ID;
 public:
 	// 생성자는 shader를 읽고 생성합니다.
-	Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+	Shader();
+	Shader(const char* vertexPath, const char* fragmentPath);
 	// shader를 활성화하고 사용합니다.
 	void use();
 	// Uniform 유틸리티 함수들
