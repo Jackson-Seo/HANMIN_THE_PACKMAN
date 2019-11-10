@@ -37,7 +37,6 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	ON_COMMAND(ID_LIGHT_SPOTLIGHT, &COpenGLProjectView::OnLightSpotlight)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_KEYDOWN()
-	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 bool COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
@@ -189,7 +188,6 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	initGL();
-	deltaTime = clock();
 
 	return 0;
 }
@@ -210,6 +208,8 @@ void COpenGLProjectView::OnDestroy()
 void COpenGLProjectView::initGL()
 {
 	TRACE0("initGL 시작\n");
+	deltaTime = clock();
+	Controller::Initialize();
 
 	// GLEW를 사용하기 전에 먼저 초기화합니다
 	GLenum err = glewInit();
@@ -262,6 +262,8 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 void COpenGLProjectView::DrawGLScene(void)
 {
 	deltaTime = clock() - deltaTime;
+	deltaTime = clock();
+	Controller::Clock();
 
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -330,26 +332,14 @@ void COpenGLProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 	CView::OnLButtonUp(nFlags, point);
 }
 
-void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
-{
-	Controller::setRClick(TRUE);
-	Controller::setpreClickPoint(point);
-
-	CView::OnRButtonDown(nFlags, point);
-}
-void COpenGLProjectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	Controller::setRClick(FALSE);
-
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { Controller::OnRButtonDown(nFlags, point); }
+void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) {
+	Controller::OnRButtonUp(nFlags, point);
 	// 우클릭 완료시 벗어나려면 주석을 지워야한다
 	// ClientToScreen(&point);
 	// OnContextMenu(this, point);
 }
-
-void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	CView::OnMouseMove(nFlags, point);
-}
+void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { Controller::OnMouseMove(nFlags, point); }
 
 void COpenGLProjectView::OnTestDirectional()
 {
@@ -369,34 +359,4 @@ void COpenGLProjectView::OnLightSpotlight()
 	mEN_LTG[2] = !mEN_LTG[2];
 }
 
-// 키보드 입력을 처리합니다
-void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
-	switch (nChar) {
-	case 'W':
-		Camera::Move(Direction::FORWARD, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	case 'A':
-		Camera::Move(Direction::LEFT, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	case 'S':
-		Camera::Move(Direction::BACKWARD, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	case 'D':
-		Camera::Move(Direction::RIGHT, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	case 'Q':
-		Camera::Move(Direction::UP, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	case 'E':
-		Camera::Move(Direction::DOWN, (double)deltaTime / CLOCKS_PER_SEC);
-		break;
-	}
-
-	CView::OnKeyDown(nChar, nRepCnt, nFlags);
-}
-// 키보드 입력을 처리합니다
-void COpenGLProjectView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
-	CView::OnKeyUp(nChar, nRepCnt, nFlags);
-}
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { Controller::OnKeyDown(nChar, nRepCnt, nFlags); }

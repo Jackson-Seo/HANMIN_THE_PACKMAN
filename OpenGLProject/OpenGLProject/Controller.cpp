@@ -3,32 +3,60 @@
 #include "Camera.h"
 
 // 정적변수 초기화
-bool Controller::s_bRClick = FALSE;
-bool Controller::s_bLClick = FALSE;
-CPoint Controller::s_ClickPoint = { 0, 0 };
-CPoint Controller::s_preClickPoint = { 0, 0 };
+time_t Controller::time = 0.0;
+time_t Controller::deltaTime = 0.0;
+bool Controller::bRClick = FALSE;
+bool Controller::bLClick = FALSE;
+CPoint Controller::clickPoint = { 0, 0 };
+CPoint Controller::preClickPoint = { 0, 0 };
 
-void Controller::setRClick(bool b) {
-	s_bRClick = b;
+void Controller::Initialize(void) {
+	time = clock();
 }
-bool Controller::getRClick() {
-	return s_bRClick;
+
+void Controller::Clock(void) {
+	deltaTime = clock() - time;
+	time = clock();
 }
-void Controller::setLClick(bool b) {
-	s_bLClick = b;
+
+void Controller::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (bRClick) {
+		Camera::Rotate(point - clickPoint, (double)deltaTime);
+		clickPoint = point;
+	}
 }
-bool Controller::getLClick() {
-	return s_bLClick;
+
+void Controller::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	bRClick = true;
+	clickPoint = point;
 }
-void Controller::setClickPoint(CPoint point) {
-	s_ClickPoint = point;
+
+void Controller::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	bRClick = false;
 }
-CPoint Controller::getClickPoint() {
-	return s_ClickPoint;
-}
-void Controller::setpreClickPoint(CPoint point) {
-	s_preClickPoint = point;
-}
-CPoint Controller::getpreClickPoint() {
-	return s_preClickPoint;
+
+void Controller::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	switch (nChar) {
+	case 'W':
+		Camera::Move(Direction::FORWARD, (double)deltaTime);
+		break;
+	case 'A':
+		Camera::Move(Direction::LEFT, (double)deltaTime);
+		break;
+	case 'S':
+		Camera::Move(Direction::BACKWARD, (double)deltaTime);
+		break;
+	case 'D':
+		Camera::Move(Direction::RIGHT, (double)deltaTime);
+		break;
+	case 'Q':
+		Camera::Move(Direction::UP, (double)deltaTime);
+		break;
+	case 'E':
+		Camera::Move(Direction::DOWN, (double)deltaTime);
+		break;
+	}
 }
