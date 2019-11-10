@@ -1,11 +1,17 @@
 #include "pch.h"
 #include "ObjectController.h"
 
+#pragma once
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "include/tinyobjloader/tiny_obj_loader.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "include/stb/stb_image.h"
+
 // 정적변수 초기화
 std::map<std::string, Object> ObjectController::s_object = {};
 int ObjectController::s_iNumGenList = 0;
 
-void ObjectController::LoadObject(const char* const fdir) {
+void ObjectController::LoadObject(Shader& shader, const char* const fdir) {
 	Object obj;
 	GLuint vao, vboV, vboUV;
 	int numTriangles = 0;
@@ -30,6 +36,9 @@ void ObjectController::LoadObject(const char* const fdir) {
 	for (auto m = 0; m < materials.size(); m++)
 	{
 		tinyobj::material_t* mp = &materials[m];
+		if (mp->diffuse_texname == "") {
+			continue;
+		}
 
 		if (obj.textures.find(mp->diffuse_texname) == obj.textures.end()) {
 			Object::Texture t;
@@ -44,13 +53,14 @@ void ObjectController::LoadObject(const char* const fdir) {
 			glBindTexture(GL_TEXTURE_2D, t.textureId);
 			if (t.comp == 3) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t.w, t.h, 0, GL_RGB, GL_UNSIGNED_BYTE, t.image);
+				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 			else if (t.comp == 4) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, t.image);
+				glGenerateMipmap(GL_TEXTURE_2D);
 			}
-			else {
-				assert(0);  // TODO
-			}
+
+			// Texture 확대 축소 필터
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -58,7 +68,7 @@ void ObjectController::LoadObject(const char* const fdir) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 			obj.textures.insert(std::make_pair(mp->diffuse_texname, t));
-			// stbi_image_free(t.image);
+			stbi_image_free(t.image);
 		}
 	}
 
@@ -66,7 +76,6 @@ void ObjectController::LoadObject(const char* const fdir) {
 	Object::Shape sp;
 	sp.idxBegin = 0;
 	sp.cntVertex = 0;
-	sp.textureId = 0;
 	sp.texname = "";
 
 	for (auto s = 0; s < shapes.size(); s++)
@@ -75,7 +84,9 @@ void ObjectController::LoadObject(const char* const fdir) {
 		if (materials.size() > 0)
 		{
 			current_material_id = shapes[s].mesh.material_ids[0];
-			sp.texname = materials[current_material_id].diffuse_texname;
+			if (current_material_id >= 0) {
+				sp.texname = materials[current_material_id].diffuse_texname;
+			}
 		}
 
 		for (auto f = 0; f < shapes[s].mesh.indices.size() / 3; f++)
@@ -186,18 +197,21 @@ void ObjectController::LoadObject(const char* const fdir) {
 			else
 			{
 				obj.shapes.push_back(sp);
-				if (materials.size() > 0)
+				if (materials.size() > 0 && material_id >= 0)
 				{
 					sp.texname = materials[material_id].diffuse_texname;
+				}
+				else {
+					sp.texname = "";
 				}
 				sp.idxBegin += sp.cntVertex;
 				sp.cntVertex = 3;
 				current_material_id = material_id;
 			}
 		}
-
 		obj.shapes.push_back(sp);
 	}
+
 	// VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -206,15 +220,20 @@ void ObjectController::LoadObject(const char* const fdir) {
 	glGenBuffers(1, &vboV);
 	glBindBuffer(GL_ARRAY_BUFFER, vboV);
 	glBufferData(GL_ARRAY_BUFFER, obj.bufferPosition.size() * sizeof(glm::vec3), &obj.bufferPosition[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
+	// Program 객체로부터 이름이 vertexPosition인 속성 변수가 바인딩된 인덱스를 리턴받아서 저장합니다
+	GLint vertexPosition = glGetAttribLocation(shader.getID(), "vertexPosition");
+	// vertexPosition에 저장된 인덱스가 가리키는 vertexPosition 속성이 VBO에서 어떻게 데이터를 가져올 수 있는지 지정해줍니다
+	glVertexAttribPointer(vertexPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// Vertex Shader의 position 속성과 VBO의 position 데이터간의 연결이 동작하기 위해서는 glEnableVertexAttribArray 함수를 사용하여 vertexPosition을 활성화해야 합니다
+	glEnableVertexAttribArray(vertexPosition);
 
 	// UV
 	glGenBuffers(1, &vboUV);
 	glBindBuffer(GL_ARRAY_BUFFER, vboUV);
 	glBufferData(GL_ARRAY_BUFFER, obj.bufferUV.size() * sizeof(glm::vec2), &obj.bufferUV[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(1);
+	GLint vertexUV = glGetAttribLocation(shader.getID(), "vertexUV"); // VertexShader에서 vertexUV의 인덱스
+	glVertexAttribPointer(vertexUV, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(vertexUV); // vertexUV 활성화
 
 	// Normal 벡터 추가
 
@@ -222,15 +241,16 @@ void ObjectController::LoadObject(const char* const fdir) {
 	obj.setNumTriangles(numTriangles);
 	obj.setID(vao, vboV, vboUV);
 	s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, obj));
+
 }
 
 Object ObjectController::FindObject(const std::string key) {
 	return s_object.find(key)->second;
 }
 
-void ObjectController::DrawObjects(void) {
+void ObjectController::DrawObjects(GLuint progId) {
 	for (auto it = s_object.begin(); it != s_object.end(); it++) {
-		it->second.Draw();
+		it->second.Draw(progId);
 	}
 }
 

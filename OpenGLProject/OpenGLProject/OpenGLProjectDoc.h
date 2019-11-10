@@ -2,9 +2,7 @@
 // OpenGLProjectDoc.h: COpenGLProjectDoc 클래스의 인터페이스
 //
 
-
 #pragma once
-
 
 class COpenGLProjectDoc : public CDocument
 {

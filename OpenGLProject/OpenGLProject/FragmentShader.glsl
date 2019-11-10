@@ -1,9 +1,11 @@
 #version 450 core
 
-in vec3 passColorAttribute;
+in vec2 textureCoord; // Texture ÁÂÇ¥
 out vec4 fragmentColor;
+
+uniform sampler2D textureSampler; // Texture °´Ã¼
 
 void main()
 {
-    fragmentColor = vec4(passColorAttribute, 1.0);
+	fragmentColor = texture( textureSampler, textureCoord ).rgba;
 }

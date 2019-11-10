@@ -15,12 +15,8 @@
 #include "include/GL/glew.h"
 #include "include/GL/glut.h"
 #include "include/glm/glm.hpp"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "include/stb/stb_image.h"
-
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "include/tinyobjloader/tiny_obj_loader.h"
+#include "include/glm/gtc/matrix_transform.hpp"
+#include "include/glm/gtc/type_ptr.hpp"
 
 #pragma comment(lib, "OPENGL32.LIB")
 // #pragma comment(lib, "GLU32.LIB")
@@ -29,7 +25,7 @@
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/freeglut.lib")
 
-#endif //PCH_H
-
 #define UWM_CUSTOM1 WM_USER + 1
 #define UWM_CHECKED WM_USER + 2
+
+#endif PCH_H

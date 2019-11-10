@@ -61,6 +61,10 @@ private:
 	GLfloat preX;
 	GLfloat preY;
 	bool clicked;
+private:
+	// 쉐이더 관련 변수
+	GLuint progId; // 쉐이더 프로그램 ID
+
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();

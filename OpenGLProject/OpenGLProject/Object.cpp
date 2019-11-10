@@ -1,34 +1,24 @@
 #include "pch.h"
 #include "Object.h"
 
-Object::Object(void) {
-	this->id = NULL;
-}
+void Object::Draw(GLuint progId) {
+	glm::mat4 mvp = glm::mat4(1.0f); // Identitiy 행렬 설정
+	mvp = glm::translate(mvp, glm::vec3(1.0f, 1.0f, 1.0f)); // Translate
+	mvp = glm::rotate(mvp, glm::radians(0.0f), glm::vec3(0.0, 0.0, 0.0)); // Rotate
+	mvp = glm::scale(mvp, glm::vec3(1.0f, 1.0f, 1.0f)); // Scale
 
-Object::Object(const GLuint id) {
-	this->id = id;
-}
+	glUniformMatrix4fv(glGetUniformLocation(progId, "MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
 
-void Object::AddVertex(GLfloat vtx[], int size) {
-	for (int i = 0; i < size; i++) {
-		this->vertex.push_back(vtx[i]);
-	}
-}
-
-void Object::AddIndex(GLubyte idx[], int size) {
-	for (int i = 0; i < size; i++) {
-		this->index.push_back(idx[i]);
-	}
-}
-
-void Object::Draw(void) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);
 
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{
+		if (it->texname == "") {
+			continue;
+		}
 		glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
-		glUniform1i(glGetUniformLocation(ProgramId, "myTextureSampler"), 0);
+		glUniform1i(glGetUniformLocation(progId, "myTextureSampler"), 0);
 
 		glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 

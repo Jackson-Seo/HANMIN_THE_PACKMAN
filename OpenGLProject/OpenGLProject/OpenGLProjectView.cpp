@@ -221,6 +221,7 @@ void COpenGLProjectView::initGL()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	Shader ourShader("VertexShader.glsl", "FragmentShader.glsl");
+	progId = ourShader.getID();
 
 	GLfloat light1_position[] = { -4.0, -4.0, 1.0, 0.0 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -243,9 +244,10 @@ void COpenGLProjectView::initGL()
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 
-	//ObjectController::LoadObject("../OpenGLProject/Asset/IronMan.obj");
-	//Object *iron = ObjectController::FindObject(std::string("IronMan.obj"));
+	ObjectController::LoadObject(ourShader, "../OpenGLProject/Asset/IronMan.obj");
+	//Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
 
+	/*
 	float position[] = {
 	0.0f,  0.5f, 0.0f, //vertex 1  위 중앙
 	0.5f, -0.5f, 0.0f, //vertex 2  오른쪽 아래
@@ -293,7 +295,7 @@ void COpenGLProjectView::initGL()
 	glBindVertexArray(0);
 	glUseProgram(ourShader.getID());
 	glBindVertexArray(triangleVertexArrayObject);
-
+	*/
 	Camera::Initialize();
 }
 
@@ -327,7 +329,7 @@ void COpenGLProjectView::DrawGLScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Camera::Convert();
 	Axis::Draw();
-	ObjectController::DrawObjects();
+	ObjectController::DrawObjects(progId);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 

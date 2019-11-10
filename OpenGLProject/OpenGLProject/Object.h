@@ -1,6 +1,7 @@
 #pragma once
-#include "pch.h"
 #include <vector>
+#include <string>
+#include <map>
 
 class Object
 {
@@ -29,7 +30,7 @@ public:
 		unsigned char* image = nullptr;
 	} Texture;
 	std::map<std::string, Texture> textures; // 여러 텍스쳐 저장한 구조체
-	// SubMesh 구조체
+	// Shape 구조체
 	typedef struct {
 		std::string texname;
 		GLuint idxBegin;
@@ -37,12 +38,9 @@ public:
 	} Shape;
 	std::vector<Shape> shapes;
 public:
-	Object(void);
-	Object(const GLuint id);
-	~Object(void);
 	void AddVertex(GLfloat vtx[], int size); // Object에 Vertex 추가
 	void AddIndex(GLubyte idx[], int size);
-	void Draw(void); // Object를 그립니다 변환까지 처리합니다
+	void Draw(GLuint progId); // Object를 그립니다
 	void setScale(const float& xSc, const float& ySc, const float& Sc); // Object의 Scale을 조정합니다
 	void setNumTriangles(const int& n);
 	void setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV);
