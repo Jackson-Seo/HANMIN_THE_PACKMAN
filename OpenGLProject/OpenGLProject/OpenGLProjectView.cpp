@@ -228,6 +228,8 @@ void COpenGLProjectView::initGL()
 
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 	// Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
 	TRACE0("로딩 종료\n");
 
