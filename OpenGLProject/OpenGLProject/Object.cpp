@@ -15,9 +15,12 @@ void Object::Draw(GLuint progId) {
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{
 		if (it->texname == "") {
+			glUniform3fv(glGetUniformLocation(progId, "useTe"), 1, &glm::vec3(1.0f, 1.0f, 1.0f)[0]);
 			continue;
 		}
+		glUniform4fv(glGetUniformLocation(progId, "useTe"), 1, &glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)[0]);
 		glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
+		// Sampler가 어느 Program에 속하는지 알려준다
 		glUniform1i(glGetUniformLocation(progId, "textureSampler"), 0);
 
 		glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);

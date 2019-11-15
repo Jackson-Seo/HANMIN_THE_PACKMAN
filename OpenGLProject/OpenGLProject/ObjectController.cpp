@@ -13,7 +13,7 @@ int ObjectController::s_iNumGenList = 0;
 
 void ObjectController::LoadObject(Shader& shader, const char* const fdir) {
 	Object obj;
-	GLuint vao, vboV, vboUV;
+	GLuint vao, vboV, vboUV, vboVN;
 	int numTriangles = 0;
 
 	tinyobj::attrib_t attrib;

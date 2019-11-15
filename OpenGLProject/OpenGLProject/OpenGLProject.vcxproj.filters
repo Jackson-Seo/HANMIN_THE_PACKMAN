@@ -36,6 +36,7 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -82,6 +83,7 @@
     <ClInclude Include="Shader.h">
       <Filter>Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -148,6 +150,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="VertexShader.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="LightingFragmentShader.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="LightingVertexShader.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

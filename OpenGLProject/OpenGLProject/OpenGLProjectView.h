@@ -9,6 +9,7 @@
 #include "Object.h"
 #include "ObjectController.h"
 #include "Shader.h"
+#include "Light.h"
 
 class COpenGLProjectView : public CView
 {
@@ -42,20 +43,10 @@ public:
 #endif
 
 private:
-	clock_t deltaTime;
 	Shader glslShader;
-	bool* mOPT_LTG;
-	bool* mEN_LTG; // Enable Lighting
-	const int nLTG = 3; // Lighting의 개수
-	const int nOPT_LTG = 8; // 조명 옵션의 개수
-	GLfloat* light0_position;
-	GLfloat preX;
-	GLfloat preY;
-	bool clicked;
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
@@ -66,13 +57,9 @@ protected:
 	afx_msg LRESULT OnUwmCustom1(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUwmChecked(WPARAM wParam, LPARAM lParam);
 public:
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnTestDirectional();
-	afx_msg void OnLightPositional();
-	afx_msg void OnLightSpotlight();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 

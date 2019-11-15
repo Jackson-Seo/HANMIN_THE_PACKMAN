@@ -88,10 +88,8 @@ void Shader::use()
 {
 	glUseProgram(ID);
 }
-
-void Shader::setMatrix(glm::mat4& matrix, const std::string& str) const {
-	glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, &matrix[0][0]);
-}
+void Shader::setVec3(const glm::vec3& vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, &vec[0]); }
+void Shader::setMatrix(const glm::mat4& matrix, const std::string& str) const { glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, &matrix[0][0]); }
 
 GLuint Shader::getID(void) {
 	return ID;
