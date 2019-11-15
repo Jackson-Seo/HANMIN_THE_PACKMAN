@@ -88,9 +88,8 @@ void Shader::use()
 {
 	glUseProgram(ID);
 }
-void Shader::setVec3(const glm::vec3& vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, &vec[0]); }
-void Shader::setMatrix(const glm::mat4& matrix, const std::string& str) const { glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, &matrix[0][0]); }
-
-GLuint Shader::getID(void) {
-	return ID;
-}
+void Shader::setVec3(const glm::vec3& const vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
+void Shader::setMatirx3(const glm::mat4& const matrix, const std::string& str) const { glUniformMatrix3fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
+void Shader::setMatrix4(const glm::mat4& const matrix, const std::string& str) const { glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
+void Shader::setUniform1(const GLuint& i, const  std::string& str) const { glUniform1i(glGetUniformLocation(ID, str.c_str()), i); }
+GLuint Shader::getID(void) const { return ID; }

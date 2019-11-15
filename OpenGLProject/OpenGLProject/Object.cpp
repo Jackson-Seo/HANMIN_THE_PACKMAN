@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "Object.h"
 
-void Object::Draw(GLuint progId) {
+void Object::Draw(const Shader& shader) {
 	glm::mat4 mvp = glm::mat4(1.0f); // Identitiy 행렬 설정
 	mvp = glm::translate(mvp, glm::vec3(0.0f, 0.0f, 0.0f)); // Translate
 	mvp = glm::rotate(mvp, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
 	mvp = glm::scale(mvp, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
 
-	glUniformMatrix4fv(glGetUniformLocation(progId, "model"), 1, GL_FALSE, glm::value_ptr(mvp));
+	shader.setMatrix4(mvp, "model");
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);
@@ -15,13 +15,12 @@ void Object::Draw(GLuint progId) {
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{
 		if (it->texname == "") {
-			glUniform3fv(glGetUniformLocation(progId, "useTe"), 1, &glm::vec3(1.0f, 1.0f, 1.0f)[0]);
+			shader.setVec3(glm::vec3(1.0f, 1.0f, 1.0f), "useTe");
 			continue;
 		}
-		glUniform4fv(glGetUniformLocation(progId, "useTe"), 1, &glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)[0]);
 		glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
 		// Sampler가 어느 Program에 속하는지 알려준다
-		glUniform1i(glGetUniformLocation(progId, "textureSampler"), 0);
+		shader.setUniform1(0, "textureSampler");
 
 		glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 

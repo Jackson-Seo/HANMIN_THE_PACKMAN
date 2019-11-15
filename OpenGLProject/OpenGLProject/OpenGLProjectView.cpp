@@ -191,7 +191,7 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 
 	glViewport(0, 0, width, height);
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
-	glslShader.setMatrix(projection, "projection");
+	glslShader.setMatrix4(projection, "projection");
 
 	// set modeview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -207,10 +207,10 @@ void COpenGLProjectView::DrawGLScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = Camera::getViewMatrix();
-	glslShader.setMatrix(view, "view");
+	glslShader.setMatrix4(view, "view");
 
 	Axis::Draw();
-	ObjectController::DrawObjects(glslShader.getID());
+	ObjectController::DrawObjects(glslShader);
 
 	// swap buffer
 	SwapBuffers(m_hDC);

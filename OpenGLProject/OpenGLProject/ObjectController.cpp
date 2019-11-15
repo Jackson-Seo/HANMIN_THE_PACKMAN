@@ -11,7 +11,7 @@
 std::map<std::string, Object> ObjectController::s_object = {};
 int ObjectController::s_iNumGenList = 0;
 
-void ObjectController::LoadObject(Shader& shader, const char* const fdir) {
+void ObjectController::LoadObject(const Shader& const shader, const char* const fdir) {
 	Object obj;
 	GLuint vao, vboV, vboUV, vboVN;
 	int numTriangles = 0;
@@ -246,9 +246,9 @@ Object ObjectController::FindObject(const std::string key) {
 	return s_object.find(key)->second;
 }
 
-void ObjectController::DrawObjects(GLuint progId) {
+void ObjectController::DrawObjects(const Shader& shader) {
 	for (auto it = s_object.begin(); it != s_object.end(); it++) {
-		it->second.Draw(progId);
+		it->second.Draw(shader);
 	}
 }
 

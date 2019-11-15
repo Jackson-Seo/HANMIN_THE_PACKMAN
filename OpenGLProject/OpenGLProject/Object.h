@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <map>
-
+#include "Shader.h"
 
 class Object
 {
@@ -41,7 +41,7 @@ public:
 public:
 	void AddVertex(GLfloat vtx[], int size); // Object에 Vertex 추가
 	void AddIndex(GLubyte idx[], int size);
-	void Draw(GLuint progId); // Object를 그립니다
+	void Draw(const Shader& shader); // Object를 그립니다
 	void setScale(const float& xSc, const float& ySc, const float& Sc); // Object의 Scale을 조정합니다
 	void setNumTriangles(const int& n);
 	void setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV);
