@@ -13,10 +13,12 @@ private:
 	float x = 0, y = 0, z = 0; // 월드에서의 위치
 	float xRo = 0, yRo = 0, zRo = 0; // 회전 각도
 	float xSc = 1, ySc = 1, zSc = 1; // Scale값
+	// VAO와 VBO의 ID 값들입니다
 	GLuint vaoId;
 	GLuint vboVId;
 	GLuint vboUvId;
 	GLuint vboNorId;
+	// Object 객체가 갖고있는 폴리곤의 수입니다
 	int m_iNumTriangles = 0;
 public:
 	std::vector<glm::vec3> bufferPosition; // Vertex의 위치
@@ -39,9 +41,7 @@ public:
 	} Shape;
 	std::vector<Shape> shapes;
 public:
-	void AddVertex(GLfloat vtx[], int size); // Object에 Vertex 추가
-	void AddIndex(GLubyte idx[], int size);
-	void Draw(const Shader& shader); // Object를 그립니다
+	void Draw(const Shader& shader); // Object 하나를 그립니다
 	void setScale(const float& xSc, const float& ySc, const float& Sc); // Object의 Scale을 조정합니다
 	void setNumTriangles(const int& n);
 	void setID(const GLuint& vao, const GLuint& vboV, const GLuint& vboUV);
