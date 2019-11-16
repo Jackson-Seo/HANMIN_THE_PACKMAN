@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Shader.h"
 
-// Shader 객체 생성자입니다 glsl파일이 저장된 경로를 입력받아 컴파일하여 Shader로 사용합니다
 Shader::Shader() {}
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -50,7 +49,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		if (!success)
 		{
 			glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-			TRACE1("%s", infoLog);
 			// std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		};
 	}
@@ -64,7 +62,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		if (!success)
 		{
 			glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-			TRACE1("%s", infoLog);
 			// std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		};
 	}
@@ -87,12 +84,12 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glDeleteShader(fragment);
 }
 
-void Shader::use() { glUseProgram(ID); } // shader를 활성화하고 사용합니다 shader를 사용하려면 반드시 호출해야 합니다
-// Uniform 유틸리티 함수들 Shader의 Uniform 변수에 값을 전달할때 사용합니다
-void Shader::setVec3(const glm::vec3& vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
-void Shader::setVec4(const glm::vec4& vec, const std::string& str) const { glUniform4fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
-void Shader::setMatirx3(const glm::mat4& matrix, const std::string& str) const { glUniformMatrix3fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
-void Shader::setMatrix4(const glm::mat4& matrix, const std::string& str) const { glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
+void Shader::use()
+{
+	glUseProgram(ID);
+}
+void Shader::setVec3(const glm::vec3& const vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
+void Shader::setMatirx3(const glm::mat4& const matrix, const std::string& str) const { glUniformMatrix3fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
+void Shader::setMatrix4(const glm::mat4& const matrix, const std::string& str) const { glUniformMatrix4fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
 void Shader::setUniform1(const GLuint& i, const  std::string& str) const { glUniform1i(glGetUniformLocation(ID, str.c_str()), i); }
-// Shader 객체의 Program ID를 받을때 사용합니다
 GLuint Shader::getID(void) const { return ID; }

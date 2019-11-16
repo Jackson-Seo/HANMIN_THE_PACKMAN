@@ -1,6 +1,10 @@
-﻿#pragma once
+﻿// OpenGLProjectDoc.h: COpenGLProjectDoc 클래스의 인터페이스
+//
 
-class COpenGLProjectDoc : public CDocument {
+#pragma once
+
+class COpenGLProjectDoc : public CDocument
+{
 protected: // serialization에서만 만들어집니다.
 	COpenGLProjectDoc() noexcept;
 	DECLARE_DYNCREATE(COpenGLProjectDoc)

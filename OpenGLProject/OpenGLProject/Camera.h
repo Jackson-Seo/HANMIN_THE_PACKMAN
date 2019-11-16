@@ -1,6 +1,5 @@
 #pragma once
 
-// 카메라가 움직이는 방향입니다
 enum class Direction {
 	FORWARD,
 	BACKWARD,

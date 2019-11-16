@@ -31,16 +31,12 @@
     <ClCompile Include="Controller.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectController.cpp" />
     <ClCompile Include="Shader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -82,16 +78,12 @@
     <ClInclude Include="framework.h">
       <Filter>헤더 파일\기본구성</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectController.h" />
     <ClInclude Include="Shader.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
