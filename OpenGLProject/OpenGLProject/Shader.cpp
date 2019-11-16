@@ -50,7 +50,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		if (!success)
 		{
 			glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-			TRACE1("%s", infoLog);
+			TRACE0("\nVertex Shader 불러오는 데 문제 발생\n");
 			// std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		};
 	}
@@ -64,7 +64,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		if (!success)
 		{
 			glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-			TRACE1("%s", infoLog);
+			TRACE0("\nFragment Shader 불러오는 데 문제 발생\n");
 			// std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		};
 	}
