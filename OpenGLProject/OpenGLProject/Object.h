@@ -28,8 +28,8 @@ public:
 	typedef struct {
 		GLuint textureId;
 		glm::vec3 ambient = { 1.0f, 1.0f, 1.0f };
-		glm::vec3 diffuse;
-		glm::vec3 specular;
+		glm::vec3 diffuse = { 1.0f, 1.0f, 1.0f };
+		glm::vec3 specular = { 1.0f, 1.0f, 1.0f };
 		GLfloat shininess;
 		int w;
 		int h;

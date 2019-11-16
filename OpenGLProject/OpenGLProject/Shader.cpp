@@ -89,6 +89,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 void Shader::use() { glUseProgram(ID); } // shader를 활성화하고 사용합니다 shader를 사용하려면 반드시 호출해야 합니다
 // Uniform 유틸리티 함수들 Shader의 Uniform 변수에 값을 전달할때 사용합니다
+void Shader::setfloat(const GLfloat& value, const std::string& str) const { glUniform1f(glGetUniformLocation(ID, str.c_str()),value); }
 void Shader::setVec3(const glm::vec3& vec, const std::string& str) const { glUniform3fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
 void Shader::setVec4(const glm::vec4& vec, const std::string& str) const { glUniform4fv(glGetUniformLocation(ID, str.c_str()), 1, glm::value_ptr(vec)); }
 void Shader::setMatirx3(const glm::mat4& matrix, const std::string& str) const { glUniformMatrix3fv(glGetUniformLocation(ID, str.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }

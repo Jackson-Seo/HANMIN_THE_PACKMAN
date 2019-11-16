@@ -166,5 +166,8 @@
     <None Include="LightingVertexShader.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="tempFragment.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

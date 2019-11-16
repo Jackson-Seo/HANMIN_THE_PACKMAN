@@ -164,7 +164,7 @@ void COpenGLProjectView::initGL()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
-	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
+	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
 	glslShader.use();
 	/*
@@ -172,8 +172,8 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
 	*/
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 	
@@ -181,7 +181,7 @@ void COpenGLProjectView::initGL()
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
 		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
 	*/
-	light0 = Light(glslShader, 0, 0, 0, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	light0 = Light(glslShader, 0, 100, 50, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	TRACE0("로딩 종료\n");
 }

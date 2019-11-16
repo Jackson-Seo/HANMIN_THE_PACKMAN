@@ -254,6 +254,7 @@
     <None Include="LightingFragmentShader.glsl" />
     <None Include="LightingVertexShader.glsl" />
     <None Include="res\OpenGLProject.rc2" />
+    <None Include="tempFragment.glsl" />
     <None Include="VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

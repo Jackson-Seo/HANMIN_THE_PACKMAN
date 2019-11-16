@@ -34,13 +34,13 @@ void main()
     vec3 norm = normalize(normalVector);
     vec3 lightDir = normalize(light.position - o_VertexPosition); // 정점에 입사하는 Vector를 구합니다
     float diff = max(dot(norm, lightDir), 0.0); // 입사각을 계산합니다
-    vec3 diffuse = light.diffuse * diff * material.diffuse;
-    
+    vec3 diffuse = light.diffuse * (diff * material.diffuse);
+   
     // specular
     vec3 viewDir = normalize(u_CameraPosition - o_VertexPosition); // 정점에서 Camera로의 Vector를 구합니다
     vec3 reflectDir = reflect(-lightDir, norm); // 정점에서 반사된 Vector를 구합니다
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1); // 입사각을 계산하고 shininess를 적용시킵니다
-    vec3 specular = light.specular * (spec * material.specular);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess); // 입사각을 계산하고 shininess를 적용시킵니다
+    vec3 specular = light.specular * (spec * material.specular);
 
 	vec3 result = ambient + diffuse + specular;
 	// defaultColor가 0,0,0이면 texture가 적용되고 1,1,1이면 적용되지 않습니다

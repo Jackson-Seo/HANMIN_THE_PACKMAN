@@ -15,6 +15,7 @@ public:
 	// shader를 활성화하고 사용합니다 shader를 사용하려면 반드시 호출해야 합니다
 	void use();
 	// Uniform 유틸리티 함수들 Shader의 Uniform 변수에 값을 전달할때 사용합니다
+	void setfloat(const GLfloat& value, const std::string& str) const;
 	void setVec3(const glm::vec3& vec, const std::string& str) const;
 	void setVec4(const glm::vec4& vec, const std::string& str) const;
 	void setMatirx3(const glm::mat4& matrix, const std::string& str) const;

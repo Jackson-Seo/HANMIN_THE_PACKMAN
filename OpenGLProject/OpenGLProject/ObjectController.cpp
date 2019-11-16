@@ -82,10 +82,10 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 				t.h = -1;
 				t.comp = -1;
 			}
-
-			t.ambient = { mp->ambient[0], mp->ambient[1], mp->ambient[2] };
-			t.diffuse = { mp->diffuse[0], mp->diffuse[1], mp->diffuse[2] };
-			t.specular = { mp->specular[0], mp->specular[1], mp->specular[2] };
+			
+			t.ambient = glm::vec3(mp->ambient[0], mp->ambient[1], mp->ambient[2]);
+			t.diffuse = glm::vec3(mp->diffuse[0], mp->diffuse[1], mp->diffuse[2]);
+			t.specular = glm::vec3(mp->specular[0], mp->specular[1], mp->specular[2]);
 			t.shininess = mp->shininess;
 
 			obj.textures.insert(std::make_pair(mp->name, t));
@@ -235,6 +235,8 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 			}
 		}
 		obj.shapes.push_back(sp);
+		sp.idxBegin += sp.cntVertex;
+		sp.cntVertex = 3;
 	}
 	TRACE0("\nshapes ÆÄ½ÌÀÌ ³¡³µ½À´Ï´Ù\n");
 	// VAO
