@@ -153,7 +153,7 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void COpenGLProjectView::initGL()
 {
 	TRACE0("initGL 시작\n");
-	Controller::Initialize();
+	Controller::Initialize(); // Controller에서 deltaTime을 계산하기 전에 먼저 time을 초기화시킵니다
 
 	// GLEW를 사용하기 전에 먼저 초기화합니다
 	GLenum err = glewInit();
@@ -163,18 +163,30 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	glslShader = Shader("VertexShader.glsl", "LightingFragmentShader.glsl");
+	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
+	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
+	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
 	glslShader.use();
-	//ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
-	//ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
-	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
-	// Object iron = ObjectController::FindObject(std::string("IronMan.obj"));
-	TRACE0("로딩 종료\n");
+	/*
+		지정한 경로에 있는 .obj 파일 하나를 Object 객체로 만들어서 저장합니다
+		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
+		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
+	*/
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
+	
+	/*
+		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
+		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
+	*/
+	light0 = Light(glslShader, 0, 0, 0, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
+	TRACE0("로딩 종료\n");
 }
 
-// OnCreate 이후에 적어도 한번 호출된다
+// OnCreate 이후에 적어도 한번 호출됩니다, 화면의 크기가 변하면 호출됩니다
 void COpenGLProjectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
@@ -182,40 +194,57 @@ void COpenGLProjectView::OnSize(UINT nType, int cx, int cy)
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	ReSizeGLScene(cx, cy);
 }
-// OnSize에서 호출된다
+// OnSize에서 호출됩니다, 화면의 크기가 변하면 호출됩니다
 void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 {
 	// don't want a divide by zero
 	if (height == 0)
 		height = 1;
 
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height); // MFC 전체 창의 크기가 변하면 그에 맞춰서 OpenGL로 그릴 화면의 크기도 변화시킵니다
+	/*
+		Viewport의 크기가 변했으므로 그에 맞춰서 카메라가 찍을 Projection matrix도 새로 계산합니다
+		계산한 Projection maxtrix를 현재 사용중인 Shader에서 Uniform mat4로 지정된 projection 변수에 전달합니다
+		Shader의 projection Uniform 변수는 VertexShader에 있습니다
+	*/
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 	glslShader.setMatrix4(projection, "projection");
-
-	// set modeview matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glPushMatrix();
 }
 
+// 주기적으로 호출되는 함수입니다 여기에 그림을 그립니다
 void COpenGLProjectView::DrawGLScene(void)
 {
+	/*
+		Controller는 프레임간 시간차를 계산합니다
+		카메라의 움직임도 여기서 적용되므로 제일 먼저 호출해야 합니다
+	*/
 	Controller::Clock();
 
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	/*
+		카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
+		Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
+		여기에서 View Matrix를 계산하고 현재 사용중인 Shader에서 Uniform mat4로 지정된 view 변수에 전달합니다
+		Shader의 view Uniform 변수는 VertexShader에 있습니다
+	*/
 	glm::mat4 view = Camera::getViewMatrix();
 	glslShader.setMatrix4(view, "view");
 
-	Axis::Draw();
+	Axis::Draw(); // X축, Y축, Z축을 그립니다
+	/*
+		ObjectController 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
+		저장된 Object 객체들을 차례대로 그립니다
+		사용할 Shader를 인자로 넘깁니다
+	*/
 	ObjectController::DrawObjects(glslShader);
 
 	// swap buffer
 	SwapBuffers(m_hDC);
 }
 
+// MFC의 속성창에서 날라오는 메시지입니다 차후에 필요하면 구현합니다
 afx_msg LRESULT COpenGLProjectView::OnUwmCustom1(WPARAM wParam, LPARAM lParam)
 {
 	//CString msg = _T("");
@@ -227,6 +256,7 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+// 마우스 및 키보드 입출력은 OpenGLProjectView.cpp에서 받아서 Controller 클래스로 넘기고 Controller 클래스에서 처리합니다
 void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { Controller::OnRButtonDown(nFlags, point); }
 void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) {
 	Controller::OnRButtonUp(nFlags, point);

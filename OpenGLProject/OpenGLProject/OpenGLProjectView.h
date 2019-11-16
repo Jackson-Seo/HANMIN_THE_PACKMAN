@@ -44,6 +44,7 @@ public:
 
 private:
 	Shader glslShader;
+	Light light0;
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
