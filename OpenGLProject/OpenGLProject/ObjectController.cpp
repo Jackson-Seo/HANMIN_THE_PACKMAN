@@ -41,38 +41,54 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 	for (auto m = 0; m < materials.size(); m++)
 	{
 		tinyobj::material_t* mp = &materials[m];
-		if (mp->diffuse_texname == "") {
-			continue;
-		}
 
-		if (obj.textures.find(mp->diffuse_texname) == obj.textures.end()) {
+		if (obj.textures.find(mp->name) == obj.textures.end()) {
 			Object::Texture t;
-			std::string texture_filename = mp->diffuse_texname;
-			texture_filename = base_dir + mp->diffuse_texname; // need check valid
+			/*
+				if문 : 불러온 .mtl 파일에 지정된 텍스쳐 파일이 있는가?
+				TRUE : 텍스쳐를 불러와서 저장한다
+				FALSE : 텍스쳐 부분을 NULL 처리한다
+			*/
+			if (mp->diffuse_texname != "") {
+				std::string texture_filename = mp->diffuse_texname;
+				texture_filename = base_dir + mp->diffuse_texname; // need check valid
 
-			t.image = stbi_load(texture_filename.c_str(), &t.w, &t.h, &t.comp, STBI_default);
+				t.image = stbi_load(texture_filename.c_str(), &t.w, &t.h, &t.comp, STBI_default);
 
-			// Texture VBO를 만듭니다
-			glActiveTexture(GL_TEXTURE0);
-			glGenTextures(1, &t.textureId);
-			glBindTexture(GL_TEXTURE_2D, t.textureId);
-			if (t.comp == 3) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t.w, t.h, 0, GL_RGB, GL_UNSIGNED_BYTE, t.image);
-				glGenerateMipmap(GL_TEXTURE_2D);
+				// Texture VBO를 만듭니다
+				glActiveTexture(GL_TEXTURE0);
+				glGenTextures(1, &t.textureId);
+				glBindTexture(GL_TEXTURE_2D, t.textureId);
+				if (t.comp == 3) {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t.w, t.h, 0, GL_RGB, GL_UNSIGNED_BYTE, t.image);
+					glGenerateMipmap(GL_TEXTURE_2D);
+				}
+				else if (t.comp == 4) {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, t.image);
+					glGenerateMipmap(GL_TEXTURE_2D);
+				}
+
+				// Texture 확대 축소 필터
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glBindTexture(GL_TEXTURE_2D, 0);
 			}
-			else if (t.comp == 4) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, t.image);
-				glGenerateMipmap(GL_TEXTURE_2D);
+			else {
+				t.image = nullptr;
+				t.textureId = -1;
+				t.w = -1;
+				t.h = -1;
+				t.comp = -1;
 			}
 
-			// Texture 확대 축소 필터
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
+			t.ambient = { mp->ambient[0], mp->ambient[1], mp->ambient[2] };
+			t.diffuse = { mp->diffuse[0], mp->diffuse[1], mp->diffuse[2] };
+			t.specular = { mp->specular[0], mp->specular[1], mp->specular[2] };
+			t.shininess = mp->shininess;
 
-			obj.textures.insert(std::make_pair(mp->diffuse_texname, t));
+			obj.textures.insert(std::make_pair(mp->name, t));
 			stbi_image_free(t.image);
 		}
 	}
@@ -91,7 +107,10 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 		{
 			current_material_id = shapes[s].mesh.material_ids[0];
 			if (current_material_id >= 0) {
-				sp.texname = materials[current_material_id].diffuse_texname;
+				sp.texname = materials[current_material_id].name;
+			}
+			else {
+				sp.texname = "";
 			}
 		}
 
@@ -205,7 +224,7 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 				obj.shapes.push_back(sp);
 				if (materials.size() > 0 && material_id >= 0)
 				{
-					sp.texname = materials[material_id].diffuse_texname;
+					sp.texname = materials[material_id].name;
 				}
 				else {
 					sp.texname = "";
@@ -226,7 +245,7 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 	glGenBuffers(1, &vboV);
 	glBindBuffer(GL_ARRAY_BUFFER, vboV);
 	glBufferData(GL_ARRAY_BUFFER, obj.bufferPosition.size() * sizeof(glm::vec3), &obj.bufferPosition[0], GL_STATIC_DRAW);
-	// Program 객체로부터 이름이 vertexPosition인 속성 변수가 바인딩된 인덱스를 리턴받아서 저장합니다
+	// Shader 객체로부터 이름이 vertexPosition인 속성 변수가 바인딩된 인덱스를 리턴받아서 저장합니다
 	GLint vertexPosition = glGetAttribLocation(shader.getID(), "vertexPosition");
 	// vertexPosition에 저장된 인덱스가 가리키는 vertexPosition 속성이 VBO에서 어떻게 데이터를 가져올 수 있는지 지정해줍니다
 	glVertexAttribPointer(vertexPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -242,6 +261,15 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 	glEnableVertexAttribArray(vertexUV); // vertexUV 활성화
 
 	// Normal 벡터 추가
+	glGenBuffers(1, &vboVN);
+	glBindBuffer(GL_ARRAY_BUFFER, vboVN);
+	glBufferData(GL_ARRAY_BUFFER, obj.bufferPosition.size() * sizeof(glm::vec3), &obj.bufferNormal[0], GL_STATIC_DRAW);
+	// Shader 객체로부터 이름이 vertexNormal인 속성 변수가 바인딩된 인덱스를 리턴받아서 저장합니다
+	GLint vertexNormal = glGetAttribLocation(shader.getID(), "vertexNormal");
+	// vertexNormal에 저장된 인덱스가 가리키는 vertexNormal 속성이 VBO에서 어떻게 데이터를 가져올 수 있는지 지정해줍니다
+	glVertexAttribPointer(vertexNormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// Vertex Shader의 normal 속성과 VBO의 normal 데이터간의 연결이 동작하기 위해서는 glEnableVertexAttribArray 함수를 사용하여 vertexNormal을 활성화해야 합니다
+	glEnableVertexAttribArray(vertexNormal);
 
 	// obj를 삽입한다
 	obj.setNumTriangles(numTriangles);

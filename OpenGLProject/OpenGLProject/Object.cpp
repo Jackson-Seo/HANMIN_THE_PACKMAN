@@ -28,18 +28,22 @@ void Object::Draw(const Shader& shader) {
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{
 		/*
-			if문 : 해당 Shape에 texture가 연결 안되어있나?
+			if문 : 해당 Shape에 texture가 없나?
 			TRUE : defaultColor에 색을 넣어서 fragment shader에 넘깁니다
-			FALSE : defaultColor를 무색으로 설정하고 연결된 texture를 fragment shader에 넘깁니다
+			else if문 : 해당 Shape에 texture가 연결 되어있나?
+				TRUE : defaultColor를 무색으로 설정하고 연결된 texture를 fragment shader에 넘깁니다
+				FALSE : defaultColor에 색을 넣어서 fragment shader에 넘깁니다
 		*/
 		if (it->texname == "") {
 			shader.setVec4(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "defaultColor");
 			// Shape 구조체에 저장된대로 삼각형을 그립니다
 			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
-			continue;
 		}
-		else {
+		else if (this->textures[it->texname].textureId != -1) {
 			shader.setVec4(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "defaultColor");
+			shader.setVec3(this->textures[it->texname].ambient, "Material.ambient");
+			shader.setVec3(this->textures[it->texname].diffuse, "Material.diffuse");
+			shader.setVec3(this->textures[it->texname].specular, "Material.specular");
 
 			// texture를 fragment shader에 넘깁니다
 			glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
@@ -48,6 +52,15 @@ void Object::Draw(const Shader& shader) {
 			// Shape 구조체에 저장된대로 삼각형을 그립니다
 			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+		else {
+			shader.setVec4(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "defaultColor");
+			shader.setVec3(this->textures[it->texname].ambient, "Material.ambient");
+			shader.setVec3(this->textures[it->texname].diffuse, "Material.diffuse");
+			shader.setVec3(this->textures[it->texname].specular, "Material.specular");
+
+			// Shape 구조체에 저장된대로 삼각형을 그립니다
+			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 		}
 	}
 }

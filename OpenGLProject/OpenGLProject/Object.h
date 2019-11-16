@@ -24,9 +24,13 @@ public:
 	std::vector<glm::vec3> bufferPosition; // Vertex의 위치
 	std::vector<glm::vec2> bufferUV; // Vertex의 Texture 좌표
 	std::vector<glm::vec3> bufferNormal; // Normal 좌표
-	// 텍스쳐 구조체
+	// 텍스쳐 + 재질 구조체
 	typedef struct {
 		GLuint textureId;
+		glm::vec3 ambient = { 1.0f, 1.0f, 1.0f };
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		GLfloat shininess;
 		int w;
 		int h;
 		int comp;
