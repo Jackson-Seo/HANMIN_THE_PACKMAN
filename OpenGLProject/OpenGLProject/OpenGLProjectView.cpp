@@ -163,7 +163,7 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
+	glslShader = Shader("VertexShader.glsl", "LightingFragmentShader.glsl");
 	glslShader.use();
 	//ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");

@@ -1,12 +1,11 @@
 #include "pch.h"
 #include "Object.h"
-using namespace glm;
 
 void Object::Draw(const Shader& shader) {
-	mat4 mvp = mat4(1.0f); // Identitiy 행렬 설정
-	mvp = translate(mvp, vec3(5.0f, 0.0f, 0.0f)); // Translate
-	mvp = rotate(mvp, radians(0.0f), vec3(1.0, 0.0, 0.0)); // Rotate
-	mvp = scale(mvp, vec3(0.5f, 0.5f, 0.5f)); // Scale
+	glm::mat4 mvp = glm::mat4(1.0f); // Identitiy 행렬 설정
+	mvp = glm::translate(mvp, glm::vec3(0.0f, 0.0f, 0.0f)); // Translate
+	mvp = glm::rotate(mvp, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
+	mvp = glm::scale(mvp, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
 
 	shader.setMatrix4(mvp, "model");
 
