@@ -14,8 +14,7 @@ uniform mat4 projection; // Project world system to Camera
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f);
-	textureCoord = vertexUV;
-	normalVector = mat3(transpose(inverse(model))) * vertexNormal; // world에서의 Normal Vector를 계산합니다
-	o_VertexPosition = vec3(model * vec4(vertexPosition, 1.0)); // world에서의 Vertex 좌표를 계산합니다
-}
+	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f); // 최종적으로 화면에 출력될 Vertex Position을 계산합니다
+	textureCoord = vertexUV; // Texture의 좌표를 FragmentShader로 넘깁니다
+	normalVector = mat3(transpose(inverse(model))) * vertexNormal; // world에서의 Normal Vector를 계산하고 FragmentShader로 넘깁니다
+	o_VertexPosition = vec3(model * vec4(vertexPosition, 1.0)); // world에서의 Vertex 좌표를 계산하고 FragmentShader로 넘깁니다
