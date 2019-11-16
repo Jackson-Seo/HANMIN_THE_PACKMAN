@@ -153,7 +153,7 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void COpenGLProjectView::initGL()
 {
 	TRACE0("initGL 시작\n");
-	Controller::Initialize(); // Controller에서 deltaTime을 계산하기 전에 먼저 time을 초기화시킵니다
+	cameraController.AttachTarget(&camera);
 
 	// GLEW를 사용하기 전에 먼저 초기화합니다
 	GLenum err = glewInit();
@@ -207,7 +207,7 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 		계산한 Projection maxtrix를 현재 사용중인 Shader에서 Uniform mat4로 지정된 projection 변수에 전달합니다
 		Shader의 projection Uniform 변수는 VertexShader에 있습니다
 	*/
-	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	mat4 projection = perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 	glslShader.setMatrix4(projection, "projection");
 }
 
@@ -216,9 +216,12 @@ void COpenGLProjectView::DrawGLScene(void)
 {
 	/*
 		Controller는 프레임간 시간차를 계산합니다
-		카메라의 움직임도 여기서 적용되므로 제일 먼저 호출해야 합니다
+		카메라의 움직임도 여기서 적용되므로 제일 먼저 호출해야 다
 	*/
-	Controller::Clock();
+	_SystemMangement_::Clock();
+	auto cinfo = cameraController.GetControl_info();
+	cameraController.GetControllTarget()->Initialize(cinfo);
+	cinfo->clickPoint = { 0,0 };
 
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -229,10 +232,9 @@ void COpenGLProjectView::DrawGLScene(void)
 		여기에서 View Matrix를 계산하고 현재 사용중인 Shader에서 Uniform mat4로 지정된 view 변수에 전달합니다
 		Shader의 view Uniform 변수는 VertexShader에 있습니다
 	*/
-	glm::mat4 view = Camera::getViewMatrix();
+	mat4 view = camera.getViewMatrix();
 	glslShader.setMatrix4(view, "view");
 
-	Axis::Draw(); // X축, Y축, Z축을 그립니다
 	/*
 		ObjectController 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
 		저장된 Object 객체들을 차례대로 그립니다
@@ -257,12 +259,23 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 }
 
 // 마우스 및 키보드 입출력은 OpenGLProjectView.cpp에서 받아서 Controller 클래스로 넘기고 Controller 클래스에서 처리합니다
-void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { Controller::OnRButtonDown(nFlags, point); }
-void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) {
-	Controller::OnRButtonUp(nFlags, point);
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	cameraController.OnRButtonDown(nFlags, point);
+}
+
+void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) 
+{
+	cameraController.OnRButtonUp(nFlags, point);
 	// 우클릭 완료시 벗어나려면 주석을 지워야한다
 	// ClientToScreen(&point);
 	// OnContextMenu(this, point);
 }
-void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { Controller::OnMouseMove(nFlags, point); }
-void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { Controller::OnKeyDown(nChar, nRepCnt, nFlags); }
+void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	cameraController.OnMouseMove(nFlags, point);
+}
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	cameraController.OnKeyDown(nChar, nRepCnt, nFlags);
+}

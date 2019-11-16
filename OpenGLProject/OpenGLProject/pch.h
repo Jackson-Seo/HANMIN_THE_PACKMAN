@@ -9,9 +9,6 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
-// #include <gl\glu.H>
-// #include <gl/glut.H>
-// #include <gl\glaux.H>
 #include "include/GL/glew.h"
 #include "include/GL/glut.h"
 #include "include/glm/glm.hpp"
@@ -19,9 +16,6 @@
 #include "include/glm/gtc/type_ptr.hpp"
 
 #pragma comment(lib, "OPENGL32.LIB")
-// #pragma comment(lib, "GLU32.LIB")
-// #pragma comment(lib, "GLUT32.LIB")
-// #pragma comment(lib, "GLAUX.LIB")
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/freeglut.lib")
 

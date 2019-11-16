@@ -41,6 +41,8 @@
     <ClCompile Include="ObjectController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectBase.cpp" />
+    <ClCompile Include="SystemMangement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -90,6 +92,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ObjectController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemMangement.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

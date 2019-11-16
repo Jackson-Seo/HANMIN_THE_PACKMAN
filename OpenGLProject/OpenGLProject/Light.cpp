@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "Light.h"
 
+Light::Light()
+{
+}
+
 Light::Light(const Shader& shader, float x, float y, float z, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) : m_x(x), m_y(y), m_z(z) {
 	// Shader에 아래에 해당하는 항목들이 있어야 적용됩니다
 	shader.setVec3(glm::vec3(x, y, z) , "Light.position");

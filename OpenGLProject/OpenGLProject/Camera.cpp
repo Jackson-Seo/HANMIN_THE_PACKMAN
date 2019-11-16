@@ -1,40 +1,42 @@
 #include "pch.h"
 #include "Camera.h"
 
-// 정적변수 초기화
-const float Camera::c_velocity = 0.1;
-const float Camera::c_fCameraRotate = 0.2778f;
-glm::vec3 Camera::vPosition = glm::vec3(0.0f, 2.0f, 0.0f);
-glm::vec3 Camera::vFront = glm::vec3(1.0f, 0.0f, 0.0f);
-glm::vec3 Camera::vRight = glm::vec3(0.0f, 0.0f, 1.0f);
-glm::vec3 Camera::vUp = glm::vec3(0.0f, 1.0f, 0.0f);
-float Camera::fYaw = 0.0f;
-float Camera::fPitch = 0.0f;
+using namespace CameraProperties;
 
-// 카메라 위치와 각 방향을 지정합니다
-void Camera::Initialize(void) {
-	vPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-	vFront = glm::vec3(1.0f, 0.0f, 0.0f);
-	vRight = glm::vec3(0.0f, 0.0f, 1.0f);
-	vUp = glm::vec3(0.0f, 1.0f, 0.0f);
+//Setting Camera properties ..
+
+const float c_velocity = 0.1f;
+const float c_fCameraRotate = 0.2778f;
+
+// Binding default Camera position and direction..
+_Camera_Base_::_Camera_Base_()
+{
+	SetCameraPos(vec3(0.0, 0.0, 0.0));
+	SetCameraDirVec(vec3(1.0, 0.0, 0.0), vec3(1.0, 0.0, 0.0), vec3(-1.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
 }
 
 // 카메라의 위치와 방향을 토대로 view matrix를 계산합니다 후에 vertex shader의 view Uniform 변수로 넘깁니다
-glm::mat4 Camera::getViewMatrix(void) {
-	return glm::lookAt(vPosition, vPosition + vFront, vUp);
+mat4 _Camera_Base_::getViewMatrix(void)
+{
+	return lookAt(vPosition, vPosition + vGaze, vUp);
+}
+
+void _Camera_Base_::Initialize(struct Control_info* info)
+{
+	Rotate(info->clickPoint, 1.3f);
 }
 
 /*
 	프레임의 시간차와 속력을 곱한 이동거리만큼 카메라를 direction 방향으로 이동시킵니다
 	방향은 유지시키고 방향에 따라 카메라의 위치만 변화시킵니다
 */
-void Camera::Move(Direction direction, double deltaTime) {
+void _Camera_Base_::Move(Direction direction, double deltaTime, float scale) {
 	float distance = c_velocity * deltaTime;
 
 	if (direction == Direction::FORWARD)
-		vPosition += vFront * distance;
+		vPosition += vGaze * distance;
 	if (direction == Direction::BACKWARD)
-		vPosition -= vFront * distance;
+		vPosition -= vGaze * distance;
 	if (direction == Direction::RIGHT)
 		vPosition += vRight * distance;
 	if (direction == Direction::LEFT)
@@ -51,8 +53,8 @@ void Camera::Move(Direction direction, double deltaTime) {
 	Yaw와 Pitch의 각도에 따라 카메라가 바라보는 방향인 vFront벡터를 회전시킵니다
 	카메라가 바라보는 방향만 알면 외적을 통해 카메라의 오른쪽과 위쪽의 벡터를 계산할 수 있습니다
 */
-void Camera::Rotate(CPoint point, double deltaTime) {
-	glm::vec3 front;
+void _Camera_Base_::Rotate(CPoint point, double deltaTime) {
+	vec3 front;
 	fYaw += deltaTime * point.x * c_fCameraRotate;
 	fPitch -= deltaTime * point.y * c_fCameraRotate;
 	// Pitch의 각도가 90도 넘어가면 카메라가 반대방향으로 넘어가니 이를 막습니다
@@ -61,12 +63,56 @@ void Camera::Rotate(CPoint point, double deltaTime) {
 	if (fPitch < -89.9999f)
 		fPitch = -89.9999f;
 	// Yaw와 Pitch의 각도에 따라 카메라가 바라보는 방향인 vFront벡터를 회전시킵니다
-	front.x = cos(glm::radians(fYaw)) * cos(glm::radians(fPitch));
-	front.y = sin(glm::radians(fPitch));
-	front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	front.x = cos(radians(fYaw)) * cos(radians(fPitch));
+	front.y = sin(radians(fPitch));
+	front.z = sin(radians(fYaw)) * cos(radians(fPitch));
 
 	// 방향벡터를 계산합니다
-	vFront = glm::normalize(front);
-	vRight = glm::normalize(glm::cross(vFront, glm::vec3(0.0f, 1.0f, 0.0f)));
-	vUp = glm::normalize(glm::cross(vRight, vFront));
+	vGaze = normalize(front);
+	vRight = normalize(cross(vGaze, vec3(0.0f, 1.0f, 0.0f)));
+	vUp = normalize(cross(vRight, vGaze));
 }
+
+
+void CameraProperties::_Camera_Base_::SetCameraPos(vec3 pos)
+{
+	vPosition = pos;
+}
+
+void _Camera_Base_::SetCameraDirVec(vec3 gaze, vec3 right, vec3 left, vec3 up)
+{
+	vGaze = gaze;
+	vRight = right;
+	vLeft = left;
+	vUp = up;
+}
+
+void CameraProperties::_Camera_Base_::SetAngle(float yaw, float pitch, float roll)
+{
+	fYaw = yaw, fPitch = pitch, fRoll = roll;
+}
+
+vec3 CameraProperties::_Camera_Base_::GetProperties(ecProperties properties)
+{
+	switch (properties)
+	{
+	case ecProperties::POS: {
+		return vPosition;
+	}
+	case ecProperties::GAZE: {
+		return vGaze;
+	}
+	case ecProperties::RIGHT:{
+		return vRight;
+	}
+	case ecProperties::LEFT: {
+		return vLeft;
+	}
+	case ecProperties::UP: {
+		return vUp;
+	}
+	}
+}
+
+
+

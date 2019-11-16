@@ -2,6 +2,7 @@
 #define OPENGLPROJECTVIEW_H
 
 #include "OpenGLProjectDoc.h"
+
 // 사용자 정의 클래스
 #include "Controller.h"
 #include "Camera.h"
@@ -10,6 +11,9 @@
 #include "ObjectController.h"
 #include "Shader.h"
 #include "Light.h"
+#include "SystemMangement.h"
+
+using namespace CameraProperties;
 
 class COpenGLProjectView : public CView
 {
@@ -21,11 +25,13 @@ public:
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
+
 public:
 	bool SetDevicePixelFormat(HDC hdc);
 	void initGL(void);
 	void ReSizeGLScene(GLsizei width, GLsizei height);
 	void DrawGLScene(void);
+
 public:
 	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
@@ -42,9 +48,13 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+	//월드에 생성될 모든 인스턴스의 선언부입니다.
 private:
 	Shader glslShader;
 	Light light0;
+	Camera camera;
+	Controller cameraController;
+
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
