@@ -4,24 +4,31 @@
 #include <map>
 #include "Shader.h"
 
+using namespace std;
+
 class Object
 {
 private:
-	std::vector<GLfloat> vertex; // 정점들
-	std::vector<GLubyte> index; // 정점 찍는 순서에 대한 인덱스
+
+	vector<GLfloat> vertex; // 정점들
+	vector<GLubyte> index; // 정점 찍는 순서에 대한 인덱스
 	GLuint id; // GenList의 id값
+
 	float x = 0, y = 0, z = 0; // 월드에서의 위치
 	float xRo = 0, yRo = 0, zRo = 0; // 회전 각도
 	float xSc = 1, ySc = 1, zSc = 1; // Scale값
+
 	GLuint vaoId;
 	GLuint vboVId;
 	GLuint vboUvId;
 	GLuint vboNorId;
 	int m_iNumTriangles = 0;
+
 public:
-	std::vector<glm::vec3> bufferPosition; // Vertex의 위치
-	std::vector<glm::vec2> bufferUV; // Vertex의 Texture 좌표
-	std::vector<glm::vec3> bufferNormal; // Normal 좌표
+
+	vector<glm::vec3> bufferPosition; // Vertex의 위치
+	vector<glm::vec2> bufferUV; // Vertex의 Texture 좌표
+	vector<glm::vec3> bufferNormal; // Normal 좌표
 	// 텍스쳐 구조체
 	typedef struct {
 		GLuint textureId;
@@ -30,14 +37,16 @@ public:
 		int comp;
 		unsigned char* image = nullptr;
 	} Texture;
-	std::map<std::string, Texture> textures; // 여러 텍스쳐 저장한 구조체
+	map<string, Texture> textures; // 여러 텍스쳐 저장한 구조체
 	// Shape 구조체
+
 	typedef struct {
-		std::string texname;
+		string texname;
 		GLuint idxBegin;
 		GLuint cntVertex;
 	} Shape;
-	std::vector<Shape> shapes;
+	vector<Shape> shapes;
+
 public:
 	void AddVertex(GLfloat vtx[], int size); // Object에 Vertex 추가
 	void AddIndex(GLubyte idx[], int size);
