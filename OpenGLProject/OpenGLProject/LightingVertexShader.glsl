@@ -6,7 +6,7 @@ layout(location = 2) in vec3 vertexNormal; // Each Vertex has their NormalVector
 
 out vec2 textureCoord; // put vertexUV on FragmentShader
 out vec3 normalVector; // put NormalVector on FramentShader
-out vec3 o_VertexPosition; // world¿¡¼­ÀÇ Vertex ÁÂÇ¥
+out vec3 o_VertexPosition; // worldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Vertex ï¿½ï¿½Ç¥
 
 uniform mat4 model; // Object's local system -> world system
 uniform mat4 view; // Camera's local system -> world system
@@ -14,8 +14,8 @@ uniform mat4 projection; // Project world system to Camera
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f); // ÃÖÁ¾ÀûÀ¸·Î È­¸é¿¡ Ãâ·ÂµÉ Vertex PositionÀ» °è»êÇÕ´Ï´Ù
-	textureCoord = vertexUV; // TextureÀÇ ÁÂÇ¥¸¦ FragmentShader·Î ³Ñ±é´Ï´Ù
-	normalVector = mat3(transpose(inverse(model))) * vertexNormal; // world¿¡¼­ÀÇ Normal Vector¸¦ °è»êÇÏ°í FragmentShader·Î ³Ñ±é´Ï´Ù
-	o_VertexPosition = vec3(model * vec4(vertexPosition, 1.0)); // world¿¡¼­ÀÇ Vertex ÁÂÇ¥¸¦ °è»êÇÏ°í FragmentShader·Î ³Ñ±é´Ï´Ù
+	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½Âµï¿½ Vertex Positionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½
+	textureCoord = vertexUV; // Textureï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ FragmentShaderï¿½ï¿½ ï¿½Ñ±ï¿½Ï´ï¿½
+	normalVector = mat3(transpose(inverse(model))) * vertexNormal; // worldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Normal Vectorï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ FragmentShaderï¿½ï¿½ ï¿½Ñ±ï¿½Ï´ï¿½
+	o_VertexPosition = vec3(model * vec4(vertexPosition, 1.0)); // worldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Vertex ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ FragmentShaderï¿½ï¿½ ï¿½Ñ±ï¿½Ï´ï¿½
 }
