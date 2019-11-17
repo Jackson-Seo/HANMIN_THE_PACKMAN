@@ -49,6 +49,10 @@
     <ClCompile Include="Light.cpp">
       <Filter>ObjectBase</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Output.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -108,6 +112,10 @@
     <ClInclude Include="Light.h">
       <Filter>ObjectBase</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -188,7 +196,10 @@
     <None Include="LightingVertexShader.glsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="tempFragment.glsl">
+    <None Include="SkyboxFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SkyboxVS.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
