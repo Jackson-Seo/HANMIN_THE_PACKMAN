@@ -162,6 +162,11 @@ void COpenGLProjectView::initGL()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
+
 
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
 	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
@@ -172,8 +177,8 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 
@@ -183,9 +188,14 @@ void COpenGLProjectView::initGL()
 	*/
 	light0 = Light(glslShader, 0, 100, 50, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
-	skyboxShader = Shader("SkyboxVS.glsl", "SkyboxFS.glsl");
-	skyboxShader.use();
-	skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
+	// Skybox Shader 및 객체 생성
+	{
+		// skybox만 렌더링하는 Shader를 생성합니다
+		skyboxShader = Shader("SkyboxVS.glsl", "SkyboxFS.glsl");
+		skyboxShader.use();
+		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
+		skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/BerzeliiPark");
+	}
 
 	TRACE0("로딩 종료\n");
 }
@@ -249,11 +259,12 @@ void COpenGLProjectView::DrawGLScene(void)
 	*/
 	ObjectManager::DrawObjects(glslShader);
 
-	glDepthFunc(GL_LEQUAL);
-	skyboxShader.use();
-	view = glm::mat4(glm::mat3(camera.getViewMatrix()));
+	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
+	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
+	view = glm::mat4(glm::mat3(camera.getViewMatrix())); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
 	skyboxShader.setMatrix4(view, "u_View");
-	skybox0.Draw();
+	skybox0.Draw(); // 해당 skybox를 그립니다
+
 	glslShader.use();
 	// swap buffer
 	SwapBuffers(m_hDC);

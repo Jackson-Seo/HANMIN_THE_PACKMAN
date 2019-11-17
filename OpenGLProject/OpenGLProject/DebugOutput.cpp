@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "Output.h"
+#include "DebugOutput.h"
 
-// 디버그 모드에서 출력을 위한 함수입니다.
+// 디버그 모드에서 출력을 위한 함수입니다. 한글은 출력시에 깨집니다
 void trace1(const std::string& str1) {
 	size_t size;
 	wchar_t* wmsg1 = new wchar_t[strlen(str1.c_str()) + 1]; //memory allocation

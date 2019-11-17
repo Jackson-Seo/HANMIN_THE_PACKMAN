@@ -37,16 +37,18 @@ Skybox::Skybox(const Shader& shader, const std::string& fdir) {
 			stbi_image_free(image);
 		}
 	}
-	// Texture에 대한 파라미터를 설정한다
+	// Texture에 대한 파라미터를 설정합니다
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+	// Shader의 skybox Uniform 변수에 Texture를 전달합니다
 	shader.setUniform1(0, "skybox");
 }
 
+// Skybox를 그립니다
 void Skybox::Draw(void) {
 	glBindVertexArray(vaoId);
 	glActiveTexture(GL_TEXTURE0);
@@ -58,47 +60,47 @@ void Skybox::Draw(void) {
 void Skybox::CreateVAO_VBO(void) {
 	// 각 Vertex들 입니다
 	float Vertices[] = {
-		-200.0f,  200.0f, -200.0f,
-		-200.0f, -200.0f, -200.0f,
-		 200.0f, -200.0f, -200.0f,
-		 200.0f, -200.0f, -200.0f,
-		 200.0f,  200.0f, -200.0f,
-		-200.0f,  200.0f, -200.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-		-200.0f, -200.0f,  200.0f,
-		-200.0f, -200.0f, -200.0f,
-		-200.0f,  200.0f, -200.0f,
-		-200.0f,  200.0f, -200.0f,
-		-200.0f,  200.0f,  200.0f,
-		-200.0f, -200.0f,  200.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-		 200.0f, -200.0f, -200.0f,
-		 200.0f, -200.0f,  200.0f,
-		 200.0f,  200.0f,  200.0f,
-		 200.0f,  200.0f,  200.0f,
-		 200.0f,  200.0f, -200.0f,
-		 200.0f, -200.0f, -200.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
 
-		-200.0f, -200.0f,  200.0f,
-		-200.0f,  200.0f,  200.0f,
-		 200.0f,  200.0f,  200.0f,
-		 200.0f,  200.0f,  200.0f,
-		 200.0f, -200.0f,  200.0f,
-		-200.0f, -200.0f,  200.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-		-200.0f,  200.0f, -200.0f,
-		 200.0f,  200.0f, -200.0f,
-		 200.0f,  200.0f,  200.0f,
-		 200.0f,  200.0f,  200.0f,
-		-200.0f,  200.0f,  200.0f,
-		-200.0f,  200.0f, -200.0f,
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-		-200.0f, -200.0f, -200.0f,
-		-200.0f, -200.0f,  200.0f,
-		 200.0f, -200.0f, -200.0f,
-		 200.0f, -200.0f, -200.0f,
-		-200.0f, -200.0f,  200.0f,
-		 200.0f, -200.0f,  200.0f
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
 	};
 
 	// VAO와 VBO를 만듭니다

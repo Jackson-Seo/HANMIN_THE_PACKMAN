@@ -52,7 +52,7 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>ObjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="Output.cpp" />
+    <ClCompile Include="DebugOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -115,7 +115,7 @@
     <ClInclude Include="Skybox.h">
       <Filter>ObjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="Output.h" />
+    <ClInclude Include="DebugOutput.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">

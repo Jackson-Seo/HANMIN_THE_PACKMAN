@@ -204,7 +204,7 @@
     <ClInclude Include="OpenGLProjectDoc.h" />
     <ClInclude Include="OpenGLProjectView.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="Output.h" />
+    <ClInclude Include="DebugOutput.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
@@ -230,7 +230,7 @@
     <ClCompile Include="OpenGLProjectDoc.cpp" />
     <ClCompile Include="OpenGLProjectView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="Output.cpp" />
+    <ClCompile Include="DebugOutput.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
