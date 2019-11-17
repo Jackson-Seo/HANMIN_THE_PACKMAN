@@ -4,17 +4,16 @@ using namespace glm;
 // 카메라가 움직이는 방향입니다
 
 namespace CameraProperties {
-
 	class _Camera_Base_ :public ObjectBase
 	{
 	private:
 
 		// Camera postion and vector properties...
-		vec3 vPosition; 
+		vec3 vPosition;
 		vec3 vGaze;
-		vec3 vRight; 
+		vec3 vRight;
 		vec3 vLeft;
-		vec3 vUp; 
+		vec3 vUp;
 
 		// Setting yaw, pitch, roll..
 		float fYaw = 0.0;
@@ -41,7 +40,6 @@ namespace CameraProperties {
 		virtual void Rotate(CPoint point, double deltaTime) override;
 
 		mat4 getViewMatrix(void);
-
 	};
 
 	class Camera : public _Camera_Base_
@@ -59,6 +57,4 @@ namespace CameraProperties {
 		float GetCamVelocity(void);
 		float GetCamRotate(void);
 	};
-
 }
-

@@ -18,4 +18,3 @@ public:
 	static void initSystem(void);
 	static void Clock(void);
 };
-

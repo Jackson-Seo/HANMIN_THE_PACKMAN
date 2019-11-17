@@ -14,7 +14,7 @@ private:
 
 	Control_info info;
 	ObjectBase* ControllTarget;
-	
+
 public:
 	Controller();
 	~Controller() {};

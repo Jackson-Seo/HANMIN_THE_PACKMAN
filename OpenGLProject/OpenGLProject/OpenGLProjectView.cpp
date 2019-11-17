@@ -172,11 +172,11 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
 	*/
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
-	
+
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
 		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
@@ -264,7 +264,7 @@ void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
 	cameraController.OnRButtonDown(nFlags, point);
 }
 
-void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) 
+void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	cameraController.OnRButtonUp(nFlags, point);
 	// 우클릭 완료시 벗어나려면 주석을 지워야한다

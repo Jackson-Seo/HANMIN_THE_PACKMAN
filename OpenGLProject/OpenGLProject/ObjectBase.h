@@ -11,18 +11,15 @@ enum class Direction {
 };
 
 struct Control_info {
-
 	bool bRClick; // 마우스 우클릭 감지
 	bool bLClick; // 마우스 좌클릭 감지
 	CPoint clickPoint; // 마우스가 누적해서 이동한 거리
 	CPoint preClickPoint; // 마우스 이동에서 이전 이동 위치
-
 };
 
 class ObjectBase
 {
 protected:
-
 
 public:
 	ObjectBase();
@@ -32,6 +29,4 @@ public:
 	virtual void Move(Direction direction, double deltaTime, float scale = 1) { };
 	virtual void Rotate(CPoint point, double deltaTime) {};
 	//virtual void Scale(ObjectBase* obj) = 0;
-
 };
-

@@ -11,7 +11,7 @@ private:
 		오브젝트들을 담아두는 map입니다
 		Key인 String은 파일명을 사용하고 Value는 Object객체 하나를 사용합니다
 	*/
-	static std::map<std::string, Object> s_object; 
+	static std::map<std::string, Object> s_object;
 private:
 	static int s_iNumGenList; // GenList의 개수
 public:
@@ -22,5 +22,3 @@ private:
 	// ObjectController 내부에서 쓰이는 함수, Normal 벡터를 계산합니다
 	static void CalcNormal(glm::vec3 N, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2);
 };
-
-

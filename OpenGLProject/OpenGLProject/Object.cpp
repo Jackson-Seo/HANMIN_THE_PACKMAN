@@ -23,7 +23,7 @@ void Object::Draw(const Shader& shader) {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);
-	
+
 	// vector<Shape>로 되어있는 shapes에서 Shape 구조체 하나하나 그립니다
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{

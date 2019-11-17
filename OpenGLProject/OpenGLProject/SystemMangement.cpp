@@ -8,7 +8,6 @@ bool _SystemMangement_::bCameraOn = true;
 bool _SystemMangement_::bObjectOn = false;
 bool _SystemMangement_::blightOn = false;
 
-
 void _SystemMangement_::Clock(void)
 {
 	clock_t newTime = clock();
