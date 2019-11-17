@@ -25,24 +25,30 @@
     <ClCompile Include="Axis.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Controller.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="ObjectBase.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
     <ClCompile Include="Object.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>ManagerBase</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemMangement.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectController.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Light.cpp">
+      <Filter>ObjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectBase.cpp" />
-    <ClCompile Include="SystemMangement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -69,9 +75,6 @@
     <ClInclude Include="Axis.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Controller.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -87,18 +90,23 @@
     <ClInclude Include="Shader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectBase.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>ManagerBase</Filter>
     </ClInclude>
     <ClInclude Include="SystemMangement.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ObjectBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +159,12 @@
     </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{25706e7c-2658-47c3-af33-3d6496d176e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ObjectBase">
+      <UniqueIdentifier>{a4e80ae6-1166-4cea-9bc5-60480e69b59b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagerBase">
+      <UniqueIdentifier>{6cd18978-c503-4aea-8063-a3887ea30331}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ObjectController.h"
+#include "ObjectManager.h"
 
 #pragma once
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -8,14 +8,14 @@
 #include "include/stb/stb_image.h"
 
 // 정적변수 초기화
-std::map<std::string, Object> ObjectController::s_object = {};
-int ObjectController::s_iNumGenList = 0;
+std::map<std::string, Object> ObjectManager::s_object = {};
+int ObjectManager::s_iNumGenList = 0;
 
 /*
 	.obj파일을 불러서 map인 s_object에 저장합니다
 	파일명은 따로 map의 key로 저장하고 파싱한 .obj파일은 Object 객체에 저장해 value로 사용합니다
 */
-void ObjectController::LoadObject(const Shader& const shader, const char* const fdir) {
+void ObjectManager::LoadObject(const Shader& const shader, const char* const fdir) {
 	TRACE1("\n%s를 불러옵니다...\n", fdir);
 	Object obj;
 	GLuint vao, vboV, vboUV, vboVN;
@@ -279,19 +279,19 @@ void ObjectController::LoadObject(const Shader& const shader, const char* const 
 }
 
 // Key에 해당하는 Object 객체를 찾아서 반환합니다 구현만해놓고 사용하고있진 않습니다
-Object ObjectController::FindObject(const std::string key) {
+Object ObjectManager::FindObject(const std::string key) {
 	return s_object.find(key)->second;
 }
 
 // map에 저장된 Object를 하나하나 그립니다
-void ObjectController::DrawObjects(const Shader& shader) {
+void ObjectManager::DrawObjects(const Shader& shader) {
 	for (auto it = s_object.begin(); it != s_object.end(); it++) {
 		it->second.Draw(shader);
 	}
 }
 
 // LoadObject 함수에서 호출되는 함수입니다 노말 벡터를 계산합니다
-void ObjectController::CalcNormal(glm::vec3 N, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2)
+void ObjectManager::CalcNormal(glm::vec3 N, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2)
 {
 	float v10[3];
 	v10[0] = v1[0] - v0[0];

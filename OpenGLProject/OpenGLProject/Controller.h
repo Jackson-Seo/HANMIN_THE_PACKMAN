@@ -11,10 +11,8 @@
 class Controller :public ObjectBase
 {
 private:
-
 	Control_info info;
 	ObjectBase* ControllTarget;
-
 public:
 	Controller();
 	~Controller() {};

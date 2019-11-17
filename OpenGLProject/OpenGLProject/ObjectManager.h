@@ -4,7 +4,7 @@
 #include "Object.h"
 #include "Shader.h"
 
-class ObjectController
+class ObjectManager
 {
 private:
 	/*
@@ -19,6 +19,6 @@ public:
 	static Object FindObject(const std::string key); // key로 Object를 찾아서 반환합니다
 	static void DrawObjects(const Shader& shader); // 모든 Object를 그립니다 Shader Program를 progId로 지정합니다
 private:
-	// ObjectController 내부에서 쓰이는 함수, Normal 벡터를 계산합니다
+	// ObjectManager 내부에서 쓰이는 함수, Normal 벡터를 계산합니다
 	static void CalcNormal(glm::vec3 N, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2);
 };

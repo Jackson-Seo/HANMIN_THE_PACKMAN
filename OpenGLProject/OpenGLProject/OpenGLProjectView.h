@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "Axis.h"
 #include "Object.h"
-#include "ObjectController.h"
+#include "ObjectManager.h"
 #include "Shader.h"
 #include "Light.h"
 #include "SystemMangement.h"

@@ -170,12 +170,12 @@ void COpenGLProjectView::initGL()
 	/*
 		지정한 경로에 있는 .obj 파일 하나를 Object 객체로 만들어서 저장합니다
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
-		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
+		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
@@ -236,11 +236,11 @@ void COpenGLProjectView::DrawGLScene(void)
 	glslShader.setMatrix4(view, "view");
 
 	/*
-		ObjectController 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
+		ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
 		저장된 Object 객체들을 차례대로 그립니다
 		사용할 Shader를 인자로 넘깁니다
 	*/
-	ObjectController::DrawObjects(glslShader);
+	ObjectManager::DrawObjects(glslShader);
 
 	// swap buffer
 	SwapBuffers(m_hDC);
@@ -259,11 +259,7 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 }
 
 // 마우스 및 키보드 입출력은 OpenGLProjectView.cpp에서 받아서 Controller 클래스로 넘기고 Controller 클래스에서 처리합니다
-void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
-{
-	cameraController.OnRButtonDown(nFlags, point);
-}
-
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { cameraController.OnRButtonDown(nFlags, point); }
 void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	cameraController.OnRButtonUp(nFlags, point);
@@ -271,11 +267,5 @@ void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point)
 	// ClientToScreen(&point);
 	// OnContextMenu(this, point);
 }
-void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	cameraController.OnMouseMove(nFlags, point);
-}
-void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
-	cameraController.OnKeyDown(nChar, nRepCnt, nFlags);
-}
+void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { cameraController.OnMouseMove(nFlags, point); }
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { cameraController.OnKeyDown(nChar, nRepCnt, nFlags); }
