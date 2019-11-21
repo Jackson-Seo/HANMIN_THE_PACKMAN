@@ -166,8 +166,6 @@ void COpenGLProjectView::initGL()
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-
-
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
 	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
@@ -177,7 +175,7 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
