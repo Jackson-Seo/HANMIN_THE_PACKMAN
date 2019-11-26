@@ -204,12 +204,10 @@
     <ClInclude Include="OpenGLProjectDoc.h" />
     <ClInclude Include="OpenGLProjectView.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="DebugOutput.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SystemMangement.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tmp.h" />
@@ -231,7 +229,6 @@
     <ClCompile Include="OpenGLProjectDoc.cpp" />
     <ClCompile Include="OpenGLProjectView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="DebugOutput.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -240,7 +237,6 @@
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemMangement.cpp" />
     <ClCompile Include="ViewTree.cpp" />
   </ItemGroup>
@@ -264,8 +260,7 @@
     <None Include="LightingFragmentShader.glsl" />
     <None Include="LightingVertexShader.glsl" />
     <None Include="res\OpenGLProject.rc2" />
-    <None Include="SkyboxFS.glsl" />
-    <None Include="SkyboxVS.glsl" />
+    <None Include="tempFragment.glsl" />
     <None Include="VertexShader.glsl" />
     <None Include="vertxSkybox.glsl" />
   </ItemGroup>

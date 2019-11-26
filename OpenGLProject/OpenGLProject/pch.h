@@ -14,9 +14,6 @@
 #include "include/glm/glm.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "include/glm/gtc/type_ptr.hpp"
-#include <string>
-#include <vector>
-#include <map>
 
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "lib/glew32.lib")

@@ -1,7 +1,7 @@
 #pragma once
+#include <string>
 #include <fstream>
 #include <sstream>
-#include "DebugOutput.h"
 
 class Shader
 {
