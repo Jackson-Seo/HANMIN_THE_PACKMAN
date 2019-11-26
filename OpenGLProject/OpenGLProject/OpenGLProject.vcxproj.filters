@@ -108,6 +108,9 @@
     <ClInclude Include="Light.h">
       <Filter>ObjectBase</Filter>
     </ClInclude>
+    <ClInclude Include="tmp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -189,6 +192,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="tempFragment.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="vertxSkybox.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="fragSkybox.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

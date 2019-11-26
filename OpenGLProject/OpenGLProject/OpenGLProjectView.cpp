@@ -8,6 +8,7 @@
 
 #include "OpenGLProjectDoc.h"
 #include "OpenGLProjectView.h"
+#include "tmp.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -163,16 +164,35 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+
+
+	
+	unsigned int cubemapTexture = ObjectManager::loadCubemap(faces);
+	unsigned int skyboxVAO;
+	unsigned int skyboxVBO;
+
+	glGenBuffers(1, &skyboxVBO);
+	glGenVertexArrays(1, &skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
-	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
+	glslShader = Shader("vertexSkybox.glsl", "fragSkybox.glsl");
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
+	glDepthMask(GL_FALSE);
 	glslShader.use();
+	glBindVertexArray(skyboxVAO);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDepthMask(GL_TRUE);
+
 	/*
 		지정한 경로에 있는 .obj 파일 하나를 Object 객체로 만들어서 저장합니다
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
@@ -240,7 +260,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		저장된 Object 객체들을 차례대로 그립니다
 		사용할 Shader를 인자로 넘깁니다
 	*/
-	ObjectManager::DrawObjects(glslShader);
+	//ObjectManager::DrawObjects(glslShader);
 
 	// swap buffer
 	SwapBuffers(m_hDC);
