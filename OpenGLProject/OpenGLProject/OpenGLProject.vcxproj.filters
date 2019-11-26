@@ -1,32 +1,32 @@
-ï»¿<?xml version="1.0" encoding="utf-8"?>
+ï»?<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="OpenGLProject.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="OpenGLProjectDoc.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="OpenGLProjectView.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="MainFrm.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼\ì°½</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼\ì°?</Filter>
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼\ì°½</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼\ì°?</Filter>
     </ClCompile>
     <ClCompile Include="ViewTree.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼\ì°½</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼\ì°?</Filter>
     </ClCompile>
     <ClCompile Include="Axis.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="Controller.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Shader</Filter>
@@ -44,48 +44,52 @@
       <Filter>ManagerBase</Filter>
     </ClCompile>
     <ClCompile Include="SystemMangement.cpp">
-      <Filter>ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>?†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>ObjectBase</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="OpenGLProjectDoc.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="OpenGLProjectView.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="MainFrm.h">
-      <Filter>í—¤ë” íŒŒì¼\ì°½</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ì°?</Filter>
     </ClInclude>
     <ClInclude Include="PropertiesWnd.h">
-      <Filter>í—¤ë” íŒŒì¼\ì°½</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ì°?</Filter>
     </ClInclude>
     <ClInclude Include="ViewTree.h">
-      <Filter>í—¤ë” íŒŒì¼\ì°½</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ì°?</Filter>
     </ClInclude>
     <ClInclude Include="Axis.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="Controller.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>í—¤ë” íŒŒì¼\ê¸°ë³¸êµ¬ì„±</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ê¸°ë³¸êµ¬ì„±</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>í—¤ë” íŒŒì¼\ê¸°ë³¸êµ¬ì„±</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ê¸°ë³¸êµ¬ì„±</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>í—¤ë” íŒŒì¼\ê¸°ë³¸êµ¬ì„±</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼\ê¸°ë³¸êµ¬ì„±</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Shader</Filter>
@@ -103,58 +107,62 @@
       <Filter>ManagerBase</Filter>
     </ClInclude>
     <ClInclude Include="SystemMangement.h">
-      <Filter>í—¤ë” íŒŒì¼</Filter>
+      <Filter>?—¤?” ?ŒŒ?¼</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>ObjectBase</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugOutput.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\OpenGLProjectDoc.ico">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\properties.bmp">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\properties_hc.bmp">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\properties_wnd.ico">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\properties_wnd_hc.ico">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\Toolbar256.bmp">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
     <Image Include="res\userimages.bmp">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="ë¦¬ì†ŒìŠ¤ íŒŒì¼">
+    <Filter Include="ë¦¬ì†Œ?Š¤ ?ŒŒ?¼">
       <UniqueIdentifier>{6c1c25fa-32d5-4c31-9a00-d5889c7962ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ì†ŒìŠ¤ íŒŒì¼">
+    <Filter Include="?†Œ?Š¤ ?ŒŒ?¼">
       <UniqueIdentifier>{3f08650f-2ca1-487f-bc77-e3f15256cbfa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="í—¤ë” íŒŒì¼">
+    <Filter Include="?—¤?” ?ŒŒ?¼">
       <UniqueIdentifier>{a333b29f-0d3e-41a8-88cd-93a9d9ad5477}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ì†ŒìŠ¤ íŒŒì¼\ì°½">
+    <Filter Include="?†Œ?Š¤ ?ŒŒ?¼\ì°?">
       <UniqueIdentifier>{fedd7cd3-7170-4829-bf9f-fba551f55c5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="í—¤ë” íŒŒì¼\ì°½">
+    <Filter Include="?—¤?” ?ŒŒ?¼\ì°?">
       <UniqueIdentifier>{76e8ad6b-6491-4c38-a71a-594d2a0fcb47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="í—¤ë” íŒŒì¼\ê¸°ë³¸êµ¬ì„±">
+    <Filter Include="?—¤?” ?ŒŒ?¼\ê¸°ë³¸êµ¬ì„±">
       <UniqueIdentifier>{42478ec0-12c7-437d-b79e-00d21470c7a9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shader">
@@ -169,12 +177,12 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGLProject.rc">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\OpenGLProject.rc2">
-      <Filter>ë¦¬ì†ŒìŠ¤ íŒŒì¼</Filter>
+      <Filter>ë¦¬ì†Œ?Š¤ ?ŒŒ?¼</Filter>
     </None>
     <None Include="FragmentShader.glsl">
       <Filter>Shader</Filter>
@@ -188,7 +196,10 @@
     <None Include="LightingVertexShader.glsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="tempFragment.glsl">
+    <None Include="SkyboxFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SkyboxVS.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

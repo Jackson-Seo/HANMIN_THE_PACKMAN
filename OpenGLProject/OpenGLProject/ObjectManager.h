@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <map>
 #include "Object.h"
 #include "Shader.h"
 
