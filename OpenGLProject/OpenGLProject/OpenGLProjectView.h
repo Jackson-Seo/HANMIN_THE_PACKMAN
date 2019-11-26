@@ -12,6 +12,7 @@
 #include "Shader.h"
 #include "Light.h"
 #include "SystemMangement.h"
+#include "Skybox.h"
 
 using namespace CameraProperties;
 
@@ -51,6 +52,8 @@ public:
 	//월드에 생성될 모든 인스턴스의 선언부입니다.
 private:
 	Shader glslShader;
+	Shader skyboxShader;
+	Skybox skybox0;
 	Light light0;
 	Camera camera;
 	Controller cameraController;

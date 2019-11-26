@@ -25,6 +25,12 @@ uniform Light light;
 
 void main()
 {
+	vec4 texColor = texture(textureSampler, textureCoord); // 텍스쳐의 색을 얻습니다
+	// 텍스쳐의 투명한 부분을 제외시킵니다
+    if(texColor.a == 0) {
+        discard;
+	}
+
 	// ambient
     vec3 ambient = light.ambient * material.ambient;
 
@@ -35,10 +41,22 @@ void main()
     vec3 diffuse = light.diffuse * (diff * material.diffuse);
     
     // specular
+<<<<<<< Updated upstream
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * (spec * material.specular);  
 	vec4 textureColor = defaultColor + texture(textureSampler, textureCoord);
 	fragmentColor = vec4(ambient, 1.0) * textureColor;
+=======
+    vec3 viewDir = normalize(u_CameraPosition - o_VertexPosition); // 정점에서 Camera로의 Vector를 구합니다
+    vec3 reflectDir = reflect(-lightDir, norm); // 정점에서 반사된 Vector를 구합니다
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1); // 입사각을 계산하고 shininess를 적용시킵니다
+    vec3 specular = light.specular * (spec * material.specular);
+
+	vec3 result = ambient + diffuse + specular;
+	// defaultColor가 0,0,0이면 texture가 적용되고 1,1,1이면 적용되지 않습니다
+	vec4 textureColor = defaultColor + texColor;
+	fragmentColor = vec4(result, 1.0) * textureColor;
+>>>>>>> Stashed changes
 }

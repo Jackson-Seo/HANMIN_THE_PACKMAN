@@ -162,6 +162,12 @@ void COpenGLProjectView::initGL()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+<<<<<<< Updated upstream
+=======
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+>>>>>>> Stashed changes
 
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
 	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
@@ -172,16 +178,33 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
 	*/
+<<<<<<< Updated upstream
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 	
+=======
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
+
+>>>>>>> Stashed changes
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
 		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
 	*/
 	light0 = Light(glslShader, 0, 0, 0, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+
+	// Skybox Shader 및 객체 생성
+	{
+		// skybox만 렌더링하는 Shader를 생성합니다
+		skyboxShader = Shader("SkyboxVS.glsl", "SkyboxFS.glsl");
+		skyboxShader.use();
+		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
+		skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/BerzeliiPark");
+	}
 
 	TRACE0("로딩 종료\n");
 }
@@ -209,6 +232,7 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 	*/
 	mat4 projection = perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 	glslShader.setMatrix4(projection, "projection");
+	skyboxShader.setMatrix4(projection, "u_Projection");
 }
 
 // 주기적으로 호출되는 함수입니다 여기에 그림을 그립니다
@@ -226,6 +250,8 @@ void COpenGLProjectView::DrawGLScene(void)
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glDepthFunc(GL_LESS);
+	glslShader.use();
 	/*
 		카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
 		Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
@@ -242,6 +268,13 @@ void COpenGLProjectView::DrawGLScene(void)
 	*/
 	ObjectController::DrawObjects(glslShader);
 
+	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
+	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
+	view = glm::mat4(glm::mat3(camera.getViewMatrix())); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
+	skyboxShader.setMatrix4(view, "u_View");
+	skybox0.Draw(); // 해당 skybox를 그립니다
+
+	glslShader.use();
 	// swap buffer
 	SwapBuffers(m_hDC);
 }

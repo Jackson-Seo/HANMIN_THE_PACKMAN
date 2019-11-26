@@ -41,8 +41,15 @@
     <ClCompile Include="ObjectController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="SystemMangement.cpp" />
+=======
+    <ClCompile Include="Skybox.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOutput.cpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -100,6 +107,16 @@
     <ClInclude Include="SystemMangement.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="Light.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugOutput.h" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -174,5 +191,14 @@
     <None Include="LightingVertexShader.glsl">
       <Filter>Shader</Filter>
     </None>
+<<<<<<< Updated upstream
+=======
+    <None Include="SkyboxFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SkyboxVS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

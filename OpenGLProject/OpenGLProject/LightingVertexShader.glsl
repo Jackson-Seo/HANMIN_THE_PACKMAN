@@ -6,6 +6,10 @@ layout(location = 2) in vec3 vertexNormal; // Each Vertex has their NormalVector
 
 out vec2 textureCoord; // put vertexUV on FragmentShader
 out vec3 normalVector; // put NormalVector on FramentShader
+<<<<<<< Updated upstream
+=======
+out vec3 o_VertexPosition; // world?????? Vertex ???
+>>>>>>> Stashed changes
 
 uniform mat4 model; // Object's local system -> world system
 uniform mat4 view; // Camera's local system -> world system
@@ -13,7 +17,14 @@ uniform mat4 projection; // Project world system to Camera
 
 void main()
 {
+<<<<<<< Updated upstream
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f);
 	textureCoord = vertexUV;
 	normalVector = mat3(transpose(inverse(model))) * vertexNormal; 
+=======
+	gl_Position = projection * view * model * vec4(vertexPosition, 1.0f); // ?????????? ??? ???? Vertex Position?? ???????
+	textureCoord = vertexUV; // Texture?? ????? FragmentShader?? ?????
+	normalVector = mat3(transpose(inverse(model))) * vertexNormal; // world?????? Normal Vector?? ?????? FragmentShader?? ?????
+	o_VertexPosition = vec3(model * vec4(vertexPosition, 1.0)); // world?????? Vertex ????? ?????? FragmentShader?? ?????
+>>>>>>> Stashed changes
 }
