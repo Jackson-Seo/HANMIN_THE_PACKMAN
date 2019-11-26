@@ -163,6 +163,8 @@ void COpenGLProjectView::initGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+
+
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
 	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
