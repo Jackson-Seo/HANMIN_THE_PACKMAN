@@ -1,20 +1,16 @@
 #include "pch.h"
 #include "Controller.h"
 
-
 Controller::Controller()
 {
 	info = { FALSE, FALSE, {0,0},{0,0} };
 }
-
-
 
 /*
 	OpenGLProjectView의 DrawGLScene에서 호출시켜 프레임간 시간차를 계산합니다
 	마우스가 움직인 거리만큼 카메라를 회전시킵니다
 */
 // deltaTime만큼 회전시키려 했으나 deltaTime이 제대로 계산이 안되므로 상수값을 넘겨줍니다
-
 
 Control_info* Controller::GetControl_info(void)
 {

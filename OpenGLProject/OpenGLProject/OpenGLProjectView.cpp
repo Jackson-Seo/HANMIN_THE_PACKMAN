@@ -162,40 +162,29 @@ void COpenGLProjectView::initGL()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-<<<<<<< Updated upstream
-=======
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
->>>>>>> Stashed changes
 
 	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
-	glslShader = Shader("VertexShader.glsl", "FragmentShader.glsl");
+	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
 	glslShader.use();
 	/*
 		지정한 경로에 있는 .obj 파일 하나를 Object 객체로 만들어서 저장합니다
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
-		저장한 Object 객체를 ObjectController 클래스의 map에 집어넣습니다
+		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-<<<<<<< Updated upstream
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
-	// ObjectController::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
-	
-=======
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
 
->>>>>>> Stashed changes
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
 		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
 	*/
-	light0 = Light(glslShader, 0, 0, 0, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	light0 = Light(glslShader, 0, 100, 50, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	// Skybox Shader 및 객체 생성
 	{
@@ -262,11 +251,11 @@ void COpenGLProjectView::DrawGLScene(void)
 	glslShader.setMatrix4(view, "view");
 
 	/*
-		ObjectController 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
+		ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
 		저장된 Object 객체들을 차례대로 그립니다
 		사용할 Shader를 인자로 넘깁니다
 	*/
-	ObjectController::DrawObjects(glslShader);
+	ObjectManager::DrawObjects(glslShader);
 
 	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
 	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
@@ -292,23 +281,13 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 }
 
 // 마우스 및 키보드 입출력은 OpenGLProjectView.cpp에서 받아서 Controller 클래스로 넘기고 Controller 클래스에서 처리합니다
-void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point)
-{
-	cameraController.OnRButtonDown(nFlags, point);
-}
-
-void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point) 
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { cameraController.OnRButtonDown(nFlags, point); }
+void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	cameraController.OnRButtonUp(nFlags, point);
 	// 우클릭 완료시 벗어나려면 주석을 지워야한다
 	// ClientToScreen(&point);
 	// OnContextMenu(this, point);
 }
-void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	cameraController.OnMouseMove(nFlags, point);
-}
-void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
-	cameraController.OnKeyDown(nChar, nRepCnt, nFlags);
-}
+void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { cameraController.OnMouseMove(nFlags, point); }
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { cameraController.OnKeyDown(nChar, nRepCnt, nFlags); }

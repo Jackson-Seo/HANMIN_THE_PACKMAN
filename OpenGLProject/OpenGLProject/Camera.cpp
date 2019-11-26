@@ -73,7 +73,6 @@ void _Camera_Base_::Rotate(CPoint point, double deltaTime) {
 	vUp = normalize(cross(vRight, vGaze));
 }
 
-
 void CameraProperties::_Camera_Base_::SetCameraPos(vec3 pos)
 {
 	vPosition = pos;
@@ -102,7 +101,7 @@ vec3 CameraProperties::_Camera_Base_::GetProperties(ecProperties properties)
 	case ecProperties::GAZE: {
 		return vGaze;
 	}
-	case ecProperties::RIGHT:{
+	case ecProperties::RIGHT: {
 		return vRight;
 	}
 	case ecProperties::LEFT: {
@@ -113,6 +112,3 @@ vec3 CameraProperties::_Camera_Base_::GetProperties(ecProperties properties)
 	}
 	}
 }
-
-
-

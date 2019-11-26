@@ -23,7 +23,7 @@ void Object::Draw(const Shader& shader) {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);
-	
+
 	// vector<Shape>로 되어있는 shapes에서 Shape 구조체 하나하나 그립니다
 	for (auto it = this->shapes.begin(); it != this->shapes.end(); ++it)
 	{
@@ -31,19 +31,28 @@ void Object::Draw(const Shader& shader) {
 			if문 : 해당 Shape에 texture가 없나?
 			TRUE : defaultColor에 색을 넣어서 fragment shader에 넘깁니다
 			else if문 : 해당 Shape에 texture가 연결 되어있나?
-				TRUE : defaultColor를 무색으로 설정하고 연결된 texture를 fragment shader에 넘깁니다
+				TRUE : 연결된 texture를 fragment shader에 넘깁니다
 				FALSE : defaultColor에 색을 넣어서 fragment shader에 넘깁니다
 		*/
 		if (it->texname == "") {
-			shader.setVec4(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "defaultColor");
+			shader.setVec4(glm::vec4(1.0f), "defaultColor");
+			// Object의 각 재질을 넘깁니다 저장된 재질이 없으므로 회색으로 넘깁니다
+			shader.setVec3(glm::vec3(0.2f), "material.ambient");
+			shader.setVec3(glm::vec3(0.2f), "material.diffuse");
+			shader.setVec3(glm::vec3(0.2f), "material.specular");
+			shader.setfloat(1.0f, "material.shininess");
+
 			// Shape 구조체에 저장된대로 삼각형을 그립니다
 			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);
 		}
 		else if (this->textures[it->texname].textureId != -1) {
+			// defaultColor를 무색으로 설정하여 texture가 적용되게 합니다
 			shader.setVec4(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "defaultColor");
-			shader.setVec3(this->textures[it->texname].ambient, "Material.ambient");
-			shader.setVec3(this->textures[it->texname].diffuse, "Material.diffuse");
-			shader.setVec3(this->textures[it->texname].specular, "Material.specular");
+			// Object의 각 재질을 넘깁니다
+			shader.setVec3(this->textures[it->texname].ambient, "material.ambient");
+			shader.setVec3(this->textures[it->texname].diffuse, "material.diffuse");
+			shader.setVec3(this->textures[it->texname].specular, "material.specular");
+			shader.setfloat(this->textures[it->texname].shininess, "material.shininess");
 
 			// texture를 fragment shader에 넘깁니다
 			glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
@@ -54,10 +63,13 @@ void Object::Draw(const Shader& shader) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		else {
-			shader.setVec4(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "defaultColor");
-			shader.setVec3(this->textures[it->texname].ambient, "Material.ambient");
-			shader.setVec3(this->textures[it->texname].diffuse, "Material.diffuse");
-			shader.setVec3(this->textures[it->texname].specular, "Material.specular");
+			// defaultColor를 흰색으로 설정하여 texture가 적용되지 않습니다
+			shader.setVec4(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "defaultColor");
+			// Object의 각 재질을 넘깁니다
+			shader.setVec3(this->textures[it->texname].ambient, "material.ambient");
+			shader.setVec3(this->textures[it->texname].diffuse, "material.diffuse");
+			shader.setVec3(this->textures[it->texname].specular, "material.specular");
+			shader.setfloat(this->textures[it->texname].shininess, "material.shininess");
 
 			// Shape 구조체에 저장된대로 삼각형을 그립니다
 			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);

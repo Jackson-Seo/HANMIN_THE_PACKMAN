@@ -199,7 +199,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectBase.h" />
-    <ClInclude Include="ObjectController.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="OpenGLProject.h" />
     <ClInclude Include="OpenGLProjectDoc.h" />
     <ClInclude Include="OpenGLProjectView.h" />
@@ -223,7 +223,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="ObjectBase.cpp" />
-    <ClCompile Include="ObjectController.cpp">
+    <ClCompile Include="ObjectManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="OpenGLProject.cpp" />
@@ -262,11 +262,8 @@
     <None Include="LightingFragmentShader.glsl" />
     <None Include="LightingVertexShader.glsl" />
     <None Include="res\OpenGLProject.rc2" />
-<<<<<<< Updated upstream
-=======
     <None Include="SkyboxFS.glsl" />
     <None Include="SkyboxVS.glsl" />
->>>>>>> Stashed changes
     <None Include="VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

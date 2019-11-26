@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: 'E 45 Aircraft_Export_Ready.blend'
 # www.blender.org
-mtllib E 45 Aircraft_obj.mtl
+mtllib Aircraft.mtl
 o Cube.021_Cube.048
 v -0.012582 1.115669 -1.216953
 v -0.116002 1.108573 -1.214218
