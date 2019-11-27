@@ -261,6 +261,7 @@
     <None Include="FragmentShader.glsl" />
     <None Include="LightingFragmentShader.glsl" />
     <None Include="LightingVertexShader.glsl" />
+    <None Include="RayTracingFS.glsl" />
     <None Include="res\OpenGLProject.rc2" />
     <None Include="SkyboxFS.glsl" />
     <None Include="SkyboxVS.glsl" />

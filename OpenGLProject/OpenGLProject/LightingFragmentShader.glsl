@@ -29,7 +29,7 @@ void main()
 {
 	vec4 texColor = texture(textureSampler, textureCoord); // 텍스쳐의 색을 얻습니다
 	// 텍스쳐의 투명한 부분을 제외시킵니다
-    if(texColor.a == 0) {
+    if (texColor.a == 0) {
         discard;
 	}
 

@@ -53,6 +53,7 @@ public:
 private:
 	Shader glslShader;
 	Shader skyboxShader;
+	Shader rayTracingShader;
 	Skybox skybox0;
 	Light light0;
 	Camera camera;

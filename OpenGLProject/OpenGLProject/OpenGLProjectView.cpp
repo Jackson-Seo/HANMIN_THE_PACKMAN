@@ -175,7 +175,7 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
