@@ -45,16 +45,21 @@ Skybox::Skybox(const Shader& shader, const std::string& fdir) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	// Shader의 skybox Uniform 변수에 Texture를 전달합니다
-	shader.setUniform1(0, "skybox");
+	shader.setUniform1i(0, "skybox");
 }
 
 // Skybox를 그립니다
-void Skybox::Draw(void) {
+void Skybox::Draw(void) const {
 	glBindVertexArray(vaoId);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, id);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+// 다른 Shader에도 Texture를 전달합니다
+void Skybox::ShareTexture(const Shader& shader) const {
+	shader.setUniform1i(0, "skybox");
 }
 
 void Skybox::CreateVAO_VBO(void) {

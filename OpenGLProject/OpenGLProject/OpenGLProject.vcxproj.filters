@@ -25,9 +25,6 @@
     <ClCompile Include="Axis.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
@@ -53,6 +50,12 @@
       <Filter>ObjectBase</Filter>
     </ClCompile>
     <ClCompile Include="DebugOutput.cpp" />
+    <ClCompile Include="IOManager.cpp">
+      <Filter>ManagerBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>ManagerBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -77,9 +80,6 @@
       <Filter>헤더 파일\창</Filter>
     </ClInclude>
     <ClInclude Include="Axis.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
@@ -116,6 +116,12 @@
       <Filter>ObjectBase</Filter>
     </ClInclude>
     <ClInclude Include="DebugOutput.h" />
+    <ClInclude Include="IOManager.h">
+      <Filter>ManagerBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>ManagerBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -184,12 +190,6 @@
     <None Include="res\OpenGLProject.rc2">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="FragmentShader.glsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="VertexShader.glsl">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="LightingFragmentShader.glsl">
       <Filter>Shader</Filter>
     </None>
@@ -203,6 +203,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="RayTracingFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="VertexGPGPUVS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="VertexGPGPUFS.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

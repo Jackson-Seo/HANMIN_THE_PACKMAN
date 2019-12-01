@@ -1,9 +1,13 @@
 #include "pch.h"
-#include "Controller.h"
+#include "IOManager.h"
 
-Controller::Controller()
+IOManager::IOManager()
 {
+	TRACE0("\nIOManager 초기화\n");
 	info = { FALSE, FALSE, {0,0},{0,0} };
+	this->width = 0;
+	this->height = 0;
+	ControllTarget = nullptr;
 }
 
 /*
@@ -12,12 +16,21 @@ Controller::Controller()
 */
 // deltaTime만큼 회전시키려 했으나 deltaTime이 제대로 계산이 안되므로 상수값을 넘겨줍니다
 
-Control_info* Controller::GetControl_info(void)
+Control_info* IOManager::GetControl_info(void)
 {
 	return &info;
 }
 
-void Controller::OnMouseMove(UINT nFlags, CPoint point)
+void IOManager::Initialize(ShaderManager* shaderManager) {
+	this->shaderManager = shaderManager;
+}
+
+void IOManager::OnSize(UINT nType, int cx, int cy) {
+	this->width = cx;
+	this->height = cy;
+}
+
+void IOManager::OnMouseMove(UINT nFlags, CPoint point)
 {
 	/*
 		if문 : 우클릭이 된 상태에서 드래그가 일어났는가?
@@ -29,19 +42,20 @@ void Controller::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
-void Controller::OnRButtonDown(UINT nFlags, CPoint point)
+void IOManager::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	info.bRClick = true;
 	info.clickPoint = { 0, 0 };
 	info.preClickPoint = point;
 }
 
-void Controller::OnRButtonUp(UINT nFlags, CPoint point)
+void IOManager::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	info.bRClick = false;
 }
+
 // 입력된 키에 따라서 카메라를 해당 방향으로 움직입니다
-void Controller::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void IOManager::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	switch (nChar) {
 	case 'W':
 		ControllTarget->Move(Direction::FORWARD, (double)_SystemMangement_::deltaTime);
@@ -64,12 +78,28 @@ void Controller::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	}
 }
 
-void Controller::AttachTarget(ObjectBase* obj)
+void IOManager::OnShaderPhongShading(void) {
+	this->shaderManager->rtxON = false;
+}
+
+void IOManager::OnShaderRayTracingRendering(void) {
+	this->shaderManager->rtxON = !this->shaderManager->rtxON;
+}
+
+void IOManager::OnUpdateShaderPhongshading(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(!shaderManager->rtxON);
+}
+
+void IOManager::OnUpdateShaderRaytracingrendering(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(shaderManager->rtxON);
+}
+
+void IOManager::AttachTarget(ObjectBase* obj)
 {
 	ControllTarget = obj;
 }
 
-ObjectBase* Controller::GetControllTarget(void)
+ObjectBase* IOManager::GetControllTarget(void)
 {
 	return ControllTarget;
 }
