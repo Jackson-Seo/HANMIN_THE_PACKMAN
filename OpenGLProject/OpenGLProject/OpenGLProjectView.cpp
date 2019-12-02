@@ -187,10 +187,9 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
-	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
+	ObjectManager::LoadObject(shaderManager->glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
 	airobj = ObjectManager::s_object[0];
 
 	for (int index = 0; index < MAXOBJ; index++) {
@@ -354,7 +353,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		for (int i = 0; i < MAXOBJ; i++) {
 			ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
 			ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);
-			ObjectManager::DrawObjects(glslShader);
+			ObjectManager::DrawObjects(shaderManager->glslShader);
 		}
 
 		glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
