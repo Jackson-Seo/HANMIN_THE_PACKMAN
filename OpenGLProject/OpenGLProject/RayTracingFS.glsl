@@ -144,7 +144,7 @@ void main()
 	t2.t = 1000;
 	vec3 n2;
 
-	int tracingCount = 2;
+	int tracingCount = 3;
 	vec3 a, b, c;
 	Intersect tmp;
 	for(int j = 0; j < tracingCount; j++) {
@@ -187,7 +187,7 @@ void main()
 			// 광원에서의 입사벡터의 반사벡터를 구한다
 			lightReflection = normalize(reflect(-lightDir, t1.normal));
 			// specular 상수를 구한다
-			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
 
 			// 색을 계산합니다
 			result += ambient;
@@ -207,7 +207,7 @@ void main()
 			// 광원에서의 입사벡터의 반사벡터를 구한다
 			lightReflection = normalize(reflect(-lightDir, t2.normal));
 			// specular 상수를 구한다
-			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
 
 			// 색을 계산합니다
 			result += ambient;
@@ -222,7 +222,8 @@ void main()
 				result = texture(skybox, o_TextureCoords);
 			}
 			else {
-				result += texture(skybox, ray.direction) * 0.5f;
+				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction, 1)));
+				result += texture(skybox, rayReflection) * 0.5f;
 			}
 			break;
 		}
