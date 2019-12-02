@@ -46,6 +46,7 @@ public:
 	} Shape;
 	std::vector<Shape> shapes;
 public:
+	void initObjPos(float x, float y, float z);
 	void setObjPos(float x, float y, float z);
 	void Draw(const Shader& shader); // Object 하나를 그립니다
 	void setScale(const float& xSc, const float& ySc, const float& Sc); // Object의 Scale을 조정합니다

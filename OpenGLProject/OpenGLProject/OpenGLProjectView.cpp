@@ -10,7 +10,9 @@
 #include "OpenGLProjectView.h"
 
 float deltay = 0.0f;
-const int MAXTANK = 10;
+float objNum[MAXOBJ][3];
+const float objAreaMin = -1000.0f;
+const float objAreaMax = 1000.0f;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -155,6 +157,9 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void COpenGLProjectView::initGL()
 {
+	CString sirenCall("../OpenGLProject/Asset/soundtrack/Tornado_Siren_II-Delilah-747233690.wav");
+	PlaySound(sirenCall, AfxGetInstanceHandle(), SND_ASYNC | SND_LOOP);
+
 	TRACE0("initGL 시작\n");
 	cameraController.AttachTarget(&camera);
 
@@ -178,16 +183,18 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	
 
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	airobj = ObjectManager::s_object[0];
 
-	for (int index = 0; index < MAXTANK; index++) {
-		ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", index);
-		airobj[index] = ObjectManager::s_object[index];
+	for (int index = 0; index < MAXOBJ; index++) {
+		objNum[index][0] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+		objNum[index][1] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+		objNum[index][2] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
 	}
-
 	
-
 	
 
 
@@ -274,12 +281,8 @@ void COpenGLProjectView::DrawGLScene(void)
 	glslShader.use();
 
 	//모든 오브젝트들의 런타임 무브먼트는 여기서 코딩합니다.
-	deltay += _SystemMangement_::deltaTime * 0.001f;
+	deltay += _SystemMangement_::deltaTime * 0.004f;
 	
-	for (int i = 0; i < MAXTANK; i++) {
-		airobj[i].setObjPos(_SystemMangement_::getRandomNumber(0.0f, 30.0f), _SystemMangement_::getRandomNumber(0.0f, 30.0f), _SystemMangement_::getRandomNumber(0.0f, 30.0f));
-	}
-
 	/*
 	for (int index = 0; index < 5; index++) {
 		airobj[index].setObjPos(5 * index, 0.0f, deltay);
@@ -298,9 +301,6 @@ void COpenGLProjectView::DrawGLScene(void)
 		airobj[index].setObjPos(- 5 * index, 30.0f, deltay);
 	}
 	*/
-	for (int index = 0; index < MAXTANK; index++) {
-		ObjectManager::s_object[index] = airobj[index];
-	}
 	
 	
 
@@ -339,7 +339,11 @@ void COpenGLProjectView::DrawGLScene(void)
 		저장된 Object 객체들을 차례대로 그립니다
 		사용할 Shader를 인자로 넘깁니다
 	*/
-	ObjectManager::DrawObjects(glslShader);
+	for (int i = 0; i < MAXOBJ; i++) {
+		ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
+		ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);
+		ObjectManager::DrawObjects(glslShader);
+	}
 
 	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
 	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다

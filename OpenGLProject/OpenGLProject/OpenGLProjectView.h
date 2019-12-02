@@ -64,7 +64,7 @@ private:
 	Camera camera;
 	Controller cameraController;
 	plane defaultPlane;
-	Object airobj[20];
+	Object airobj;
 
 	// 생성된 메시지 맵 함수
 protected:

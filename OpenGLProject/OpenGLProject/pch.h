@@ -18,7 +18,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <mmsystem.h>
 
+#pragma comment(lib, "winmm")
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/freeglut.lib")
