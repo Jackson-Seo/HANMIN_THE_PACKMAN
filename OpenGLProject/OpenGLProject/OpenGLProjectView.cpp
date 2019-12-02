@@ -161,8 +161,8 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void COpenGLProjectView::initGL()
 {
-	CString sirenCall("../OpenGLProject/Asset/soundtrack/Tornado_Siren_II-Delilah-747233690.wav");
-	PlaySound(sirenCall, AfxGetInstanceHandle(), SND_ASYNC | SND_LOOP);
+	// CString sirenCall("../OpenGLProject/Asset/soundtrack/Tornado_Siren_II-Delilah-747233690.wav");
+	// PlaySound(sirenCall, AfxGetInstanceHandle(), SND_ASYNC | SND_LOOP);
 
 	TRACE0("initGL 시작\n");
 
@@ -194,7 +194,7 @@ void COpenGLProjectView::initGL()
 
 	for (int index = 0; index < MAXOBJ; index++) {
 		objNum[index][0] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
-		objNum[index][1] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+		objNum[index][1] = _SystemMangement_::getRandomNumber(-30, objAreaMax);
 		objNum[index][2] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
 	}
 
@@ -212,6 +212,7 @@ void COpenGLProjectView::initGL()
 	{
 		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
 		skybox0 = Skybox(shaderManager->skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
+		// skybox0 = Skybox(shaderManager->skyboxShader, "../OpenGLProject/Asset/Skyboxes/BonoBono");
 		skybox0.ShareTexture(shaderManager->rayTracingShader);
 		// GPGPU를 작동시키기 위해 Skybox의 Vertex만 넘겨줍니다
 		skybox0.ShareTexture(shaderManager->gpgpuShader);

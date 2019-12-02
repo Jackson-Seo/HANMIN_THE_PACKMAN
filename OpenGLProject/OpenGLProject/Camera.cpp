@@ -18,7 +18,7 @@ _Camera_Base_::_Camera_Base_()
 // 카메라의 위치와 방향을 토대로 view matrix를 계산합니다 후에 vertex shader의 view Uniform 변수로 넘깁니다
 mat4 _Camera_Base_::getViewMatrix(void)
 {
-	return lookAt(vPosition, vPosition + vGaze, vUp);
+	return glm::lookAt(vPosition, vPosition + vGaze, vUp);
 }
 
 void _Camera_Base_::Initialize(struct Control_info* info)

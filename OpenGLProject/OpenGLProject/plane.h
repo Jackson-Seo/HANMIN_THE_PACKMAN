@@ -5,10 +5,10 @@ namespace DefaultPlane
 {
 	const float vertices[] = {
 		// positions          // colors           // texture coords
-		 1000.0f,  -50.0f, -1000.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		 1000.0f, -50.0f, 1000.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-1000.0f, -50.0f, 1000.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-1000.0f,  -50.0f, -1000.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+		 1000.0f,  -100.0f, -1000.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		 1000.0f, -100.0f, 1000.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-1000.0f, -100.0f, 1000.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-1000.0f,  -100.0f, -1000.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 	};
 	const unsigned int indices[] = {
 		0, 1, 3, // first triangle

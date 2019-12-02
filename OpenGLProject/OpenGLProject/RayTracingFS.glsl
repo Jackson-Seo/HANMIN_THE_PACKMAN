@@ -144,7 +144,7 @@ void main()
 	t2.t = 1000;
 	vec3 n2;
 
-	int tracingCount = 3;
+	int tracingCount = 4;
 	vec3 a, b, c;
 	Intersect tmp;
 	for(int j = 0; j < tracingCount; j++) {
