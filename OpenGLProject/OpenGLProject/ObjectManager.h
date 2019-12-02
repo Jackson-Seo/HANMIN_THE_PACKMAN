@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "Shader.h"
 
-const int MAXOBJ = 5;
+const int MAXOBJ = 500;
 
 class ObjectManager
 {

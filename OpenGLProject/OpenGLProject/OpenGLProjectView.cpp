@@ -11,8 +11,8 @@
 
 float deltay = 0.0f;
 float objNum[MAXOBJ][3];
-const float objAreaMin = -1000.0f;
-const float objAreaMax = 1000.0f;
+const float objAreaMin = -500.0f;
+const float objAreaMax = 500.0f;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -184,9 +184,9 @@ void COpenGLProjectView::initGL()
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
 
-	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
+	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
 	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
-	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
 	airobj = ObjectManager::s_object[0];
 
 	for (int index = 0; index < MAXOBJ; index++) {
