@@ -8,6 +8,7 @@ out vec4 fragmentColor;
 struct Ray {
 	vec3 origin;
 	vec3 direction;
+	vec3 direction2;
 };
 
 struct Sphere {
@@ -189,17 +190,12 @@ void main()
 			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
 
 			// 색을 계산합니다
-			if (j == 0){
-				result = ambient + diffuse + spec;
-			}
-			else {
-				result += (ambient + diffuse + spec) * 0.5f;
-			}
+			result += ambient;
 
-			// 광선의 반사벡터를 구한다
+			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t1.point;
-			// ray.direction = normalize(reflect(ray.direction, t1.normal));
 			ray.direction = lightDir;
+			ray.direction2 = normalize(reflect(ray.direction, t1.normal));
 		}
 		else if (t1.t > t2.t) {
 			// 광원에서의 입사벡터를 구한다
@@ -214,28 +210,61 @@ void main()
 			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
 
 			// 색을 계산합니다
-			if (j == 0){
-				result = ambient + diffuse + spec;
-			}
-			else {
-				result += (ambient + diffuse + spec) * 0.5f;
-			}
+			result += ambient;
 
-			// 광선의 반사벡터를 구한다
+			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t2.point;
-			// ray.direction = normalize(reflect(ray.direction, t2.normal));
 			ray.direction = lightDir;
+			ray.direction2 = normalize(reflect(ray.direction, t1.normal));
 		}
 		else {
-			// 색을 계산합니다
-			if (j == 0){
+			if (j == 0) {
 				result = texture(skybox, o_TextureCoords);
 			}
 			else {
-				// 광선의 반사벡터를 구한다
-				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction, 1)));
-				result += texture(skybox, rayReflection) * 0.5f;
+				result += texture(skybox, ray.direction) * 0.5f;
 			}
+			break;
+		}
+
+		t1.t = 1000;
+		t2.t = 1000;
+
+		// 1번 큐브를 계산합니다 하늘색
+		for (int i = 0; i < 12; i++) {
+			a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
+			b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
+			c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
+			tmp = IntersectTriangle(ray, a, b, c);
+			if (t1.t > tmp.t){
+				t1.t = tmp.t;
+				t1.point = tmp.point;
+				t1.normal = tmp.normal;
+			}
+		}
+
+		// 2번 큐브를 계산합니다 연두색
+		for (int i = 12; i < 24; i++) {
+			a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
+			b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
+			c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
+			tmp = IntersectTriangle(ray, a, b, c);
+			if (t2.t > tmp.t){
+				t2.t = tmp.t;
+				t2.point = tmp.point;
+				t2.normal = tmp.normal;
+			}
+		}
+
+		if (t1.t == t2.t) {
+			result += diffuse + spec;
+			// 광선의 반사벡터를 구한다
+			rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 1)));
+			result += texture(skybox, rayReflection) * 0.5f;
+			break;
+		}
+		else {
+			ray.direction = ray.direction2;
 		}
 	}
 	fragmentColor = result;
