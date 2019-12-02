@@ -13,8 +13,10 @@
 #include "Light.h"
 #include "SystemMangement.h"
 #include "Skybox.h"
+#include "plane.h"
 
 using namespace CameraProperties;
+using namespace DefaultPlane;
 
 class COpenGLProjectView : public CView
 {
@@ -23,6 +25,8 @@ protected: // serialization에서만 만들어집니다.
 	DECLARE_DYNCREATE(COpenGLProjectView)
 public:
 	COpenGLProjectDoc* GetDocument() const;
+	
+
 public:
 	HDC	m_hDC;
 	HGLRC m_hglRC;
@@ -54,10 +58,13 @@ private:
 	Shader glslShader;
 	Shader skyboxShader;
 	Shader rayTracingShader;
+	Shader planeShader;
 	Skybox skybox0;
 	Light light0;
 	Camera camera;
 	Controller cameraController;
+	plane defaultPlane;
+	Object airobj;
 
 	// 생성된 메시지 맵 함수
 protected:
@@ -80,9 +87,13 @@ public:
 
 #endif
 
+
 #ifndef _DEBUG  // OpenGLProjectView.cpp의 디버그 버전
 inline COpenGLProjectDoc* COpenGLProjectView::GetDocument() const
 {
 	return reinterpret_cast<COpenGLProjectDoc*>(m_pDocument);
 }
+
 #endif
+
+

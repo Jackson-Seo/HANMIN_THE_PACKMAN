@@ -3,6 +3,9 @@
 
 #pragma once
 #include <afxwin.h>
+#include <random>
+#include <iostream>
+using namespace std;
 
 class _SystemMangement_
 {
@@ -15,6 +18,7 @@ public:
 
 public:
 
+	static float getRandomNumber(float min, float max);
 	static void initSystem(void);
 	static void Clock(void);
 };

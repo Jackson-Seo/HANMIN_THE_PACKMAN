@@ -1,6 +1,22 @@
 #include "pch.h"
 #include "Object.h"
 
+//오브젝트 초기 위치 초기화
+
+void Object::initObjPos(float x, float y, float z)
+{
+	this->x = x;
+	this->y = y;
+	this->z = z;
+}
+
+void Object::setObjPos(float x, float y, float z)
+{
+	this->x += x;
+	this->y += y;
+	this->z += z;
+}
+
 /*
 	Object 객체 하나를 그립니다 그릴때 사용할 shader를 매개변수로 받습니다
 	Object 객체 하나는 여러개의 Shape 구조체(shapes)와 여러개의 Texture 구조체(textures)로 이루어져 있습니다
@@ -14,12 +30,14 @@ void Object::Draw(const Shader& shader) {
 		코드에서의 Translate, Rotate, Scale 순서와 실제 적용되는 순서는 반대입니다
 		Scale -> Rotate -> Translate 순으로 적용됩니다
 	*/
+
 	glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Translate
-	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
+	model = glm::translate(model, glm::vec3(x, y, z)); // Translate
+	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0)); // Rotate
+	model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f)); // Scale
 	// 계산한 model matrix를 shader의 Uniform 변수로 넘겨줍니다
 	shader.setMatrix4(model, "model");
+
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vaoId);

@@ -53,6 +53,7 @@
       <Filter>ObjectBase</Filter>
     </ClCompile>
     <ClCompile Include="DebugOutput.cpp" />
+    <ClCompile Include="plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLProject.h">
@@ -116,6 +117,9 @@
       <Filter>ObjectBase</Filter>
     </ClInclude>
     <ClInclude Include="DebugOutput.h" />
+    <ClInclude Include="plane.h">
+      <Filter>ObjectBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\OpenGLProject.ico">
@@ -203,6 +207,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="RayTracingFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="planeVS.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="planeFS.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

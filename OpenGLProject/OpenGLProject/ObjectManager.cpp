@@ -8,18 +8,25 @@
 #include "include/stb/stb_image.h"
 
 // 정적변수 초기화
-std::map<std::string, Object> ObjectManager::s_object = {};
+std::map<int , Object> ObjectManager::s_object = {};
 int ObjectManager::s_iNumGenList = 0;
-
+int ObjectManager::idIndex = 0;
 /*
 	.obj파일을 불러서 map인 s_object에 저장합니다
 	파일명은 따로 map의 key로 저장하고 파싱한 .obj파일은 Object 객체에 저장해 value로 사용합니다
 */
-void ObjectManager::LoadObject(const Shader& const shader, const char* const fdir) {
+void ObjectManager::LoadObject(const Shader& const shader, const char* const fdir, int objID) {
+	//오브젝트 아이디 추가
+	//ObjectManager::ObjID[ObjectManager::idIndex] = objID;
+	//ObjectManager::idIndex++;
+
 	TRACE1("\n%s를 불러옵니다...\n", fdir);
 	Object obj;
+	obj.objID = objID;
+
 	GLuint vao, vboV, vboUV, vboVN;
 	int numTriangles = 0;
+	//초기 위치 초기화
 
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
@@ -40,6 +47,8 @@ void ObjectManager::LoadObject(const Shader& const shader, const char* const fdi
 	// load Texture Images from materials
 	for (auto m = 0; m < materials.size(); m++)
 	{
+		
+
 		tinyobj::material_t* mp = &materials[m];
 
 		if (obj.textures.find(mp->name) == obj.textures.end()) {
@@ -101,6 +110,7 @@ void ObjectManager::LoadObject(const Shader& const shader, const char* const fdi
 
 	for (auto s = 0; s < shapes.size(); s++)
 	{
+	
 		int current_material_id = 0;
 		if (materials.size() > 0)
 		{
@@ -275,11 +285,15 @@ void ObjectManager::LoadObject(const Shader& const shader, const char* const fdi
 	// obj를 삽입한다
 	obj.setNumTriangles(numTriangles);
 	obj.setID(vao, vboV, vboUV);
-	s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, obj));
+
+	
+
+	s_object.insert(std::make_pair(objID, obj));
+	//s_object.insert(std::make_pair(strrchr(fdir, '/') + 1, obj));
 }
 
 // Key에 해당하는 Object 객체를 찾아서 반환합니다 구현만해놓고 사용하고있진 않습니다
-Object ObjectManager::FindObject(const std::string key) {
+Object ObjectManager::FindObject(const int key) {
 	return s_object.find(key)->second;
 }
 

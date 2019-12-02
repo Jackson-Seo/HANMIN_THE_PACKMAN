@@ -14,10 +14,13 @@
 #include "include/glm/glm.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "include/glm/gtc/type_ptr.hpp"
+#include "include/GL/freeglut.h"
 #include <string>
 #include <vector>
 #include <map>
+#include <mmsystem.h>
 
+#pragma comment(lib, "winmm")
 #pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/freeglut.lib")

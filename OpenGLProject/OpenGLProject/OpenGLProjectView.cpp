@@ -9,6 +9,11 @@
 #include "OpenGLProjectDoc.h"
 #include "OpenGLProjectView.h"
 
+float deltay = 0.0f;
+float objNum[MAXOBJ][3];
+const float objAreaMin = -1000.0f;
+const float objAreaMax = 100.0f;
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -152,6 +157,9 @@ int COpenGLProjectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void COpenGLProjectView::initGL()
 {
+	CString sirenCall("../OpenGLProject/Asset/soundtrack/Tornado_Siren_II-Delilah-747233690.wav");
+	PlaySound(sirenCall, AfxGetInstanceHandle(), SND_ASYNC | SND_LOOP);
+
 	TRACE0("initGL 시작\n");
 	cameraController.AttachTarget(&camera);
 
@@ -175,10 +183,36 @@ void COpenGLProjectView::initGL()
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
 		저장한 Object 객체를 ObjectManager 클래스의 map에 집어넣습니다
 	*/
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/IronMan.obj");
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Kizuna/kizunaai.obj");
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj");
-	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
+	
+	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	airobj = ObjectManager::s_object[0];
+
+	for (int index = 0; index < MAXOBJ; index++) {
+		objNum[index][0] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+		objNum[index][1] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+		objNum[index][2] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
+	}
+	
+	
+
+
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft4.obj", 100);
+//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
+//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
+//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
+//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
+	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 40, 20, 20);
+	 //ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
+
+
+	
+
+	 //디폴트 plane 초기화
+	 planeShader = Shader("planeVS.glsl", "planeFS.glsl");
+	 defaultPlane.settingPlane();
+
 
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
@@ -192,7 +226,7 @@ void COpenGLProjectView::initGL()
 		skyboxShader = Shader("SkyboxVS.glsl", "SkyboxFS.glsl");
 		skyboxShader.use();
 		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
-		skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/BerzeliiPark");
+		skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
 	}
 
 	TRACE0("로딩 종료\n");
@@ -222,6 +256,10 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 	mat4 projection = perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 	glslShader.setMatrix4(projection, "projection");
 	skyboxShader.setMatrix4(projection, "u_Projection");
+
+    planeShader.use();
+	planeShader.setMatrix4(projection, "projection");
+	skyboxShader.use();
 }
 
 // 주기적으로 호출되는 함수입니다 여기에 그림을 그립니다
@@ -241,6 +279,52 @@ void COpenGLProjectView::DrawGLScene(void)
 
 	glDepthFunc(GL_LESS);
 	glslShader.use();
+
+	//모든 오브젝트들의 런타임 무브먼트는 여기서 코딩합니다.
+	deltay += _SystemMangement_::deltaTime * 0.004f;
+	
+
+
+	/*
+	for (int index = 0; index < 5; index++) {
+		airobj[index].setObjPos(5 * index, 0.0f, deltay);
+		airobj[index+5].setObjPos(-5 * (index+5), 0.0f, deltay);
+	}
+
+	for (int index = 5; index < 10; index++) {
+		airobj[index].setObjPos(- 5 * index, 0.0f, deltay);
+	}
+
+	for (int index = 10; index < 15; index++) {
+		airobj[index].setObjPos(5 * index, 30.0f, deltay);
+	}
+
+	for (int index = 15; index < 20; index++) {
+		airobj[index].setObjPos(- 5 * index, 30.0f, deltay);
+	}
+	*/
+
+	
+	
+
+	
+
+	
+	/*
+	static float deltay = 0.0f;
+	deltay += _SystemMangement_::deltaTime * 0.001f;
+	glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
+	model = glm::translate(model, glm::vec3(10.0f, deltay, 0.0f)); // Translate
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
+	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
+	// 계산한 model matrix를 shader의 Uniform 변수로 넘겨줍니다
+	glslShader.setMatrix4(model, "model");
+	*/
+	
+	
+
+
+
 	/*
 		카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
 		Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
@@ -250,18 +334,29 @@ void COpenGLProjectView::DrawGLScene(void)
 	mat4 view = camera.getViewMatrix();
 	glslShader.setMatrix4(view, "view");
 
+	planeShader.use();
+	planeShader.setMatrix4(view, "view");
+	glslShader.use();
 	/*
 		ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
 		저장된 Object 객체들을 차례대로 그립니다
 		사용할 Shader를 인자로 넘깁니다
 	*/
-	ObjectManager::DrawObjects(glslShader);
+	for (int i = 0; i < MAXOBJ; i++) {
+		ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
+		ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);
+		ObjectManager::DrawObjects(glslShader);
+	}
 
 	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
 	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
 	view = glm::mat4(glm::mat3(camera.getViewMatrix())); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
 	skyboxShader.setMatrix4(view, "u_View");
 	skybox0.Draw(); // 해당 skybox를 그립니다
+
+	planeShader.use();
+	defaultPlane.caltranslate(planeShader);
+	defaultPlane.drawPlane();
 
 	glslShader.use();
 	// swap buffer
