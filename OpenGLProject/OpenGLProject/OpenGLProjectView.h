@@ -64,7 +64,6 @@ private:
 	Light light0;
 	Light light1;
 	Camera camera;
-	Controller cameraController;
 	plane defaultPlane;
 	Object airobj;
 	IOManager ioManager;

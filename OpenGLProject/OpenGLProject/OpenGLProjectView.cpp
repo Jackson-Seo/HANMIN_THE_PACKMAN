@@ -334,7 +334,6 @@ void COpenGLProjectView::DrawGLScene(void)
 	else {
 		glUseProgram(0);
 		glDepthFunc(GL_LESS);
-		shaderManager->glslShader.use();
 		/*
 			카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
 			Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
@@ -342,15 +341,16 @@ void COpenGLProjectView::DrawGLScene(void)
 			Shader의 view Uniform 변수는 VertexShader에 있습니다
 		*/
 		mat4 view = camera.getViewMatrix();
+		shaderManager->glslShader.use();
 		shaderManager->glslShader.setMatrix4(view, "view");
 		planeShader.use();
 		planeShader.setMatrix4(view, "view");
-		shaderManager->glslShader.use();
 		/*
 			ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
 			저장된 Object 객체들을 차례대로 그립니다
 			사용할 Shader를 인자로 넘깁니다
 		*/
+		shaderManager->glslShader.use();
 		for (int i = 0; i < MAXOBJ; i++) {
 			ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
 			ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);

@@ -49,8 +49,11 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>ObjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="DebugOutput.cpp" />
-    <ClCompile Include="plane.cpp" />
+    <ClCompile Include="DebugOutput.cpp">
+    </ClCompile>
+    <ClCompile Include="plane.cpp">
+      <Filter>ObjectBase</Filter>
+    </ClCompile>
     <ClCompile Include="IOManager.cpp">
       <Filter>ManagerBase</Filter>
     </ClCompile>
@@ -117,8 +120,10 @@
       <Filter>ObjectBase</Filter>
     </ClInclude>
     <ClInclude Include="DebugOutput.h" />
+    </ClInclude>
     <ClInclude Include="plane.h">
       <Filter>ObjectBase</Filter>
+    </ClInclude>
     <ClInclude Include="IOManager.h">
       <Filter>ManagerBase</Filter>
     </ClInclude>
@@ -212,6 +217,8 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="planeFS.glsl">
+      <Filter>Shader</Filter>
+    </None>
     <None Include="VertexGPGPUVS.glsl">
       <Filter>Shader</Filter>
     </None>
