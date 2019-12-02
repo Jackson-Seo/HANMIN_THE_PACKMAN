@@ -34,6 +34,10 @@ BEGIN_MESSAGE_MAP(COpenGLProjectView, CView)
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_KEYDOWN()
+	ON_COMMAND(ID_SHADER_PHONGSHADING, &COpenGLProjectView::OnShaderPhongShading)
+	ON_COMMAND(ID_SHADER_RAYTRACINGRENDERING, &COpenGLProjectView::OnShaderRayTracingRendering)
+	ON_UPDATE_COMMAND_UI(ID_SHADER_PHONGSHADING, &COpenGLProjectView::OnUpdateShaderPhongshading)
+	ON_UPDATE_COMMAND_UI(ID_SHADER_RAYTRACINGRENDERING, &COpenGLProjectView::OnUpdateShaderRaytracingrendering)
 END_MESSAGE_MAP()
 
 bool COpenGLProjectView::SetDevicePixelFormat(HDC hdc) {
@@ -161,7 +165,6 @@ void COpenGLProjectView::initGL()
 	PlaySound(sirenCall, AfxGetInstanceHandle(), SND_ASYNC | SND_LOOP);
 
 	TRACE0("initGL 시작\n");
-	cameraController.AttachTarget(&camera);
 
 	// GLEW를 사용하기 전에 먼저 초기화합니다
 	GLenum err = glewInit();
@@ -174,10 +177,11 @@ void COpenGLProjectView::initGL()
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-	// Shader 객체를 생성합니다. 인자로 넘겨주는 string에 해당하는 glsl파일을 쉐이더로 사용합니다
-	glslShader = Shader("LightingVertexShader.glsl", "LightingFragmentShader.glsl");
+	shaderManager = new ShaderManager();
+	ioManager.Initialize(shaderManager);
+	ioManager.AttachTarget(&camera);
 	// 해당하는 쉐이더를 사용하려면 반드시 호출해야 합니다
-	glslShader.use();
+	shaderManager->glslShader.use();
 	/*
 		지정한 경로에 있는 .obj 파일 하나를 Object 객체로 만들어서 저장합니다
 		Object 객체로 저장시에 그 객체가 사용할 Shader를 인자로 넘겨야 합니다
@@ -194,41 +198,36 @@ void COpenGLProjectView::initGL()
 		objNum[index][1] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
 		objNum[index][2] = _SystemMangement_::getRandomNumber(objAreaMin, objAreaMax);
 	}
-	
-	
-
-
-	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft4.obj", 100);
-//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
-//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
-//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
-//	ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 100);
-	//ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Aircraft.obj", 40, 20, 20);
-	 //ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/h/Handgun.obj");
-
-
-	
 
 	 //디폴트 plane 초기화
 	 planeShader = Shader("planeVS.glsl", "planeFS.glsl");
 	 defaultPlane.settingPlane();
 
-
 	/*
 		Light 객체를 생성합니다 LightingFragmentShader를 사용해야 적용됩니다
 		사용할 쉐이더, 위치, ambient, diffuse, specular 값을 인자로 넘깁니다
 	*/
-	light0 = Light(glslShader, 0, 100, 50, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	light0 = Light(shaderManager->glslShader, 0, 100, 50, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	// Skybox Shader 및 객체 생성
 	{
-		// skybox만 렌더링하는 Shader를 생성합니다
-		skyboxShader = Shader("SkyboxVS.glsl", "SkyboxFS.glsl");
-		skyboxShader.use();
 		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
-		skybox0 = Skybox(skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
+		skybox0 = Skybox(shaderManager->skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
+		skybox0.ShareTexture(shaderManager->rayTracingShader);
+		// GPGPU를 작동시키기 위해 Skybox의 Vertex만 넘겨줍니다
+		skybox0.ShareTexture(shaderManager->gpgpuShader);
 	}
-
+	// Ray Tracing을 위한 세팅입니다
+	{
+		shaderManager->rayTracingShader.use();
+		light1 = Light(shaderManager->rayTracingShader, 0, 0, 0, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+		shaderManager->rayTracingShader.setVec3(glm::vec3(0.2f, 0.0f, 0.0f), "material.ambient");
+		shaderManager->rayTracingShader.setVec3(glm::vec3(0.2f, 0.0f, 0.0f), "material.diffuse");
+		shaderManager->rayTracingShader.setVec3(glm::vec3(0.8f), "material.specular");
+		shaderManager->rayTracingShader.setfloat(1.0f, "material.shininess");
+		// Rendering할 물체들을 그립니다
+		makeArr();
+	}
 	TRACE0("로딩 종료\n");
 }
 
@@ -236,10 +235,12 @@ void COpenGLProjectView::initGL()
 void COpenGLProjectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
+	ioManager.OnSize(nType, cx, cy);
 
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	ReSizeGLScene(cx, cy);
 }
+
 // OnSize에서 호출됩니다, 화면의 크기가 변하면 호출됩니다
 void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 {
@@ -253,109 +254,120 @@ void COpenGLProjectView::ReSizeGLScene(GLsizei width, GLsizei height)
 		계산한 Projection maxtrix를 현재 사용중인 Shader에서 Uniform mat4로 지정된 projection 변수에 전달합니다
 		Shader의 projection Uniform 변수는 VertexShader에 있습니다
 	*/
-	mat4 projection = perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	float fovy = 45.0f;
+	mat4 projection = perspective(fovy, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 	glslShader.setMatrix4(projection, "projection");
-	skyboxShader.setMatrix4(projection, "u_Projection");
-
     planeShader.use();
 	planeShader.setMatrix4(projection, "projection");
-	skyboxShader.use();
+	shaderManager->glslShader.use();
+	shaderManager->glslShader.setMatrix4(projection, "projection");
+	shaderManager->skyboxShader.use();
+	shaderManager->skyboxShader.setMatrix4(projection, "u_Projection");
+	shaderManager->rayTracingShader.use();
+	shaderManager->rayTracingShader.setUniform1i(width * 0.5f, "u_ScreenWidthHalf");
+	shaderManager->rayTracingShader.setUniform1i(height * 0.5f, "u_ScreenHeightHalf");
+	shaderManager->rayTracingShader.setUniform1f((height * 0.5f) / glm::tan(fovy * 0.5f), "u_Distance");
+	shaderManager->rayTracingShader.setMatrix4(projection, "u_Projection");
 }
 
 // 주기적으로 호출되는 함수입니다 여기에 그림을 그립니다
 void COpenGLProjectView::DrawGLScene(void)
 {
 	/*
-		Controller는 프레임간 시간차를 계산합니다
-		카메라의 움직임도 여기서 적용되므로 제일 먼저 호출해야 다
+		_SystemManagement는 매 프레임간 시간차를 계산합니다
 	*/
 	_SystemMangement_::Clock();
-	auto cinfo = cameraController.GetControl_info();
-	cameraController.GetControllTarget()->Initialize(cinfo);
+	auto cinfo = ioManager.GetControl_info();
+	ioManager.GetControllTarget()->Initialize(cinfo);
 	cinfo->clickPoint = { 0,0 };
 
 	// claer screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glDepthFunc(GL_LESS);
-	glslShader.use();
-
 	//모든 오브젝트들의 런타임 무브먼트는 여기서 코딩합니다.
 	deltay += _SystemMangement_::deltaTime * 0.004f;
-	
-	/*
-	for (int index = 0; index < 5; index++) {
-		airobj[index].setObjPos(5 * index, 0.0f, deltay);
-		airobj[index+5].setObjPos(-5 * (index+5), 0.0f, deltay);
-	}
-
-	for (int index = 5; index < 10; index++) {
-		airobj[index].setObjPos(- 5 * index, 0.0f, deltay);
-	}
-
-	for (int index = 10; index < 15; index++) {
-		airobj[index].setObjPos(5 * index, 30.0f, deltay);
-	}
-
-	for (int index = 15; index < 20; index++) {
-		airobj[index].setObjPos(- 5 * index, 30.0f, deltay);
-	}
-	*/
-	
-	
-
-	
-
-	
-	/*
-	static float deltay = 0.0f;
-	deltay += _SystemMangement_::deltaTime * 0.001f;
-	glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
-	model = glm::translate(model, glm::vec3(10.0f, deltay, 0.0f)); // Translate
-	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Scale
-	// 계산한 model matrix를 shader의 Uniform 변수로 넘겨줍니다
-	glslShader.setMatrix4(model, "model");
-	*/
-	
-	
-
-
 
 	/*
-		카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
-		Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
-		여기에서 View Matrix를 계산하고 현재 사용중인 Shader에서 Uniform mat4로 지정된 view 변수에 전달합니다
-		Shader의 view Uniform 변수는 VertexShader에 있습니다
+		IF문 : Ray Tracing 렌더링을 하도록 설정되었나?
+		TRUE : Ray Tracing 렌더링을 적용합니다
+		FALSE : Phong Shading을 적용합니다
 	*/
-	mat4 view = camera.getViewMatrix();
-	glslShader.setMatrix4(view, "view");
+	if (shaderManager->rtxON) {
+		glUseProgram(0);
+		shaderManager->rayTracingShader.use();
+		// 구의 위치를 World 위치를 설정하고 카메라 좌표계로 변환합니다
+		mat4 view = camera.getViewMatrix();
+		// Rendering할 vertex에 model과 view 변환을 적용시킵니다
+		float arr[219];
+		glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 3.0f)); // Translate
+		glm::vec3 tmp;
+		for (int i = 0; i < 36; i++) {
+			tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			arr[i * 3 + 0] = tmp.x;
+			arr[i * 3 + 1] = tmp.y;
+			arr[i * 3 + 2] = tmp.z;
+		}
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, -3.0f)); // Translate
+		for (int i = 36; i < 72; i++) {
+			 tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			 arr[i * 3 + 0] = tmp.x;
+			 arr[i * 3 + 1] = tmp.y;
+			 arr[i * 3 + 2] = tmp.z;
+		}
+		tmp = glm::vec3(view * glm::vec4(vertexArr[72], 1.0f));
+		arr[216] = tmp.x;
+		arr[217] = tmp.y;
+		arr[218] = tmp.z;
+		shaderManager->rayTracingShader.setfloatv(arr, 219, "arr");
 
-	planeShader.use();
-	planeShader.setMatrix4(view, "view");
-	glslShader.use();
-	/*
-		ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
-		저장된 Object 객체들을 차례대로 그립니다
-		사용할 Shader를 인자로 넘깁니다
-	*/
-	for (int i = 0; i < MAXOBJ; i++) {
-		ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
-		ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);
-		ObjectManager::DrawObjects(glslShader);
+		// 빛의 위치를 계산하고 Shader에 전달합니다
+		glm::vec3 lightPos = glm::vec3(view * glm::vec4(0, 2, 0, 1));
+		light1.setPosition(shaderManager->rayTracingShader, lightPos);
+
+		// RayTracingVS에 Vertex 좌표를 보내줘야 하므로 skybox의 Vertex를 이용합니다
+		view = glm::mat4(glm::mat3(view)); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
+		shaderManager->skyboxShader.setMatrix4(view, "u_View");
+		skybox0.Draw();
 	}
+	else {
+		glUseProgram(0);
+		glDepthFunc(GL_LESS);
+		shaderManager->glslShader.use();
+		/*
+			카메라의 위치와 각도에 따른 local 좌표계를 world 좌표계로 변환한 matrix를 계산합니다
+			Controller 클래스에서 마우스, 키보드 입출력에 따라 Camera 클래스의 위치값, 정면 벡터 값을 변화시킵니다
+			여기에서 View Matrix를 계산하고 현재 사용중인 Shader에서 Uniform mat4로 지정된 view 변수에 전달합니다
+			Shader의 view Uniform 변수는 VertexShader에 있습니다
+		*/
+		mat4 view = camera.getViewMatrix();
+		shaderManager->glslShader.setMatrix4(view, "view");
+		planeShader.use();
+		planeShader.setMatrix4(view, "view");
+		shaderManager->glslShader.use();
+		/*
+			ObjectManager 클래스는 Object 객체들을 map에다가 저장해논 상태입니다
+			저장된 Object 객체들을 차례대로 그립니다
+			사용할 Shader를 인자로 넘깁니다
+		*/
+		for (int i = 0; i < MAXOBJ; i++) {
+			ObjectManager::s_object[0].initObjPos(objNum[i][0], objNum[i][1], objNum[i][2]);
+			ObjectManager::s_object[0].setObjPos(0.0f, 0.0f, deltay);
+			ObjectManager::DrawObjects(glslShader);
+		}
 
-	glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
-	skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
-	view = glm::mat4(glm::mat3(camera.getViewMatrix())); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
-	skyboxShader.setMatrix4(view, "u_View");
-	skybox0.Draw(); // 해당 skybox를 그립니다
+		glDepthFunc(GL_LEQUAL); // Object가 그려지지 않은 부분에 Skybox가 그려집니다
+		shaderManager->skyboxShader.use(); // 어느 Shader를 사용해서 그릴건지 설정합니다
+		view = glm::mat4(glm::mat3(camera.getViewMatrix())); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
+		shaderManager->skyboxShader.setMatrix4(view, "u_View");
+		skybox0.Draw(); // 해당 skybox를 그립니다
 
-	planeShader.use();
-	defaultPlane.caltranslate(planeShader);
-	defaultPlane.drawPlane();
-
-	glslShader.use();
+		planeShader.use();
+		defaultPlane.caltranslate(planeShader);
+		defaultPlane.drawPlane();
+		shaderManager->glslShader.use();
+	}
 	// swap buffer
 	SwapBuffers(m_hDC);
 }
@@ -373,13 +385,70 @@ afx_msg LRESULT COpenGLProjectView::OnUwmChecked(WPARAM wParam, LPARAM lParam)
 }
 
 // 마우스 및 키보드 입출력은 OpenGLProjectView.cpp에서 받아서 Controller 클래스로 넘기고 Controller 클래스에서 처리합니다
-void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { cameraController.OnRButtonDown(nFlags, point); }
+void COpenGLProjectView::OnRButtonDown(UINT nFlags, CPoint point) { ioManager.OnRButtonDown(nFlags, point); }
 void COpenGLProjectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
-	cameraController.OnRButtonUp(nFlags, point);
+	ioManager.OnRButtonUp(nFlags, point);
 	// 우클릭 완료시 벗어나려면 주석을 지워야한다
 	// ClientToScreen(&point);
 	// OnContextMenu(this, point);
 }
-void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { cameraController.OnMouseMove(nFlags, point); }
-void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { cameraController.OnKeyDown(nChar, nRepCnt, nFlags); }
+void COpenGLProjectView::OnMouseMove(UINT nFlags, CPoint point) { ioManager.OnMouseMove(nFlags, point); }
+void COpenGLProjectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { ioManager.OnKeyDown(nChar, nRepCnt, nFlags); }
+void COpenGLProjectView::OnShaderPhongShading() { ioManager.OnShaderPhongShading(); }
+void COpenGLProjectView::OnShaderRayTracingRendering() { ioManager.OnShaderRayTracingRendering(); }
+void COpenGLProjectView::OnUpdateShaderPhongshading(CCmdUI* pCmdUI) { ioManager.OnUpdateShaderPhongshading(pCmdUI); }
+void COpenGLProjectView::OnUpdateShaderRaytracingrendering(CCmdUI* pCmdUI) { ioManager.OnUpdateShaderRaytracingrendering(pCmdUI); }
+
+void COpenGLProjectView::makeArr(void) {
+	// Rendering할 물체들을 그립니다
+	float Vertices[] = {
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+	vertexArr = new glm::vec3[73];
+	for (int i = 0; i < 36; i++) {
+		vertexArr[i] = glm::vec3(Vertices[i * 3 + 0], Vertices[i * 3 + 1], Vertices[i * 3 + 2]);
+		vertexArr[i+36] = glm::vec3(Vertices[i * 3 + 0], Vertices[i * 3 + 1], Vertices[i * 3 + 2]);
+	}
+	vertexArr[72] = glm::vec3(0, 0, 0);
+}

@@ -4,7 +4,7 @@
 #include "OpenGLProjectDoc.h"
 
 // 사용자 정의 클래스
-#include "Controller.h"
+#include "IOManager.h"
 #include "Camera.h"
 #include "Axis.h"
 #include "Object.h"
@@ -14,6 +14,7 @@
 #include "SystemMangement.h"
 #include "Skybox.h"
 #include "plane.h"
+#include "ShaderManager.h"
 
 using namespace CameraProperties;
 using namespace DefaultPlane;
@@ -61,10 +62,20 @@ private:
 	Shader planeShader;
 	Skybox skybox0;
 	Light light0;
+	Light light1;
 	Camera camera;
 	Controller cameraController;
 	plane defaultPlane;
 	Object airobj;
+	IOManager ioManager;
+	ShaderManager* shaderManager;
+
+	// Ray Tracing Rendering에 사용될 vertex의 Array 입니다
+	glm::vec3 *vertexArr;
+	GLfloat test[3] = { 10,0,0 };
+	// vertexArr에 데이터를 채웁니다 initGL에서 실행됩니다
+	// 큐브 두개와 구 하나를 그립니다
+	void makeArr(void);
 
 	// 생성된 메시지 맵 함수
 protected:
@@ -83,6 +94,10 @@ public:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnShaderPhongShading();
+	afx_msg void OnShaderRayTracingRendering();
+	afx_msg void OnUpdateShaderPhongshading(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateShaderRaytracingrendering(CCmdUI* pCmdUI);
 };
 
 #endif

@@ -74,7 +74,7 @@ void Object::Draw(const Shader& shader) {
 
 			// texture를 fragment shader에 넘깁니다
 			glBindTexture(GL_TEXTURE_2D, this->textures[it->texname].textureId);
-			shader.setUniform1(0, "textureSampler");
+			shader.setUniform1i(0, "textureSampler");
 
 			// Shape 구조체에 저장된대로 삼각형을 그립니다
 			glDrawArrays(GL_TRIANGLES, it->idxBegin, it->cntVertex);

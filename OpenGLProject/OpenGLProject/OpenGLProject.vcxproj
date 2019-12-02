@@ -200,7 +200,7 @@
   <ItemGroup>
     <ClInclude Include="Axis.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Controller.h" />
+    <ClInclude Include="IOManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Object.h" />
@@ -216,6 +216,7 @@
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SystemMangement.h" />
     <ClInclude Include="targetver.h" />
@@ -224,7 +225,7 @@
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Object.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -247,6 +248,7 @@
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemMangement.cpp" />
     <ClCompile Include="ViewTree.cpp" />
@@ -266,7 +268,6 @@
     <Image Include="res\userimages.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FragmentShader.glsl" />
     <None Include="LightingFragmentShader.glsl" />
     <None Include="LightingVertexShader.glsl" />
     <None Include="planeFS.glsl" />
@@ -275,7 +276,8 @@
     <None Include="res\OpenGLProject.rc2" />
     <None Include="SkyboxFS.glsl" />
     <None Include="SkyboxVS.glsl" />
-    <None Include="VertexShader.glsl" />
+    <None Include="VertexGPGPUFS.glsl" />
+    <None Include="VertexGPGPUVS.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

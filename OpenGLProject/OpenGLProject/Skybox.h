@@ -12,7 +12,8 @@ public:
 	Skybox(void);
 	Skybox(const Shader& shader, const std::string& fdir);
 public:
-	void Draw(void);
+	void Draw(void) const;
+	void ShareTexture(const Shader& shader) const;
 private:
 	void CreateVAO_VBO(void);
 };

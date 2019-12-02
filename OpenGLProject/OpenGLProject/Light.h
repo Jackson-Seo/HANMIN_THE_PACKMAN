@@ -12,6 +12,7 @@ public:
 	*/
 	Light();
 	Light(const Shader& shader, float x, float y, float z, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular);
+	void setPosition(const Shader& shader, const glm::vec3& vec);
 	void setAmbient(const Shader& shader, const glm::vec3& vec);
 	void setDiffuse(const Shader& shader, const glm::vec3& vec);
 	void setSpecular(const Shader& shader, const glm::vec3& vec);
