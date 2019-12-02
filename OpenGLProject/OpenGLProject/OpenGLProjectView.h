@@ -61,6 +61,7 @@ private:
 
 	// Ray Tracing Rendering에 사용될 vertex의 Array 입니다
 	glm::vec3 *vertexArr;
+	GLfloat test[3] = { 10,0,0 };
 	// vertexArr에 데이터를 채웁니다 initGL에서 실행됩니다
 	// 큐브 두개와 구 하나를 그립니다
 	void makeArr(void);

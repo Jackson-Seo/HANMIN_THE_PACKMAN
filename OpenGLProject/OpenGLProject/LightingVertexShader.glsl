@@ -9,7 +9,7 @@ out vec3 normalVector; // put NormalVector on FramentShader
 out vec3 o_VertexPosition; // world?????? Vertex ???
 
 uniform mat4 model; // Object's local system -> world system
-uniform mat4 view; // Camera's local system -> world system
+uniform mat4 view;
 uniform mat4 projection; // Project world system to Camera
 
 void main()

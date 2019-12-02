@@ -193,7 +193,7 @@ void COpenGLProjectView::initGL()
 	// Skybox Shader 및 객체 생성
 	{
 		// 폴더에 있는 텍스처를 사용하여 Skybox 객체를 만듭니다
-		skybox0 = Skybox(shaderManager->skyboxShader, "../OpenGLProject/Asset/Skyboxes/BerzeliiPark");
+		skybox0 = Skybox(shaderManager->skyboxShader, "../OpenGLProject/Asset/Skyboxes/Skybox_Space");
 		skybox0.ShareTexture(shaderManager->rayTracingShader);
 		// GPGPU를 작동시키기 위해 Skybox의 Vertex만 넘겨줍니다
 		skybox0.ShareTexture(shaderManager->gpgpuShader);
@@ -273,21 +273,34 @@ void COpenGLProjectView::DrawGLScene(void)
 		// 구의 위치를 World 위치를 설정하고 카메라 좌표계로 변환합니다
 		mat4 view = camera.getViewMatrix();
 		// Rendering할 vertex에 model과 view 변환을 적용시킵니다
-		glm::vec3 arr[73];
+		float arr[219];
 		glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f)); // Translate
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 3.0f)); // Translate
+		glm::vec3 tmp;
 		for (int i = 0; i < 36; i++) {
-			arr[i] = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			arr[i * 3 + 0] = tmp.x;
+			arr[i * 3 + 1] = tmp.y;
+			arr[i * 3 + 2] = tmp.z;
 		}
-		model = glm::translate(model, glm::vec3(-4.0f, 0.0f, 0.0f)); // Translate
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, -3.0f)); // Translate
 		for (int i = 36; i < 72; i++) {
-			arr[i] = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			 tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
+			 arr[i * 3 + 0] = tmp.x;
+			 arr[i * 3 + 1] = tmp.y;
+			 arr[i * 3 + 2] = tmp.z;
 		}
-		arr[72] = glm::vec3(view * glm::vec4(vertexArr[72], 1.0f));
+		tmp = glm::vec3(view * glm::vec4(vertexArr[72], 1.0f));
+		arr[216] = tmp.x;
+		arr[217] = tmp.y;
+		arr[218] = tmp.z;
+		shaderManager->rayTracingShader.setfloatv(arr, 219, "arr");
+
+		// 빛의 위치를 계산하고 Shader에 전달합니다
 		glm::vec3 lightPos = glm::vec3(view * glm::vec4(0, 2, 0, 1));
 		light1.setPosition(shaderManager->rayTracingShader, lightPos);
-		// shaderManager->rayTracingShader.setfloatv(spherePosition, 3, "arr");
-		shaderManager->rayTracingShader.setVec3v(*arr, 73, "arr");
+
 		// RayTracingVS에 Vertex 좌표를 보내줘야 하므로 skybox의 Vertex를 이용합니다
 		view = glm::mat4(glm::mat3(view)); // View의 이동은 적용하지 않기 위해 w요소를 제거합니다
 		shaderManager->skyboxShader.setMatrix4(view, "u_View");
@@ -403,5 +416,5 @@ void COpenGLProjectView::makeArr(void) {
 		vertexArr[i] = glm::vec3(Vertices[i * 3 + 0], Vertices[i * 3 + 1], Vertices[i * 3 + 2]);
 		vertexArr[i+36] = glm::vec3(Vertices[i * 3 + 0], Vertices[i * 3 + 1], Vertices[i * 3 + 2]);
 	}
-	vertexArr[72] = glm::vec3(5, 0, 0);
+	vertexArr[72] = glm::vec3(0, 0, 0);
 }

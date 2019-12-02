@@ -31,7 +31,7 @@ void _Camera_Base_::Initialize(struct Control_info* info)
 	방향은 유지시키고 방향에 따라 카메라의 위치만 변화시킵니다
 */
 void _Camera_Base_::Move(Direction direction, double deltaTime, float scale) {
-	float distance = c_velocity * deltaTime;
+	float distance = 0.1;
 
 	if (direction == Direction::FORWARD)
 		vPosition += vGaze * distance;

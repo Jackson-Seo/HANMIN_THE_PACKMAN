@@ -18,7 +18,7 @@ public:
 	void setfloat(const GLfloat& value, const std::string& str) const;
 	void setfloatv(const GLfloat* value, const int& size, const std::string& str) const;
 	void setVec3(const glm::vec3& vec, const std::string& str) const;
-	void setVec3v(const glm::vec3& vec, const int& size, const std::string& str) const;
+	void setVec3v(glm::vec3 vec, const int& size, const std::string& str) const;
 	void setVec4(const glm::vec4& vec, const std::string& str) const;
 	void setMatirx3(const glm::mat4& matrix, const std::string& str) const;
 	void setMatrix4(const glm::mat4& matrix, const std::string& str) const;

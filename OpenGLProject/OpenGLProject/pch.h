@@ -18,7 +18,7 @@
 #include <vector>
 #include <map>
 
-#pragma comment(lib, "OPENGL32.LIB")
+//#pragma comment(lib, "OPENGL32.LIB")
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/freeglut.lib")
 
