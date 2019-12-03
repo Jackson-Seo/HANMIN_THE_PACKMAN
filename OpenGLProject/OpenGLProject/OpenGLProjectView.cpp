@@ -301,6 +301,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		float arr[219];
 		glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
 		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 3.0f)); // Translate
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glm::vec3 tmp;
 		for (int i = 0; i < 36; i++) {
 			tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
@@ -310,6 +311,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		}
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(4.0f, 0.0f, -3.0f)); // Translate
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		for (int i = 36; i < 72; i++) {
 			 tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
 			 arr[i * 3 + 0] = tmp.x;
@@ -321,6 +323,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		arr[217] = tmp.y;
 		arr[218] = tmp.z;
 		shaderManager->rayTracingShader.setfloatv(arr, 219, "arr");
+		TRACE1("\nwho : %d\n", glGetUniformLocation(shaderManager->rayTracingShader.getID(), "arr"));
 
 		// 빛의 위치를 계산하고 Shader에 전달합니다
 		glm::vec3 lightPos = glm::vec3(view * glm::vec4(0, 2, 0, 1));

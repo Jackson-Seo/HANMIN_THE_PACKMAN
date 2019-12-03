@@ -133,7 +133,7 @@ void main()
 	vec4 diffuse = vec4(0.0f);
 	vec4 specular = vec4(0.0f);
 	float diff, spec;
-	vec3 lightDir, lightReflection, rayReflection;
+	vec3 lightDir, lightReflection, rayReflection, normal;
 
 	// 광선의 최대 거리를 설정합니다
 	Intersect t1;
@@ -144,7 +144,7 @@ void main()
 	t2.t = 1000;
 	vec3 n2;
 
-	int tracingCount = 4;
+	int tracingCount = 1;
 	vec3 a, b, c;
 	Intersect tmp;
 	for(int j = 0; j < tracingCount; j++) {
@@ -178,6 +178,7 @@ void main()
 
 		// 하늘색이 더 가깝습니다
 		if (t1.t < t2.t){
+			normal = t1.normal;
 			// 광원에서의 입사벡터를 구한다
 			lightDir = normalize(light.position - t1.point);
 			// diffuse 상수를 구한다
@@ -189,15 +190,13 @@ void main()
 			// specular 상수를 구한다
 			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
 
-			// 색을 계산합니다
-			result += ambient;
-
 			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t1.point;
 			ray.direction = lightDir;
 			ray.direction2 = normalize(reflect(ray.direction, t1.normal));
 		}
 		else if (t1.t > t2.t) {
+			normal = t2.normal;
 			// 광원에서의 입사벡터를 구한다
 			lightDir = normalize(light.position - t2.point);
 			// diffuse 상수를 구한다
@@ -208,9 +207,6 @@ void main()
 			lightReflection = normalize(reflect(-lightDir, t2.normal));
 			// specular 상수를 구한다
 			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
-
-			// 색을 계산합니다
-			result += ambient;
 
 			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t2.point;
@@ -228,44 +224,50 @@ void main()
 			break;
 		}
 
-		t1.t = 1000;
-		t2.t = 1000;
-
-		// 1번 큐브를 계산합니다 하늘색
-		for (int i = 0; i < 12; i++) {
-			a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
-			b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
-			c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
-			tmp = IntersectTriangle(ray, a, b, c);
-			if (t1.t > tmp.t){
-				t1.t = tmp.t;
-				t1.point = tmp.point;
-				t1.normal = tmp.normal;
-			}
-		}
-
-		// 2번 큐브를 계산합니다 연두색
-		for (int i = 12; i < 24; i++) {
-			a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
-			b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
-			c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
-			tmp = IntersectTriangle(ray, a, b, c);
-			if (t2.t > tmp.t){
-				t2.t = tmp.t;
-				t2.point = tmp.point;
-				t2.normal = tmp.normal;
-			}
-		}
-
-		if (t1.t == t2.t) {
-			result += diffuse + spec;
-			// 광선의 반사벡터를 구한다
-			rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 1)));
-			result += texture(skybox, rayReflection) * 0.5f;
-			break;
+		if (dot(ray.direction, normal) < 0) {
+			ray.direction = ray.direction2;
 		}
 		else {
-			ray.direction = ray.direction2;
+			t1.t = 1000;
+			t2.t = 1000;
+
+			// 1번 큐브를 계산합니다 하늘색
+			for (int i = 0; i < 12; i++) {
+				a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
+				b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
+				c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
+				tmp = IntersectTriangle(ray, a, b, c);
+				if (t1.t > tmp.t){
+					t1.t = tmp.t;
+					t1.point = tmp.point;
+					t1.normal = tmp.normal;
+				}
+			}
+
+			// 2번 큐브를 계산합니다 연두색
+			for (int i = 12; i < 24; i++) {
+				a = vec3(arr[i * 9 + 0], arr[i * 9 + 1], arr[i * 9 + 2]);
+				b = vec3(arr[i * 9 + 3], arr[i * 9 + 4], arr[i * 9 + 5]);
+				c = vec3(arr[i * 9 + 6], arr[i * 9 + 7], arr[i * 9 + 8]);
+				tmp = IntersectTriangle(ray, a, b, c);
+				if (t2.t > tmp.t){
+					t2.t = tmp.t;
+					t2.point = tmp.point;
+					t2.normal = tmp.normal;
+				}
+			}
+
+			if (t1.t == t2.t) {
+				result += ambient + diffuse + spec;
+				// 광선의 반사벡터를 구한다
+				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 1)));
+				result += texture(skybox, rayReflection) * 0.5f;
+				break;
+			}
+			else {
+				ray.direction = ray.direction2;
+				result += ambient;
+			}
 		}
 	}
 	fragmentColor = result;
