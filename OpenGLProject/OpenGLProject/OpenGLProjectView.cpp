@@ -300,8 +300,9 @@ void COpenGLProjectView::DrawGLScene(void)
 		// Rendering할 vertex에 model과 view 변환을 적용시킵니다
 		float arr[219];
 		glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
-		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 3.0f)); // Translate
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 5.0f)); // Translate
+		model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0, 1, 0));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glm::vec3 tmp;
 		for (int i = 0; i < 36; i++) {
 			tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
@@ -310,7 +311,8 @@ void COpenGLProjectView::DrawGLScene(void)
 			arr[i * 3 + 2] = tmp.z;
 		}
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(4.0f, 0.0f, -3.0f)); // Translate
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -5.0f)); // Translate
+		model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0, 1, 0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		for (int i = 36; i < 72; i++) {
 			 tmp = glm::vec3(view * model * glm::vec4(vertexArr[i], 1.0f));
@@ -326,7 +328,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		TRACE1("\nwho : %d\n", glGetUniformLocation(shaderManager->rayTracingShader.getID(), "arr"));
 
 		// 빛의 위치를 계산하고 Shader에 전달합니다
-		glm::vec3 lightPos = glm::vec3(view * glm::vec4(0, 2, 0, 1));
+		glm::vec3 lightPos = glm::vec3(view * glm::vec4(-20, 2, 5, 1));
 		light1.setPosition(shaderManager->rayTracingShader, lightPos);
 
 		// RayTracingVS에 Vertex 좌표를 보내줘야 하므로 skybox의 Vertex를 이용합니다

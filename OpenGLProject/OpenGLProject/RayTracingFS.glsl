@@ -125,7 +125,7 @@ void main()
 	float y = gl_FragCoord.y - u_ScreenHeightHalf;
 	ray.direction = normalize(vec3(x, y, -u_Distance));
 	Sphere sphere;
-	// sphere.position = arr[72];
+	sphere.position = vec3(arr[216], arr[217], arr[218]);
 	sphere.radius = 2.0f;
 
 	vec4 result = vec4(0.0f);
@@ -144,7 +144,7 @@ void main()
 	t2.t = 1000;
 	vec3 n2;
 
-	int tracingCount = 1;
+	int tracingCount = 2;
 	vec3 a, b, c;
 	Intersect tmp;
 	for(int j = 0; j < tracingCount; j++) {
@@ -182,36 +182,36 @@ void main()
 			// 광원에서의 입사벡터를 구한다
 			lightDir = normalize(light.position - t1.point);
 			// diffuse 상수를 구한다
+			ambient = vec4(0.2431f, 0.7725f, 0.9451f, 1.0f) * 0.7f;
 			diff = max(dot(lightDir, t1.normal), 0.0);
-			ambient = vec4(0.2431f, 0.7725f, 0.9451f, 1.0f) * 0.15;
-			diffuse = vec4(light.diffuse * diff * vec3(0.2431f, 0.7725f, 0.9451f), 1.0f);
+			diffuse = vec4(light.diffuse * diff * vec3(0.2431f, 0.7725f, 0.9451f), 1.0f) * 0.5f;
 			// 광원에서의 입사벡터의 반사벡터를 구한다
 			lightReflection = normalize(reflect(-lightDir, t1.normal));
 			// specular 상수를 구한다
-			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
+			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
 
 			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t1.point;
-			ray.direction = lightDir;
 			ray.direction2 = normalize(reflect(ray.direction, t1.normal));
+			ray.direction = lightDir;
 		}
 		else if (t1.t > t2.t) {
 			normal = t2.normal;
 			// 광원에서의 입사벡터를 구한다
 			lightDir = normalize(light.position - t2.point);
 			// diffuse 상수를 구한다
+			ambient = vec4(0.6392f, 0.8235f, 0.4706f, 1.0f) * 0.7f;
 			diff = max(dot(lightDir, t2.normal), 0.0);
-			ambient = vec4(0.6392f, 0.8235f, 0.4706f, 1.0f) * 0.15;
-			diffuse = vec4(light.diffuse * diff * vec3(0.6392f, 0.8235f, 0.4706f), 1.0f);
+			diffuse = vec4(light.diffuse * diff * vec3(0.6392f, 0.8235f, 0.4706f), 1.0f) * 0.5f;
 			// 광원에서의 입사벡터의 반사벡터를 구한다
 			lightReflection = normalize(reflect(-lightDir, t2.normal));
 			// specular 상수를 구한다
-			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 30);
+			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
 
 			// 광원쪽으로 광선을 발사합니다
 			ray.origin = t2.point;
+			ray.direction2 = normalize(reflect(ray.direction, t2.normal));
 			ray.direction = lightDir;
-			ray.direction2 = normalize(reflect(ray.direction, t1.normal));
 		}
 		else {
 			if (j == 0) {
@@ -219,13 +219,14 @@ void main()
 			}
 			else {
 				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction, 1)));
-				result += texture(skybox, rayReflection) * 0.5f;
+				result += texture(skybox, rayReflection) * 0.2f;
 			}
 			break;
 		}
 
 		if (dot(ray.direction, normal) < 0) {
 			ray.direction = ray.direction2;
+			result += ambient;
 		}
 		else {
 			t1.t = 1000;
@@ -258,15 +259,15 @@ void main()
 			}
 
 			if (t1.t == t2.t) {
+				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
+				result += texture(skybox, rayReflection) * 0.2f;
 				result += ambient + diffuse + spec;
 				// 광선의 반사벡터를 구한다
-				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 1)));
-				result += texture(skybox, rayReflection) * 0.5f;
 				break;
 			}
 			else {
+				result += ambient + diffuse;
 				ray.direction = ray.direction2;
-				result += ambient;
 			}
 		}
 	}
