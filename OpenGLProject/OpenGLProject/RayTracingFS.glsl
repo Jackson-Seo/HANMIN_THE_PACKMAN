@@ -171,6 +171,7 @@ void main()
 	vec4 diffuse = vec4(0.0f);
 	vec4 specular = vec4(0.0f);
 	float diff, spec;
+	float amb = 0.2f;
 	vec3 lightDir, lightReflection, rayReflection, normal;
 
 	// 광선의 최대 거리를 설정합니다
@@ -187,7 +188,7 @@ void main()
 	vec3 n3;
 
 	// 반사 횟수입니다
-	int tracingCount = 6;
+	int tracingCount = 10;
 	vec3 a, b, c;
 	Intersect tmp;
 	for(int j = 0; j < tracingCount; j++) {
@@ -224,10 +225,10 @@ void main()
 				normal = t1.normal;
 				// 광원에서의 입사벡터를 구한다
 				lightDir = normalize(light.position - t1.point);
-				ambient = vec4(0.2431f, 0.7725f, 0.9451f, 1.0f) * 0.3f;
+				ambient = vec4(0.2431f, 0.7725f, 0.9451f, 1.0f) * amb;
 				// diffuse 상수를 구한다
 				diff = max(dot(lightDir, t1.normal), 0.0);
-				diffuse = vec4(light.diffuse * diff * vec3(0.2431f, 0.7725f, 0.9451f), 1.0f) * 0.5f;
+				diffuse = vec4(light.diffuse * diff * vec3(0.2431f, 0.7725f, 0.9451f), 1.0f) * 0.6f;
 				// 광원에서의 입사벡터의 반사벡터를 구한다
 				lightReflection = normalize(reflect(-lightDir, t1.normal));
 				// specular 상수를 구한다
@@ -243,9 +244,9 @@ void main()
 			else {
 				normal = t3.normal;
 				lightDir = normalize(light.position - t3.point);
-				ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * 0.3f;
+				ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * amb;
 				diff = max(dot(lightDir, t3.normal), 0.0);
-				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.6f;
 				lightReflection = normalize(reflect(-lightDir, t3.normal));
 				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
 				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
@@ -262,9 +263,9 @@ void main()
 				// 광원에서의 입사벡터를 구한다
 				lightDir = normalize(light.position - t2.point);
 				// diffuse 상수를 구한다
-				ambient = vec4(0.6392f, 0.8235f, 0.4706f, 1.0f) * 0.3f;
+				ambient = vec4(0.6392f, 0.8235f, 0.4706f, 1.0f) * amb;
 				diff = max(dot(lightDir, t2.normal), 0.0);
-				diffuse = vec4(light.diffuse * diff * vec3(0.6392f, 0.8235f, 0.4706f), 1.0f) * 0.5f;
+				diffuse = vec4(light.diffuse * diff * vec3(0.6392f, 0.8235f, 0.4706f), 1.0f) * 0.6f;
 				// 광원에서의 입사벡터의 반사벡터를 구한다
 				lightReflection = normalize(reflect(-lightDir, t2.normal));
 				// specular 상수를 구한다
@@ -280,9 +281,9 @@ void main()
 			else {
 				normal = t3.normal;
 				lightDir = normalize(light.position - t3.point);
-				ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * 0.3f;
+				ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * amb;
 				diff = max(dot(lightDir, t3.normal), 0.0);
-				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.6f;
 				lightReflection = normalize(reflect(-lightDir, t3.normal));
 				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
 				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
@@ -296,9 +297,9 @@ void main()
 		else if (t3.hit == true) {
 			normal = t3.normal;
 			lightDir = normalize(light.position - t3.point);
-			ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * 0.3f;
+			ambient = vec4(0.8627f, 0.0784f, 0.2353f, 1.0f) * amb;
 			diff = max(dot(lightDir, t3.normal), 0.0);
-			diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+			diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.6f;
 			lightReflection = normalize(reflect(-lightDir, t3.normal));
 			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
 			specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
@@ -349,17 +350,67 @@ void main()
 			}
 
 			t3 = IntersectSphere(ray, sphere);
-
-			if (t1.t == 1000 && t2.t == 1000 && t3.t == 1000) {
+			if (t1.t < t2.t) {
+				if(t1.t < t3.t) {
+					if (t1.hit) {
+						result += ambient ;
+						ray.direction = ray.direction2;
+					}
+					else {
+						rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
+						result += texture(skybox, rayReflection) * 0.2f;
+						result += ambient + diffuse + specular;
+						break;
+					}
+				}
+				else {
+					if (t3.hit) {
+						result += ambient ;
+						ray.direction = ray.direction2;
+					}
+					else {
+						rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
+						result += texture(skybox, rayReflection) * 0.2f;
+						result += ambient + diffuse + specular;
+						break;
+					}
+				}
+			}
+			else if (t1.t > t2.t) {
+				if (t2.t < t3.t) {
+					if (t2.hit) {
+						result += ambient ;
+						ray.direction = ray.direction2;
+					}
+					else {	
+						rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
+						result += texture(skybox, rayReflection) * 0.2f;
+						result += ambient + diffuse + specular;
+						break;
+					}
+				}
+				else {
+					if (t3.hit) {
+						result += ambient ;
+						ray.direction = ray.direction2;
+					}
+					else {	
+						rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
+						result += texture(skybox, rayReflection) * 0.2f;
+						result += ambient + diffuse + specular;
+						break;
+					}
+				}
+			}
+			else if (t3.hit == true) {
+				result += ambient ;
+				ray.direction = ray.direction2;
+			}
+			else {
 				rayReflection = normalize(vec3(inverse(u_View) * vec4(ray.direction2, 0)));
 				result += texture(skybox, rayReflection) * 0.2f;
 				result += ambient + diffuse + specular;
-				// 광선의 반사벡터를 구한다
 				break;
-			}
-			else {
-				result += ambient ;
-				ray.direction = ray.direction2;
 			}
 		}
 	}
