@@ -33,8 +33,8 @@ void Object::Draw(const Shader& shader) {
 
 	glm::mat4 model = glm::mat4(1.0f); // Identitiy 행렬 설정
 	model = glm::translate(model, glm::vec3(x, y, z)); // Translate
-	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0)); // Rotate
-	model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f)); // Scale
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)); // Rotate
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f)); // Scale
 	// 계산한 model matrix를 shader의 Uniform 변수로 넘겨줍니다
 	shader.setMatrix4(model, "model");
 

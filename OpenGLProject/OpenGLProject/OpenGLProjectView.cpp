@@ -189,7 +189,8 @@ void COpenGLProjectView::initGL()
 	*/
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/Imperial_Exekutor_Class/StarDestroyer_Exekutorclass.obj", 0);
 	// ObjectManager::LoadObject(glslShader, "../OpenGLProject/Asset/Air/fighter/FuturisticCombatJet.obj", 0);
-	ObjectManager::LoadObject(shaderManager->glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	//ObjectManager::LoadObject(shaderManager->glslShader, "../OpenGLProject/Asset/Air/miniAirFighter/Aircraft.obj", 0);
+	ObjectManager::LoadObject(shaderManager->glslShader, "../OpenGLProject/Asset/IronMan.obj", 0);
 	airobj = ObjectManager::s_object[0];
 
 	for (int index = 0; index < MAXOBJ; index++) {
