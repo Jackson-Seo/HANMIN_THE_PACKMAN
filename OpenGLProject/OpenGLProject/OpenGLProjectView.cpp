@@ -328,7 +328,7 @@ void COpenGLProjectView::DrawGLScene(void)
 		TRACE1("\nwho : %d\n", glGetUniformLocation(shaderManager->rayTracingShader.getID(), "arr"));
 
 		// 빛의 위치를 계산하고 Shader에 전달합니다
-		glm::vec3 lightPos = glm::vec3(view * glm::vec4(-20, 2, 5, 1));
+		glm::vec3 lightPos = glm::vec3(view * glm::vec4(-10, 2, 15, 1));
 		light1.setPosition(shaderManager->rayTracingShader, lightPos);
 
 		// RayTracingVS에 Vertex 좌표를 보내줘야 하므로 skybox의 Vertex를 이용합니다

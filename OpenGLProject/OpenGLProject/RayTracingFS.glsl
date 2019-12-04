@@ -231,8 +231,8 @@ void main()
 				// 광원에서의 입사벡터의 반사벡터를 구한다
 				lightReflection = normalize(reflect(-lightDir, t1.normal));
 				// specular 상수를 구한다
-				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
-				specular = vec4(light.specular * spec * vec3(0.2431f, 0.7725f, 0.9451f), 1.0f) * 0.5f;
+				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
 
 				// 광원쪽으로 광선을 발사합니다
 				ray.origin = t1.point;
@@ -247,8 +247,8 @@ void main()
 				diff = max(dot(lightDir, t3.normal), 0.0);
 				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
 				lightReflection = normalize(reflect(-lightDir, t3.normal));
-				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
-				specular = vec4(light.specular * spec * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
 
 				ray.origin = t3.point;
 				ray.direction2 = normalize(reflect(ray.direction, t3.normal));
@@ -268,8 +268,8 @@ void main()
 				// 광원에서의 입사벡터의 반사벡터를 구한다
 				lightReflection = normalize(reflect(-lightDir, t2.normal));
 				// specular 상수를 구한다
-				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
-				specular = vec4(light.specular * spec * vec3(0.6392f, 0.8235f, 0.4706f), 1.0f) * 0.5f;
+				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
 
 				// 광원쪽으로 광선을 발사합니다
 				ray.origin = t2.point;
@@ -284,8 +284,8 @@ void main()
 				diff = max(dot(lightDir, t3.normal), 0.0);
 				diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
 				lightReflection = normalize(reflect(-lightDir, t3.normal));
-				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
-				specular = vec4(light.specular * spec * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+				spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+				specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
 
 				ray.origin = t3.point;
 				ray.direction2 = normalize(reflect(ray.direction, t3.normal));
@@ -300,8 +300,8 @@ void main()
 			diff = max(dot(lightDir, t3.normal), 0.0);
 			diffuse = vec4(light.diffuse * diff * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
 			lightReflection = normalize(reflect(-lightDir, t3.normal));
-			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 100);
-			specular = vec4(light.specular * spec * vec3(0.8627f, 0.0784f, 0.2353f), 1.0f) * 0.5f;
+			spec = pow(max(dot(-ray.direction, lightReflection), 0.0f), 10);
+			specular = vec4(light.specular * spec * vec3(1.0f), 1.0f);
 
 			ray.origin = t3.point;
 			ray.direction2 = normalize(reflect(ray.direction, t3.normal));
